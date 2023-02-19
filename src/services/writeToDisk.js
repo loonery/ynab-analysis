@@ -1,4 +1,4 @@
-import { sortJsonAlphabetically } from "./processing.js"
+import { sortJsonAlphabetically } from "./processData.js"
 import { getFlattenedBudgetMonths, getFlattenedTransactions } from "./getYnabData.js"
 import fs from 'fs';
 
@@ -17,7 +17,7 @@ const write = async () => {
     
     // writing the csvs to the file system
     fs.writeFile(dataPath + 'budgetMonths.json', 
-                 budgetMonthsData, 
+                 budgetMonthsData,
                  (err) => {if (err) throw err; console.log("budgetMonths written successfully.\n")} 
                  );
     
