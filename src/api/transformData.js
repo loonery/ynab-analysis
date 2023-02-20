@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { group } from 'd3';
+import { flatRollup , sum} from 'd3';
 
 // path to read data from
 const dataPath = "./assets/";
@@ -11,11 +11,8 @@ let transactions = fs.readFileSync(dataPath + 'transactions.json', 'utf8', (err)
 transactions = JSON.parse(transactions);
 budgetMonths = JSON.parse(budgetMonths);
 
-const groupTransactionsByCategory = (transactions) => {
-
-    console.log(transactions)
-    transactions = group(transactions, t=>t.month_year, t=>t.category_group_name);
-    console.log(transactions);
-
-}
-groupTransactionsByCategory(transactions);
+let groupTransactions = flatRollup(transactions, t => sum(t, t=>t.amount), t=>t.month_year, t=>t.category_group_name);
+const xAxis = groupTransactions.map((transaction) => {
+    return transaction[0];
+})
+console.log(xAxis)

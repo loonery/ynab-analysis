@@ -1,7 +1,6 @@
 
 import { getBudgetTransactions, getCategoryGroups, getBudgetMonth, getBudgetMonths } from "./getYnabData";
 
-
 // ##############################
 // Budgets
 // ##############################
@@ -177,6 +176,12 @@ export const getFlattenedTransactions = async () => {
     return transactions;
 } 
 
+/**
+ * 
+ * @param {*} categoryGroups 
+ * @param {*} subCategoryId 
+ * @returns 
+ */
 const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
 
     // for each category group

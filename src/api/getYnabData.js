@@ -2,6 +2,7 @@ import * as dotenv from 'dotenv'
 import * as ynab from 'ynab';
 dotenv.config("../../.env");
 
+// get environment variables and ynabAPI object
 const accessToken = process.env.API_KEY;
 const budgetId = process.env.BUDGET_ID;
 const ynabAPI = new ynab.API(accessToken);
