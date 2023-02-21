@@ -1,19 +1,11 @@
-import {configureStore, createSlice } from '@reduxjs/toolkit'
-import transactions from "../assets/transactions.json"
-
-const transactionSlice = configureStore({
-    name: 'transactions',
-    initialState: transactions,
-    reducers : {
-        
-    }
-});
+import { configureStore } from "@reduxjs/toolkit";
+import transactionsReducer from "../reducers/transactionsReducer";
 
 // configure the store 
 const store = configureStore({
     reducer: {
-        transactions: transactionSlice.reducer
+        transactions: transactionsReducer
     }
 })
 
-console.log(store);
+export { store };
