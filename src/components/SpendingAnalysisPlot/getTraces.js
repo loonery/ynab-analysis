@@ -52,3 +52,7 @@ export const getBarTraces = (transactions, categoryDimension, selectedCategory) 
     })
     return traceData;
 }
+
+export const getLineTraces = () => {
+    
+}
