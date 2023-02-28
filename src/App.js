@@ -1,12 +1,12 @@
 
 import { Route, Routes } from 'react-router'
-import SpendingAnalysis from './components/SpendingAnalysis';
+import SpendingAnalysisDashboard from './components/SpendingAnalysisDashboard/';
 
 const App = () => {
   return (
-    <div className="container border mx-4 my-4">
+    <div className="container">
       <Routes>
-        <Route path='/' element={<SpendingAnalysis/>}/>
+        <Route path='/' element={<SpendingAnalysisDashboard/>}/>
       </Routes>
     </div>
   );
