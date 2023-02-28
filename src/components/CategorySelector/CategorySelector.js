@@ -8,16 +8,16 @@ const CategorySelector = ({selectedCategory, handleSelect}) => {
 
     const transactions = useSelector(state => state.transactions);
     const categories = ["All", ...getCategoryGroups(transactions)];
-    const subCategories = selectedCategory !== "All" ? getSubcategoriesOfParentCategory(transactions, selectedCategory) : "";
 
-    console.log(selectedCategory);
+    // subcategories mapped to buttons
+    const subCategories = selectedCategory !== "All" ? getSubcategoriesOfParentCategory(transactions, selectedCategory) : [];
 
     return (
         <Fragment>
             <div className="d-flex justify-content-start">
 
                 {/* houses the drowndown  */}
-                <div class="input-group">
+                <div className="input-group">
                     {/* prepend dialog */}
                     <div className="input-group-prepend">
                         <label className="input-group-text" htmlFor="categoryDrilldownSelect">Showing...</label>

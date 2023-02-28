@@ -1,10 +1,4 @@
 import React, {useState } from "react";
-import { useSelector } from "react-redux";
-import { 
-    getCategories, 
-    getCategoryGroups, 
-    getRollupBySubcategory, 
-    rollupByCategoryGroup } from "./utils/dataManipulation";
 import SpendingAnalysisPlot from "../SpendingAnalysisPlot/SpendingAnalysisPlot";
 import CategorySelector from "../CategorySelector";
 

@@ -1,25 +1,18 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { 
-    getCategoryGroups, 
     getSpendingRollup,
     getSumsOfCategory,
     getSummedSpending,
     getActiveMonthsOfCategory,
-    getSubcategoriesOfParentCategory,
 } from "../SpendingAnalysisDashboard/utils/dataManipulation";
 
 // selected for refactor 
 // (maybe some of this data manipulation can be done in the d3 file)
 export const getBarTraces = (transactions, categoryDimension, selectedCategory) => {
 
-    const categories = categoryDimension === "category_group_name" ? 
-                                              getCategoryGroups(transactions) : 
-                                              getSubcategoriesOfParentCategory(transactions, selectedCategory);
-    
     const spendingMap = getSpendingRollup(transactions, categoryDimension, selectedCategory);
-
-    // create a trace object for each category
+    
+    // create a trace object for each category type item we're rendering
+    const categories = Array.from(spendingMap.keys());
     const traceData = categories.map((categoryItem) => {
 
         // get summed spending for each category group for the months that that category was active
@@ -44,8 +37,6 @@ export const getBarTraces = (transactions, categoryDimension, selectedCategory) 
 
             return html;
         })
-        
-        let type = "bar";
 
         // return the compiled trace
         return {
@@ -55,7 +46,7 @@ export const getBarTraces = (transactions, categoryDimension, selectedCategory) 
             text: text,                     // [name, name, name];
             textposition: "none",           // only using category name as tooltip
             hovertemplate: '%{text}',
-            type: type,
+            type: "bar",
             width: 0.4,
         }
     })
