@@ -3,10 +3,10 @@ import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
 import { getBarTraces } from "./getTraces";
 
-const SpendingAnalysisPlot = ({ categoryDimension, selectedCategory }) => {
+const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
 
     const transactions = useSelector(state => state.transactions);
-    const traceObjects = getBarTraces(transactions, categoryDimension, selectedCategory);
+    const traceObjects = getBarTraces(transactions, categoryDimension, selectedCategoryItem);
 
     /* Get the Layout for the Plot */
     const getLayout = () => {

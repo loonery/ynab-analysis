@@ -3,13 +3,13 @@ import {
     getSumsOfCategory,
     getSummedSpending,
     getActiveMonthsOfCategory,
-} from "../SpendingAnalysisDashboard/utils/dataManipulation";
+} from "../SpendingAnalysisDashboard/getData";
 
 // selected for refactor 
 // (maybe some of this data manipulation can be done in the d3 file)
-export const getBarTraces = (transactions, categoryDimension, selectedCategory) => {
+export const getBarTraces = (transactions, categoryDimension, selectedCategoryItem) => {
 
-    const spendingMap = getSpendingRollup(transactions, categoryDimension, selectedCategory);
+    const spendingMap = getSpendingRollup(transactions, categoryDimension, selectedCategoryItem);
     
     // create a trace object for each category type item we're rendering
     const categories = Array.from(spendingMap.keys());

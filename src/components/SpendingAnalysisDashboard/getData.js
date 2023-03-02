@@ -1,4 +1,4 @@
-import {group, rollup, sum, sort, reduce} from 'd3'
+import {group, rollup, sum, sort} from 'd3'
 
 /**
  * 
@@ -30,7 +30,32 @@ export const getSpendingRollup = (transactions, categoryDimension, selectedCateg
     } 
     else if (categoryDimension === "category_name") {
         return getRollupBySubcategory(transactions, selectedCategory);
+    } 
+    else if (categoryDimension === "single_category") {
+        return getRollupBySingleSubcategory(transactions, selectedCategory);
     }
+}
+
+/**
+ * Gets rolled up spending on the basis of category group. Returned map has structure
+ * Subcategory => monthYear => spending in that period for that category.
+ * 
+ * @param {*} transactions - The transactions to be rolled up.
+ * @returns A map of 1 chosen subcategory's spending, mapped to 
+ *          their spending in each active budget period. 
+ */
+const getRollupBySingleSubcategory = (transactions, selectedCategory) => {
+
+    // rollup transactions on subcategories of selected category group
+    const filteredTransactions = transactions.filter(commonFilter);
+    const spendingRollup = rollup(filteredTransactions, 
+        t=> Math.abs(sum(t, i=>i.amount)),
+        t=> t.category_name,
+        t=> t.month_year
+    );
+    const returnedMap = new Map();
+    returnedMap.set(selectedCategory, spendingRollup.get(selectedCategory))
+    return returnedMap;
 }
 
 /**
@@ -41,7 +66,7 @@ export const getSpendingRollup = (transactions, categoryDimension, selectedCateg
  * @returns A map of subcategories, specified by their parent category group, \
  *          mapped to their spending in each active budget period. 
  */
-export const getRollupBySubcategory = (transactions, parentCategory) => {
+const getRollupBySubcategory = (transactions, parentCategory) => {
 
     // rollup transactions on subcategories of selected category group
     const filteredTransactions = transactions.filter(commonFilter);
@@ -99,10 +124,39 @@ export const getSubcategories = (transactions) => {
  * @param {*} transactions 
  * @returns Array of all unique category groups
  */
-export const getSubcategoriesOfParentCategory = (transactions, categoryGroup) => {
+export const getSubcategoriesOfCategoryGroup = (transactions, categoryGroup) => {
     const filteredTransactions = transactions.filter(commonFilter);
     const categoryGroups = group(filteredTransactions, t => t.category_group_name, t => t.category_name);
     return sort(Array.from(categoryGroups.get(categoryGroup).keys()));
+}
+
+/**
+ * 
+ * @param {*} spendingMap 
+ * @param {*} subcategory 
+ */
+export const getSubcategoriesOfSibling = (transactions, subcategory) => {
+    const filteredTransactions = transactions.filter(commonFilter);
+    const categoryGroups = group(filteredTransactions, t => t.category_group_name, t => t.category_name);
+    let returned;
+    categoryGroups.forEach((value, key) => {
+        if (categoryGroups.get(key).has(subcategory)){
+            returned = Array.from(categoryGroups.get(key).keys());
+        }
+    });
+    return returned;
+}
+
+export const getParentOfSubcategory = (transactions, subcategory) => {
+    const filteredTransactions = transactions.filter(commonFilter);
+    const categoryGroups = group(filteredTransactions, t => t.category_group_name, t => t.category_name);
+    let returned;
+    categoryGroups.forEach((value, key) => {
+        if (categoryGroups.get(key).has(subcategory)){
+            returned = key;
+        }
+    });
+    return returned;
 }
 
 /**
@@ -127,8 +181,7 @@ const getSummedSpendingByMonth = (spendingData) => {
 }
 
 export const getSummedSpending = (spendingData) => {
-    let summedSpending;
-    summedSpending = getSummedSpendingByMonth(spendingData);
+    const summedSpending = getSummedSpendingByMonth(spendingData);
     return summedSpending;
 }
 

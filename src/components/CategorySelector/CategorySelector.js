@@ -2,15 +2,33 @@ import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment } from "react";
 import { useSelector } from "react-redux";
-import { getCategoryGroups, getSubcategoriesOfParentCategory } from "../SpendingAnalysisDashboard/utils/dataManipulation";
+import { 
+    getCategoryGroups, 
+    getSubcategoriesOfSibling, 
+    getSubcategoriesOfCategoryGroup, 
+    getParentOfSubcategory
+} from "../SpendingAnalysisDashboard/getData";
 
-const CategorySelector = ({selectedCategory, handleSelect}) => {
+const CategorySelector = ({
+    categoryDimension, 
+    selectedCategoryItem, 
+    handleSelect}) => {
 
     const transactions = useSelector(state => state.transactions);
     const categories = ["All", ...getCategoryGroups(transactions)];
 
-    // subcategories mapped to buttons
-    const subCategories = selectedCategory !== "All" ? getSubcategoriesOfParentCategory(transactions, selectedCategory) : [];
+    // subcategories mapped to drilldown buttons
+    let subCategories; let parentOfSelected;
+    if (categoryDimension === "category_name") {
+        // get the 'child' subcategories of the selected category group
+        subCategories = getSubcategoriesOfCategoryGroup(transactions, selectedCategoryItem);
+    } else if (categoryDimension === "single_category") {
+        // get the 'sibling' subcategories of the selected single category
+        subCategories = getSubcategoriesOfSibling(transactions, selectedCategoryItem);
+        parentOfSelected = getParentOfSubcategory(transactions, selectedCategoryItem);
+    } else {
+        subCategories = [];
+    }
 
     return (
         <Fragment>
@@ -26,8 +44,22 @@ const CategorySelector = ({selectedCategory, handleSelect}) => {
                     {/* select box */}
                     <select className="form-select form-select-sm" 
                             id="categoryDrilldownSelect"
-                            onChange={(event) => handleSelect(event.target.value)}
-                            value={selectedCategory}>
+                            onChange={(event) => {
+                                // if all is selected, set dimension as cat_group_name
+                                if (event.target.value === "All") {
+                                    handleSelect(
+                                        categoryDimension="category_group_name",
+                                        selectedCategoryItem="All");
+                                } else { // else set dimension as cat_name
+                                    handleSelect(
+                                        categoryDimension="category_name", 
+                                        selectedCategoryItem=event.target.value);
+                                }
+                            }
+                            }
+                            // value in the dropdown is the selected item, or the parent
+                            // of the selected item if the selected item is a subcategory
+                            value={(parentOfSelected ? parentOfSelected : selectedCategoryItem)}>
                             
                             {/* enumerate the choices */}
                             {categories.map((category) => {
@@ -38,22 +70,34 @@ const CategorySelector = ({selectedCategory, handleSelect}) => {
                                 )
                             })}
                     </select>
+
                 {/* conditionally shown back button to the right of dropdown */}
-                {selectedCategory !== "All" &&
+                {categoryDimension !== "category_group_name" &&
                     <button 
                         className="btn btn-outline-dark ml-3"
-                        onClick={() => handleSelect("All")}>
+                        onClick={() => handleSelect( // reset view to all category groups 
+                                        categoryDimension="category_group_name", 
+                                        selectedCategoryItem="All")
+                                }>
                         <FontAwesomeIcon icon={faArrowUp}/>
                     </button>
                 }
                 </div>
             </div>
-            {/* Conditionally rendered drilldown */}
-            {selectedCategory !== "All" &&
+
+            {/* Conditionally rendered subcategory buttons */}
+            {categoryDimension !== "category_group_name" &&
                 <div className="btn-toolbar mt-3">
                     {subCategories.map((Subcategory) => {
                         return (
-                            <button className="btn btn-sm btn-outline-dark mr-1 mb-1">{Subcategory}</button>
+                            <button 
+                                className="btn btn-sm btn-outline-dark mr-1 mb-1"
+                                onClick={() => handleSelect(
+                                    categoryDimension="single_category",
+                                    selectedCategoryItem=Subcategory)
+                                }>
+                                {Subcategory}
+                            </button>
                         )
                     })}
                 </div>
