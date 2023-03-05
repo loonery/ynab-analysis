@@ -1,12 +1,12 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
-import { getBarTraces } from "./getTraces";
+import { getBarTraces, getTraces } from "./getTraces";
 
 const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
 
     const transactions = useSelector(state => state.transactions);
-    const traceObjects = getBarTraces(transactions, categoryDimension, selectedCategoryItem);
+    const traceObjects = getTraces(transactions, categoryDimension, selectedCategoryItem);
 
     /* Get the Layout for the Plot */
     const getLayout = () => {
@@ -34,7 +34,7 @@ const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
     }
 
     return (
-        <Plot className="border rounded mb-5 mt-2"
+        <Plot className="border rounded my-2"
             data={traceObjects}
             layout={getLayout()}
             config={getConfig()}

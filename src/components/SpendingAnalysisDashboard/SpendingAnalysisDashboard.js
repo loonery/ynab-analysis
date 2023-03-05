@@ -1,6 +1,7 @@
-import React, {useState } from "react";
+import React, {Fragment, useState } from "react";
 import SpendingAnalysisPlot from "../SpendingAnalysisPlot/SpendingAnalysisPlot";
 import CategorySelector from "../categorySelector";
+import { Row, Col } from "react-bootstrap";
 
 const SpendingAnalysisDashboard = () => {
 
@@ -16,29 +17,21 @@ const SpendingAnalysisDashboard = () => {
     }
 
     return (
-        <div className="border rounded mx-2 my-2">
-            <div className="d-flex justify-content-center">
-                <div className="d-flex flex-column">
-                    
-                    {/* House the category dropdown options */}
-                    <div className="mt-3 mr-3">
-                        <CategorySelector 
-                            categoryDimension={categoryDimension} 
-                            selectedCategoryItem={selectedCategoryItem} 
-                            handleSelect={handleSelect}/>
-                    </div>
+        // the whole dashboard renders as a row within the container
+        <Row className="mx-2 my-2 pt-3 border">
+            <Col>
+                {/* House the category dropdown options */}
+                <CategorySelector 
+                    categoryDimension={categoryDimension} 
+                    selectedCategoryItem={selectedCategoryItem} 
+                    handleSelect={handleSelect}/>
 
-                    {/* house the spending analysis plot */}
-                    <div>
-                        <SpendingAnalysisPlot  
-                            categoryDimension={categoryDimension}
-                            selectedCategoryItem={selectedCategoryItem} 
-                            />
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
+                {/* house the spending analysis plot */}
+                <SpendingAnalysisPlot  
+                    categoryDimension={categoryDimension}
+                    selectedCategoryItem={selectedCategoryItem}/>
+            </Col>
+        </Row>
     )
 }
 export default SpendingAnalysisDashboard;
