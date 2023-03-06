@@ -1,6 +1,7 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
+import { Row } from "react-bootstrap";
 import { getBarTraces, getTraces } from "./getTraces";
 
 const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {

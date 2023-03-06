@@ -30,14 +30,11 @@ const CategorySelector = ({
                                 undefined;
 
     return (
+    <Form>
     <Row>
         <Col>
-            {/* houses the drowndown  */}
-            <InputGroup className="input-group">
-
-                {/* prepend dialog */}
-                <InputGroup.Text>Showing...</InputGroup.Text>
-
+            <InputGroup>
+                <InputGroup.Text>Category Group</InputGroup.Text>
                 {/* Category Group select box */}
                 <Form.Select 
                     className="form-select form-select-sm" 
@@ -67,47 +64,53 @@ const CategorySelector = ({
                         )
                     })}
                 </Form.Select>
-
+            
                 {/* conditionally shown back button to the right of dropdown */}
                 {categoryDimension !== "category_group_name" &&
-                    <Button 
-                        className="ml-3"
-                        onClick={() => handleSelect( // reset view to all category groups 
-                                        categoryDimension="category_group_name", 
-                                        selectedCategoryItem="All")
-                                }
-                        variant='outline-dark'>
-                        <FontAwesomeIcon icon={faArrowUp}/>
-                    </Button>
+                <Button 
+                    className="ml-3"
+                    onClick={() => handleSelect( // reset view to all category groups 
+                                    categoryDimension="category_group_name", 
+                                    selectedCategoryItem="All")
+                            }
+                    variant='outline-dark'>
+                    <FontAwesomeIcon icon={faArrowUp}/>
+                </Button>
                 }
             </InputGroup>
 
-            {/* Conditionally rendered subcategory buttons */}
+            {/* Conditionally rendered subcategory dropdown */}
             {categoryDimension !== "category_group_name" &&
-            <Row>
-            <Col>
-                <ButtonToolbar className="btn-toolbar mt-3">
-                    <ButtonGroup>
-                        {subCategories.map((Subcategory) => {
-                            return (
-                                <Button 
-                                    className="btn btn-sm btn-outline-dark mr-1 mb-1"
-                                    onClick={() => handleSelect(
-                                        categoryDimension="single_category",
-                                        selectedCategoryItem=Subcategory)
-                                    }>
-                                    {Subcategory}
-                                </Button>
-                            );
-                        })}
-                    </ButtonGroup>
-                </ButtonToolbar>
-            </Col>
-            </Row>
+            <InputGroup className="mt-3">
+                <InputGroup.Text>Subcategory</InputGroup.Text>
+                <Form.Select 
+                    value={subCategories.includes(selectedCategoryItem) ? selectedCategoryItem : 'All'}
+                    onChange={(event) => {
+                        if (event.target.value === "All") {
+                        handleSelect(
+                            categoryDimension="category_name",
+                            selectedCategoryItem=parentOfSubcategory);
+                        } else { // else set dimension as cat_name
+                        handleSelect(
+                            categoryDimension="single_category", 
+                            selectedCategoryItem=event.target.value);
+                        }
+                    }}>
+                    
+                    {/* subcategories appear as choices in the dropdown */}
+                    {subCategories.map((Subcategory) => {
+                    return (
+                        <option className="btn btn-sm btn-outline-dark mr-1 mb-1">
+                            {Subcategory}
+                        </option>
+                    );
+                    })}
+                </Form.Select>
+            </InputGroup>
             }
-            <hr/>
         </Col>
     </Row>
+    </Form>
     );
 }
 export default CategorySelector;

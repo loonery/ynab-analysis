@@ -5,13 +5,12 @@ import SpendingAnalysisDashboard from './components/SpendingAnalysisDashboard/';
 
 const App = () => {
   return (
-    <Container fluid className='border'>
+    <Container className='border'>
       <Row>
         <Col>
           <Routes>
             <Route path='/' element={<SpendingAnalysisDashboard/>}/>
           </Routes>
-        
         </Col>
       </Row>
     </Container>
