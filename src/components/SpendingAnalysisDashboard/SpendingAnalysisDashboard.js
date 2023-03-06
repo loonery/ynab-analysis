@@ -1,6 +1,6 @@
-import React, {Fragment, useState } from "react";
-import SpendingAnalysisPlot from "../SpendingAnalysisPlot/SpendingAnalysisPlot";
-import CategorySelector from "../categorySelector";
+import React, {useState } from "react";
+import SpendingAnalysisPlot from "../SpendingAnalysisPlot";
+import CategorySelector from "../CategorySelector";
 import { Row, Col } from "react-bootstrap";
 
 const SpendingAnalysisDashboard = () => {

@@ -20,7 +20,7 @@ const CategorySelector = ({
 
     // subcategories of the currently selected 
     // categoryGroup are mapped to drilldown buttons
-    const subCategories = getSubcategories(transactionHirearchy, categoryDimension, selectedCategoryItem); 
+    const subCategories = ["All", ...getSubcategories(transactionHirearchy, categoryDimension, selectedCategoryItem)]; 
     
     // need to show the parent of the selected item in the
     // dropdown if the selected item is a single-category level
@@ -38,7 +38,7 @@ const CategorySelector = ({
                 {/* prepend dialog */}
                 <InputGroup.Text>Showing...</InputGroup.Text>
 
-                {/* select box */}
+                {/* Category Group select box */}
                 <Form.Select 
                     className="form-select form-select-sm" 
                     id="categoryDrilldownSelect"

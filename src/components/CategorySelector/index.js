@@ -1,1 +1,1 @@
-export { default } from './categorySelector.js'; 
+export { default } from './CategorySelector.js'; 
