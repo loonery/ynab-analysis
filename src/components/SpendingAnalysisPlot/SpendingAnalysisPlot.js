@@ -1,7 +1,6 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { useSelector } from "react-redux";
-import { Row } from "react-bootstrap";
 import { getBarTraces, getTraces } from "./getTraces";
 
 const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
@@ -16,7 +15,6 @@ const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
         const xaxis = {tickprefix: ""}
 
         return {
-            title: 'Spending Analysis by Category',
             barmode: 'stack',
             showlegend: false,
             width: 800, 

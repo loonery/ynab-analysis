@@ -1,14 +1,16 @@
 import React, {useState } from "react";
 import SpendingAnalysisPlot from "../SpendingAnalysisPlot";
 import CategorySelector from "../CategorySelector";
-import { Row, Col } from "react-bootstrap";
+import { useTransactions } from "../../hooks/useTransactions";
 
 const SpendingAnalysisDashboard = () => {
 
     // categoryDimension can be ["category_group_name, category_name, single_category"]
     // selectedCategoryItem can be any category group or subcategory name
     const [categoryDimension, setCategoryDimension] = useState("category_group_name");
-    const [selectedCategoryItem, setSelectedCategory] = useState("All");       
+    const [selectedCategoryItem, setSelectedCategory] = useState("All");    
+    
+    const transactions = useTransactions();
     
     // handle selecting of a category (this function passed to category selector)
     const handleSelect = (categoryDimension, selectedCategoryItem) => {
@@ -18,20 +20,20 @@ const SpendingAnalysisDashboard = () => {
 
     return (
         // the whole dashboard renders as a row within the container
-        <Row className="mx-2 my-2 pt-3 border">
-            <Col>
+        <div className="row mx-2 my-2 pt-3 border">
+            <div className="col">
                 {/* House the category dropdown options */}
-                <CategorySelector 
+                {/* <CategorySelector 
                     categoryDimension={categoryDimension} 
                     selectedCategoryItem={selectedCategoryItem} 
-                    handleSelect={handleSelect}/>
+                    handleSelect={handleSelect}/> */}
 
                 {/* house the spending analysis plot */}
-                <SpendingAnalysisPlot  
+                {/* <SpendingAnalysisPlot  
                     categoryDimension={categoryDimension}
-                    selectedCategoryItem={selectedCategoryItem}/>
-            </Col>
-        </Row>
+                    selectedCategoryItem={selectedCategoryItem}/> */}
+            </div>
+        </div>
     )
 }
 export default SpendingAnalysisDashboard;
