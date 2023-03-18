@@ -3,7 +3,7 @@ import {
     getTransactionHirearchy,
     getActiveMonthsSums,
     getTotalSpending,
-} from "../SpendingAnalysisDashboard/getSpendingData";
+} from "../SpendingAnalysisDashboard/utils/getSpendingData";
 
 export const getTraces = (
     transactions, 

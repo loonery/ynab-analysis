@@ -21,7 +21,7 @@ export const configureApollo = () => {
             },
             transactions: {
                 uri: transactionsEndpoint,
-                responseTransformer: async (response, typename) => response.json().then((data) => data.data[typename])
+                responseTransformer: async (response) => response.json().then((data) => data.data["transactions"])
             },
             categories: {
                 uri: categoriesEndpoint,

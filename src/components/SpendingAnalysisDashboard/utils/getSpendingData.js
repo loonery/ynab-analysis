@@ -9,14 +9,13 @@ const commonFilter = (transaction) => {
     if (transaction.category_group_name === "Starting Balance" || 
         transaction.category_group_name === "Internal Master Category" ||
         transaction.category_group_name === "-- INACTIVE & ARCHIVE --" ||
-        transaction.category_group_name === "Reimbursements")
+        transaction.category_group_name === "Reimbursements" || transaction.deleted) 
     {
         return false;
     } else {
         return true;
     }
 }
-
 
 
 /**

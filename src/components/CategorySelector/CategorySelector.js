@@ -3,18 +3,36 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button} from "react-bootstrap";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
+import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
 import { 
     getTransactionHirearchy,
     getSubcategories,
     getCategoryGroups,
     getParentOfSubcategory
-} from "../SpendingAnalysisDashboard/getSpendingData";
+} from "../SpendingAnalysisDashboard/utils/getSpendingData";
 const CategorySelector = ({
     categoryDimension, 
     selectedCategoryItem, 
     handleSelect}) => {
 
-    const transactions = useSelector(state => state.transactions);
+    const {transactions, loading, error} = useTransactions();
+
+    if (loading) {
+        return (
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        )
+    } 
+
+    if (error) {
+        return (
+            <div>
+                Error...
+            </div>
+        )
+    }
+
     const transactionHirearchy = getTransactionHirearchy(transactions);
     const categoryGroups = ["All", ...getCategoryGroups(transactionHirearchy)];
 
@@ -26,9 +44,7 @@ const CategorySelector = ({
     // dropdown if the selected item is a single-category level
     let parentOfSubcategory = categoryDimension === 'single_category' ? 
                                 getParentOfSubcategory(transactionHirearchy, selectedCategoryItem) 
-                                : 
-                                undefined;
-
+                                : undefined;
 
     return (
     <div className="row">

@@ -9,9 +9,7 @@ const SpendingAnalysisDashboard = () => {
     // selectedCategoryItem can be any category group or subcategory name
     const [categoryDimension, setCategoryDimension] = useState("category_group_name");
     const [selectedCategoryItem, setSelectedCategory] = useState("All");    
-    
-    const transactions = useTransactions();
-    
+
     // handle selecting of a category (this function passed to category selector)
     const handleSelect = (categoryDimension, selectedCategoryItem) => {
         setCategoryDimension(categoryDimension);
@@ -23,15 +21,15 @@ const SpendingAnalysisDashboard = () => {
         <div className="row mx-2 my-2 pt-3 border">
             <div className="col">
                 {/* House the category dropdown options */}
-                {/* <CategorySelector 
+                <CategorySelector 
                     categoryDimension={categoryDimension} 
                     selectedCategoryItem={selectedCategoryItem} 
-                    handleSelect={handleSelect}/> */}
+                    handleSelect={handleSelect}/>
 
                 {/* house the spending analysis plot */}
-                {/* <SpendingAnalysisPlot  
+                <SpendingAnalysisPlot  
                     categoryDimension={categoryDimension}
-                    selectedCategoryItem={selectedCategoryItem}/> */}
+                    selectedCategoryItem={selectedCategoryItem}/>
             </div>
         </div>
     )
