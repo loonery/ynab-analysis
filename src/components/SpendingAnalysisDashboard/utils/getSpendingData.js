@@ -7,9 +7,11 @@ import {group, sort} from 'd3'
  */
 const commonFilter = (transaction) => {
 
+    // if category group is undefined
     const undefinedGroup = typeof transaction.category_group_name === "undefined";
 
-    const badCategoryGroups = ["Internal Master Category", "-- INACTIVE & ARCHIVE --", "Reimbursements"];
+    // if category has one of the 'bad' category groups that don't relate to spending
+    const badCategoryGroups = ["Internal Master Category", "Reimbursements"];
     const isBadCategoryGroup = badCategoryGroups.includes(transaction.category_group_name);
 
     const deleted = transaction.deleted;
@@ -17,11 +19,17 @@ const commonFilter = (transaction) => {
     return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
 }
 
+const userFilter = (filterObject) => {
+
+}
+
 /**
  * The 'constructor' for the data aggregation object
  */ 
 export const getTransactionHirearchy = (transactions) => {
+    
     const filteredTransactions = transactions.filter(commonFilter);
+
     const groupedTransactions = group(
         filteredTransactions, 
         t => t.category_group_name, 
