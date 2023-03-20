@@ -6,17 +6,25 @@ import {group, sort} from 'd3'
  * @returns 
  */
 const commonFilter = (transaction) => {
-    if (transaction.category_group_name === "Starting Balance" || 
-        transaction.category_group_name === "Internal Master Category" ||
-        transaction.category_group_name === "-- INACTIVE & ARCHIVE --" ||
-        transaction.category_group_name === "Reimbursements" || transaction.deleted) 
-    {
-        return false;
-    } else {
-        return true;
-    }
+
+    const undefinedGroup = typeof transaction.category_group_name === "undefined";
+
+    const badCategoryGroups = ["Internal Master Category", "-- INACTIVE & ARCHIVE --", "Reimbursements"];
+    const isBadCategoryGroup = badCategoryGroups.includes(transaction.categoryGroup);
+
+    const deleted = transaction.deleted;
+
+    return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
 }
 
+const undefinedFilter = (transaction) => {
+    if (typeof transaction.category_group_name === 'undefined')
+    {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 /**
  * The 'constructor' for the data aggregation object

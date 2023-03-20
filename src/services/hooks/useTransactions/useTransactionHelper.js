@@ -3,32 +3,6 @@
 // ##############################
 const handleNullCategories = (transaction) => {
     
-
-    const hashCode = (str) => {
-        let hash = 0;
-        for (let i = 0, len = str.length; i < len; i++) {
-            let chr = str.charCodeAt(i);
-            hash = (hash << 5) - hash + chr;
-            hash |= 0; // Convert to 32bit integer
-        }
-        return hash;
-    }
-
-    if (transaction.category_id === null) {
-        if (transaction.memo === "Starting balance") {
-            transaction.category_group_name = "Starting Balance";
-            transaction.category_name = "Starting Balance";
-            
-        } else {
-            transaction.category_group_name = "Transfer";
-            transaction.category_name = "Transfer";
-        }
-    
-        // we need to give each transaction category an id so that it is identifiable
-        // when graphing
-        transaction.category_id = hashCode(transaction.category_name);
-    }
-
 }
 
 // helper
@@ -87,7 +61,7 @@ export const getFlattenedTransactions = (transactions, categoryGroups) => {
     let transactionsCopy = transactions.map((transaction) => Object.assign({}, transaction));
 
     let i = 0;
-    while (i < transactions.length) {
+    while (i < transactionsCopy.length) {
 
         // get the transaction object
         let transaction = transactionsCopy[i];

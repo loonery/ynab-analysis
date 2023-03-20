@@ -1,7 +1,6 @@
 import React, {useState } from "react";
 import SpendingAnalysisPlot from "../SpendingAnalysisPlot";
 import CategorySelector from "../CategorySelector";
-import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
 
 const SpendingAnalysisDashboard = () => {
 
