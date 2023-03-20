@@ -10,20 +10,11 @@ const commonFilter = (transaction) => {
     const undefinedGroup = typeof transaction.category_group_name === "undefined";
 
     const badCategoryGroups = ["Internal Master Category", "-- INACTIVE & ARCHIVE --", "Reimbursements"];
-    const isBadCategoryGroup = badCategoryGroups.includes(transaction.categoryGroup);
+    const isBadCategoryGroup = badCategoryGroups.includes(transaction.category_group_name);
 
     const deleted = transaction.deleted;
 
     return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
-}
-
-const undefinedFilter = (transaction) => {
-    if (typeof transaction.category_group_name === 'undefined')
-    {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 /**
