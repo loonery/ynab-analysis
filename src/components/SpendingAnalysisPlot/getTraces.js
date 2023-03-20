@@ -3,7 +3,7 @@ import {
     getTransactionHirearchy,
     getActiveMonthsSums,
     getTotalSpending,
-} from "../SpendingAnalysisDashboard/getSpendingData";
+} from "../SpendingAnalysisDashboard/utils/getSpendingData";
 
 export const getTraces = (
     transactions, 
@@ -80,7 +80,7 @@ const getLineTrace = (
         const categorySums = Array.from(totalsMap.values());
 
         let text = activeMonths.map((month) => {
-            const monthlyTotal = totalsMap.get(month);
+            const monthlyTotal = totalsMap.get(month).toFixed(2);
             
             let html = '<i>' + month + '</i><br>';
             html += '<b>$' + monthlyTotal + '</b><br>';

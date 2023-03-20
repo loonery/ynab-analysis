@@ -1,20 +1,38 @@
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { ButtonToolbar, ButtonGroup, Button, Row, InputGroup, Form, Col } from "react-bootstrap";
+import { Button} from "react-bootstrap";
 import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
 import { 
     getTransactionHirearchy,
     getSubcategories,
     getCategoryGroups,
     getParentOfSubcategory
-} from "../SpendingAnalysisDashboard/getSpendingData";
-
+} from "../SpendingAnalysisDashboard/utils/getSpendingData";
 const CategorySelector = ({
     categoryDimension, 
     selectedCategoryItem, 
     handleSelect}) => {
 
-    const transactions = useSelector(state => state.transactions);
+    const {transactions, loading, error} = useTransactions();
+
+    if (loading) {
+        return (
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        )
+    } 
+
+    if (error) {
+        return (
+            <div>
+                Error...
+            </div>
+        )
+    }
+
     const transactionHirearchy = getTransactionHirearchy(transactions);
     const categoryGroups = ["All", ...getCategoryGroups(transactionHirearchy)];
 
@@ -26,50 +44,101 @@ const CategorySelector = ({
     // dropdown if the selected item is a single-category level
     let parentOfSubcategory = categoryDimension === 'single_category' ? 
                                 getParentOfSubcategory(transactionHirearchy, selectedCategoryItem) 
-                                : 
-                                undefined;
+                                : undefined;
 
     return (
-    <Row>
-        <Col>
-            {/* houses the drowndown  */}
-            <InputGroup className="input-group">
+    <div className="row">
+        <div className="col">
+            <div className="d-flex">
+                {/* wraps both select items */}
+                <div>
+                    {/* select input group */}
+                    <div className="input-group">
+                        <div className="input-group-prepend">
+                            <label 
+                                className="input-group-text" 
+                                htmlFor="categoryGroupDrilldownSelect">
+                                Category Group
+                            </label>
+                        </div>
 
-                {/* prepend dialog */}
-                <InputGroup.Text>Showing...</InputGroup.Text>
+                        {/* Category Group select box */}
+                        <select 
+                            className="custom-select"
+                            id="categoryGroupDrilldownSelect"
+                            onChange={(event) => {
+                                // if all is selected, set dimension as cat_group_name
+                                if (event.target.value === "All") {
+                                    handleSelect(
+                                        categoryDimension="category_group_name",
+                                        selectedCategoryItem="All");
+                                } else { // else set dimension as cat_name
+                                    handleSelect(
+                                        categoryDimension="category_name", 
+                                        selectedCategoryItem=event.target.value);
+                                }
+                            }}
+                            // value in the dropdown is the selected item, or the parent
+                            // of the selected item if the selected item is a subcategory
+                            value={parentOfSubcategory ? parentOfSubcategory : selectedCategoryItem}>
+                            
+                            {/* enumerate the choices */}
+                            {categoryGroups.map((category) => {
+                            return (
+                                <option 
+                                    className="btn dropdown-toggle"
+                                    value={category}>
+                                    {category}
+                                </option>
+                            )
+                            })}
+                        </select>
+                    </div>
 
-                {/* Category Group select box */}
-                <Form.Select 
-                    className="form-select form-select-sm" 
-                    id="categoryDrilldownSelect"
-                    onChange={(event) => {
-                        // if all is selected, set dimension as cat_group_name
-                        if (event.target.value === "All") {
-                            handleSelect(
-                                categoryDimension="category_group_name",
-                                selectedCategoryItem="All");
-                        } else { // else set dimension as cat_name
-                            handleSelect(
-                                categoryDimension="category_name", 
-                                selectedCategoryItem=event.target.value);
-                        }
-                    }}
-                    // value in the dropdown is the selected item, or the parent
-                    // of the selected item if the selected item is a subcategory
-                    value={parentOfSubcategory ? parentOfSubcategory : selectedCategoryItem}>
-                    
-                    {/* enumerate the choices */}
-                    {categoryGroups.map((category) => {
-                        return (
-                            <option className="btn dropdown-toggle">
-                                {category}
-                            </option>
-                        )
-                    })}
-                </Form.Select>
+                    {/* Conditionally rendered subcategory dropdown */}
+                    {categoryDimension !== "category_group_name" &&
+                    // select input group
+                    <div className="input-group mt-3">
+                        <div className="input-group-prepend">
+                            <label 
+                                className="input-group-text" 
+                                htmlFor="subcategoryDrilldownSelect">
+                                {"Subcategory"}
+                            </label>
+                        </div>
 
-                {/* conditionally shown back button to the right of dropdown */}
-                {categoryDimension !== "category_group_name" &&
+                        <select
+                            className="custom-select"
+                            id="subcategoryDrilldownSelect"
+                            value={subCategories.includes(selectedCategoryItem) ? selectedCategoryItem : 'All'}
+                            onChange={(event) => {
+                                if (event.target.value === "All") {
+                                handleSelect(
+                                    categoryDimension="category_name",
+                                    selectedCategoryItem=parentOfSubcategory);
+                                } else { // else set dimension as cat_name
+                                handleSelect(
+                                    categoryDimension="single_category", 
+                                    selectedCategoryItem=event.target.value);
+                                }
+                            }}>
+                            
+                            {/* subcategories appear as choices in the dropdown */}
+                            {subCategories.map((Subcategory) => {
+                            return (
+                                <option className="btn btn-sm btn-outline-dark mr-1 mb-1">
+                                    {Subcategory}
+                                </option>
+                            );
+                            })}
+                        </select>
+                    </div>
+                    }
+                </div>
+
+                <div className="d-flex align-items-stretch">
+                    {/* conditionally shown back button to the right of dropdown */}
+                    {categoryDimension !== "category_group_name" &&
                     <Button 
                         className="ml-3"
                         onClick={() => handleSelect( // reset view to all category groups 
@@ -79,35 +148,11 @@ const CategorySelector = ({
                         variant='outline-dark'>
                         <FontAwesomeIcon icon={faArrowUp}/>
                     </Button>
-                }
-            </InputGroup>
-
-            {/* Conditionally rendered subcategory buttons */}
-            {categoryDimension !== "category_group_name" &&
-            <Row>
-            <Col>
-                <ButtonToolbar className="btn-toolbar mt-3">
-                    <ButtonGroup>
-                        {subCategories.map((Subcategory) => {
-                            return (
-                                <Button 
-                                    className="btn btn-sm btn-outline-dark mr-1 mb-1"
-                                    onClick={() => handleSelect(
-                                        categoryDimension="single_category",
-                                        selectedCategoryItem=Subcategory)
-                                    }>
-                                    {Subcategory}
-                                </Button>
-                            );
-                        })}
-                    </ButtonGroup>
-                </ButtonToolbar>
-            </Col>
-            </Row>
-            }
-            <hr/>
-        </Col>
-    </Row>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
     );
 }
 export default CategorySelector;

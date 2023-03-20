@@ -1,11 +1,28 @@
 import React from "react";
 import Plot from "react-plotly.js";
-import { useSelector } from "react-redux";
-import { getBarTraces, getTraces } from "./getTraces";
+import { getTraces } from "./getTraces";
+import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
 
 const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
+    
+    const {transactions, loading, error} = useTransactions();
 
-    const transactions = useSelector(state => state.transactions);
+    if (loading) {
+        return (
+            <div className="spinner-border" role="status">
+                <span className="sr-only">Loading...</span>
+            </div>
+        )
+    } 
+
+    if (error) {
+        return (
+            <div>
+                Error...
+            </div>
+        )
+    }
+
     const traceObjects = getTraces(transactions, categoryDimension, selectedCategoryItem);
 
     /* Get the Layout for the Plot */
@@ -15,7 +32,6 @@ const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
         const xaxis = {tickprefix: ""}
 
         return {
-            title: 'Spending Analysis by Category',
             barmode: 'stack',
             showlegend: false,
             width: 800, 

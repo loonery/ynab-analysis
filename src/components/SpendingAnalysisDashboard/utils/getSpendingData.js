@@ -6,24 +6,30 @@ import {group, sort} from 'd3'
  * @returns 
  */
 const commonFilter = (transaction) => {
-    if (transaction.category_group_name === "Starting Balance" || 
-        transaction.category_group_name === "Internal Master Category" ||
-        transaction.category_group_name === "-- INACTIVE & ARCHIVE --" ||
-        transaction.category_group_name === "Reimbursements")
-    {
-        return false;
-    } else {
-        return true;
-    }
+
+    // if category group is undefined
+    const undefinedGroup = typeof transaction.category_group_name === "undefined";
+
+    // if category has one of the 'bad' category groups that don't relate to spending
+    const badCategoryGroups = ["Internal Master Category", "Reimbursements"];
+    const isBadCategoryGroup = badCategoryGroups.includes(transaction.category_group_name);
+
+    const deleted = transaction.deleted;
+
+    return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
 }
 
+const userFilter = (filterObject) => {
 
+}
 
 /**
  * The 'constructor' for the data aggregation object
  */ 
 export const getTransactionHirearchy = (transactions) => {
+    
     const filteredTransactions = transactions.filter(commonFilter);
+
     const groupedTransactions = group(
         filteredTransactions, 
         t => t.category_group_name, 
