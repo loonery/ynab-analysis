@@ -6,7 +6,7 @@ const App = () => {
     <div className='row'>
       <div className='col'>
           <Routes>
-            <Route path='/' element={<SpendingAnalysisDashboard/>}/>
+            <Route index element={<SpendingAnalysisDashboard />}/>
           </Routes>
       </div>
     </div>

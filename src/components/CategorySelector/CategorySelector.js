@@ -1,9 +1,9 @@
 import { faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
 import { Button} from "react-bootstrap";
-import { useSelector } from "react-redux";
-import styled from "styled-components";
-import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchTransactionsThunk } from "../../store/apis/thunks/fetchTransactionsThunk";
 import { 
     getTransactionHirearchy,
     getSubcategories,
@@ -15,24 +15,14 @@ const CategorySelector = ({
     selectedCategoryItem, 
     handleSelect}) => {
 
-    const {transactions, loading, error} = useTransactions();
+    // fetch transactions on 
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(fetchTransactionsThunk());
+    }, [dispatch]);
 
-    if (loading) {
-        return (
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
-    } 
-
-    if (error) {
-        return (
-            <div>
-                Error...
-            </div>
-        )
-    }
-
+    const transactions = useSelector(state => state.transactions);
+    
     const transactionHirearchy = getTransactionHirearchy(transactions);
     const categoryGroups = ["All", ...getCategoryGroups(transactionHirearchy)];
 
