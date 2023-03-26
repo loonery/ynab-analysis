@@ -8,5 +8,5 @@ const store = configureStore({
     }
 });
 
-export * from './apis/thunks/fetchTransactionsThunk'
+export * from '../api/thunks/fetchTransactionsThunk'
 export { store }

@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router'
-import SpendingAnalysisDashboard from './components/SpendingAnalysisDashboard/';
+import FilterBar from './components/FilterBar/FilterBar';
 
 const App = () => {
   return (
     <div className='row'>
       <div className='col'>
           <Routes>
-            <Route index element={<SpendingAnalysisDashboard />}/>
+            <Route index element={<FilterBar />}/>
           </Routes>
       </div>
     </div>

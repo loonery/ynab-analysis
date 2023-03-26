@@ -1,26 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchTransactionsThunk } from "../apis/thunks/fetchTransactionsThunk";
+import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
 
 const transactionsSlice = createSlice({
     name: 'transactions',
     initialState: {
-        appliedFilters: {
-            categoryFilter: undefined, 
-            dateFilter: undefined,
-            accountFilter: undefined,
-        },
         transactions: [],
+        filteredTransactions: [],
         loading: false,
         error: undefined
     },
     reducers: {
-        changeAppliedFilters(state, action) { 
+        // takes a filter object to filter the current transactions
+        filterTransactions(state, action) { 
             // get active filters
-            state.appliedFilters = action.payload;
-            const {categoryFilter, dateFilter, accountFilter} = state.appliedFilters;
+            const appliedFilters = action.payload;
+            const {categoryFilter, dateFilter, accountFilter} = appliedFilters;
 
             // filter the transactions
-            const filteredTransactions  = state.transactions.filter((transaction) => {
+            const filteredTransactions = state.transactions.filter((transaction) => {
             
                 // if filter defined, apply filter. If not defined, let anything through
                 const date = dateFilter ? (transaction.month_year >= dateFilter.start && transaction.month_year) <= dateFilter.end : true;
@@ -30,7 +27,7 @@ const transactionsSlice = createSlice({
                 // let the transaction through if it passes through all filters 
                 return (date && category && account);
             });
-            state.transactions = filteredTransactions;
+            state.filteredTransactions = filteredTransactions;
         }
     },
     extraReducers: {
@@ -39,6 +36,7 @@ const transactionsSlice = createSlice({
             state.transactions = action.payload;    // thunk return value is the payload
         },
         [fetchTransactionsThunk.pending]: (state, action) => {
+            console.log('loading...')
             state.loading = true;
         },
         [fetchTransactionsThunk.rejected]: (state, action) => {

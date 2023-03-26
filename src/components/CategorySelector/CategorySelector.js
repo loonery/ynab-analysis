@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import { Button} from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactionsThunk } from "../../store/apis/thunks/fetchTransactionsThunk";
+import {fetchTransactionsThunk} from '../../api/thunks/fetchTransactionsThunk';
 import { 
     getTransactionHirearchy,
     getSubcategories,
@@ -21,7 +21,9 @@ const CategorySelector = ({
         dispatch(fetchTransactionsThunk());
     }, [dispatch]);
 
-    const transactions = useSelector(state => state.transactions);
+    const {transactions, loading, error} = useSelector(state => state.transactions);
+
+    if (error || loading) { return <div>something happenning</div>}
     
     const transactionHirearchy = getTransactionHirearchy(transactions);
     const categoryGroups = ["All", ...getCategoryGroups(transactionHirearchy)];
