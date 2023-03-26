@@ -15,6 +15,7 @@ export const getTransactionsService = async () => {
     let transactions = transactionsResponse.data.data.transactions;
     let categories = categoriesResponse.data.data.category_groups;
 
+    // flatten the transactions
     transactions = getFlattenedTransactions(transactions, categories);
     
     return transactions;

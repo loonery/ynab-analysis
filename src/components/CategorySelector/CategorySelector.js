@@ -21,7 +21,7 @@ const CategorySelector = ({
         dispatch(fetchTransactionsThunk());
     }, [dispatch]);
 
-    const {transactions, loading, error} = useSelector(state => state.transactions);
+    const {transactions, loading, error} = useSelector(state => state.filteredTransactions);
 
     if (error || loading) { return <div>something happenning</div>}
     

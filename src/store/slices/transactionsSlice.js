@@ -6,7 +6,7 @@ const transactionsSlice = createSlice({
     initialState: {
         transactions: [],
         filteredTransactions: [],
-        loading: false,
+        loading: true,
         error: undefined
     },
     reducers: {
@@ -20,7 +20,7 @@ const transactionsSlice = createSlice({
             const filteredTransactions = state.transactions.filter((transaction) => {
             
                 // if filter defined, apply filter. If not defined, let anything through
-                const date = dateFilter ? (transaction.month_year >= dateFilter.start && transaction.month_year) <= dateFilter.end : true;
+                const date = dateFilter ? (transaction.month_year >= dateFilter.startDate && transaction.month_year) <= dateFilter.endDate : true;
                 const category = categoryFilter ? (transaction.categoryFilter.includes(transaction.category)) : true;
                 const account = accountFilter ? (transaction.account.includes(transaction.account)) : true;
                 
