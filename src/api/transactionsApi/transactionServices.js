@@ -1,16 +1,21 @@
 import axios from 'axios'
 import { API_BASE, BUDGET_ID, defaultHeaders } from '../apiUtils';
-import {getFlattenedTransactions} from './transactionHelper'
+import { getFlattenedTransactions } from './transactionHelper'
 export const getTransactionsService = async () => {
-    console.log('running service...')
+    
     const transactionsResponse = await axios.get(`${API_BASE}/budgets/${BUDGET_ID}/transactions`, {
         headers: defaultHeaders
     });
-    // to render the transactions as we want we 
-    // need categories to determine category groups
+    // to render the transactions as we want we need categories to determine category groups
     const categoriesResponse = await axios.get(`${API_BASE}/budgets/${BUDGET_ID}/categories`, {
         headers: defaultHeaders
     });
-    const transactions = getFlattenedTransactions(transactionsResponse, categoriesResponse);
+    
+    // 'peel the fruit' 
+    let transactions = transactionsResponse.data.data.transactions;
+    let categories = categoriesResponse.data.data.category_groups;
+
+    transactions = getFlattenedTransactions(transactions, categories);
+    
     return transactions;
 }
