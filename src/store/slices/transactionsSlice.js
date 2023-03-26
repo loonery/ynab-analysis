@@ -14,18 +14,30 @@ const transactionsSlice = createSlice({
         filterTransactions(state, action) { 
             // get active filters
             const appliedFilters = action.payload;
-            const {categoryFilter, dateFilter, accountFilter} = appliedFilters;
+            const {filteredCategories, startDate, endDate, filteredAccounts} = appliedFilters;
 
             // filter the transactions
             const filteredTransactions = state.transactions.filter((transaction) => {
             
                 // if filter defined, apply filter. If not defined, let anything through
-                const date = dateFilter ? (transaction.month_year >= dateFilter.startDate && transaction.month_year) <= dateFilter.endDate : true;
-                const category = categoryFilter ? (transaction.categoryFilter.includes(transaction.category)) : true;
-                const account = accountFilter ? (transaction.account.includes(transaction.account)) : true;
+                const passStart = startDate ? (transaction.month_year >= startDate) : true;
+
+                const passEnd = endDate ? (transaction.month_year <= endDate) : true;
+
+                const passCategory = filteredCategories ? 
+                            (filteredCategories.includes(transaction.category_name) 
+                            || filteredCategories.includes(transaction.category_group_name)) 
+                            : true;
+
+                const passAccount = filteredAccounts ? (filteredAccounts.includes(transaction.account)) : true;
                 
                 // let the transaction through if it passes through all filters 
-                return (date && category && account);
+                return (
+                    passStart &&
+                    passEnd &&
+                    passCategory &&
+                    passAccount
+                );
             });
             state.filteredTransactions = filteredTransactions;
         }
@@ -36,7 +48,6 @@ const transactionsSlice = createSlice({
             state.transactions = action.payload;    // thunk return value is the payload
         },
         [fetchTransactionsThunk.pending]: (state, action) => {
-            console.log('loading...')
             state.loading = true;
         },
         [fetchTransactionsThunk.rejected]: (state, action) => {

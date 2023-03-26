@@ -1,32 +1,33 @@
 import { useDispatch, useSelector } from "react-redux";
 import {useEffect, useState} from 'react'
 import {fetchTransactionsThunk} from '../../api/thunks/fetchTransactionsThunk'
+import {filterTransactions} from '../../store/slices/transactionsSlice'
 
 const FilterBar = () => {
-    
-    // fetch transactions on 
-    const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(fetchTransactionsThunk());
-    }, [dispatch]);
 
-    const {transactions, loading, error} = useSelector(state => state.transactions);
+    const dispatch = useDispatch();
+
 
     // maybe export this to a constant
     const defaultFilters = {
-        dateFilter: {
-            startDate: undefined, 
-            endDate: undefined
-        },
-        categoryFilter: [],
-        accountFilter: []
+        startDate: undefined, 
+        endDate: undefined,
+        filteredCategories: [],
+        filteredAccounts: []
     }
+    const [filter, setFilter] = useState(defaultFilters);   // filter the transactions
+ 
+    useEffect(() => {
+        dispatch(fetchTransactionsThunk());
+    });
 
-    const [filter, setFilter] = useState(defaultFilters);
+    const {transactions, loading, error} = useSelector(state => state.transactions);
 
 
+    // return a component in loading and error cases 
     if (loading) { return <div>Loading...</div>}
     if (error) { return <div>Error in Filter Bar</div>}
+
 
     return (
         <div>Filter Bar Component</div>
