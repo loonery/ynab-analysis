@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
 import {useEffect, useState} from 'react'
-import {filterTransactions} from '../../store/slices/transactionsSlice'
 import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
 
 const FilterBar = () => {
