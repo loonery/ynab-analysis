@@ -2,7 +2,7 @@ import React, {useState } from "react";
 import SpendingAnalysisPlot from "../SpendingAnalysisPlot";
 import CategorySelector from "../CategorySelector";
 
-const SpendingAnalysisDashboard = () => {
+const SpendingByCategoryReport = () => {
 
     // categoryDimension can be ["category_group_name, category_name, single_category"]
     // selectedCategoryItem can be any category group or subcategory name
@@ -33,4 +33,4 @@ const SpendingAnalysisDashboard = () => {
         </div>
     )
 }
-export default SpendingAnalysisDashboard;
+export default SpendingByCategoryReport;
