@@ -1,12 +1,11 @@
 import { useDispatch, useSelector } from "react-redux";
 import {useEffect, useState} from 'react'
-import {fetchTransactionsThunk} from '../../api/thunks/fetchTransactionsThunk'
 import {filterTransactions} from '../../store/slices/transactionsSlice'
+import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
 
 const FilterBar = () => {
 
     const dispatch = useDispatch();
-
 
     // maybe export this to a constant
     const defaultFilters = {
@@ -21,14 +20,10 @@ const FilterBar = () => {
         dispatch(fetchTransactionsThunk());
     });
 
-    const {transactions, loading, error} = useSelector(state => state.transactions);
+    const {filteredTransactions, loading, error} = useSelector(state => state.transactions);
 
-
-    // return a component in loading and error cases 
-    if (loading) { return <div>Loading...</div>}
-    if (error) { return <div>Error in Filter Bar</div>}
-
-
+    if (loading || error ) return <div>booo</div>
+    // otherwise return 
     return (
         <div>Filter Bar Component</div>
     )

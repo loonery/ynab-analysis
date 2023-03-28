@@ -57,5 +57,5 @@ const transactionsSlice = createSlice({
     }
 });
 
-export const {changeAppliedFilters, filterTransactions} = transactionsSlice.actions;
+export const {filterTransactions} = transactionsSlice.actions;
 export const transactionsReducer = transactionsSlice.reducer;

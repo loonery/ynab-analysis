@@ -21,11 +21,12 @@ const CategorySelector = ({
         dispatch(fetchTransactionsThunk());
     }, [dispatch]);
 
-    const {transactions, loading, error} = useSelector(state => state.filteredTransactions);
+    const {filteredTransactions, loading, error} = useSelector(state => state.transactions);
 
     if (error || loading) { return <div>something happenning</div>}
     
-    const transactionHirearchy = getTransactionHirearchy(transactions);
+    console.log(filteredTransactions);
+    const transactionHirearchy = getTransactionHirearchy(filteredTransactions);
     const categoryGroups = ["All", ...getCategoryGroups(transactionHirearchy)];
 
     // subcategories of the currently selected 
