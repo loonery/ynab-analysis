@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 
-const selectTransactions = state => state.transactions;
-const selectFilters = state => state.appliedFilters;
+const selectTransactions = state => state.transactions.transactions;
+const selectFilters = state => state.transactions.appliedFilters;
 
 export const selectFilteredTransactions = createSelector(
     [
@@ -20,12 +20,12 @@ export const selectFilteredTransactions = createSelector(
 
             const passEnd = endDate ? (transaction.month_year <= endDate) : true;
 
-            const passCategory = filteredCategories ? 
+            const passCategory = (filteredCategories.length > 0) ? 
                         (filteredCategories.includes(transaction.category_name) 
                         || filteredCategories.includes(transaction.category_group_name)) 
                         : true;
 
-            const passAccount = filteredAccounts ? (filteredAccounts.includes(transaction.account)) : true;
+            const passAccount = (filteredAccounts.length > 0) ? (filteredAccounts.includes(transaction.account)) : true;
             
             // let the transaction through if it passes through all filters 
             return (

@@ -16,6 +16,8 @@ const SpendingByCategoryReport = () => {
     if (loading) return <div>loading...</div>
     
     if (error) return <div>error</div>
+
+    console.log(filteredTransactions);
     
     return (
         // the whole dashboard renders as a row within the container
