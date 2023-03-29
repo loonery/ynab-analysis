@@ -1,1 +1,1 @@
-export {default} from './SpendingAnalysisDashboard.js';
+export {default} from './SpendingByCategoryReport';
