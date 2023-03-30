@@ -1,24 +1,24 @@
 import React, {useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
-import { selectFilteredTransactions } from "../../store/selectors/selectFilteredTransactions";
+import { selectFilteredTransactions } from "../../store/selectors/transactionSliceSelectors";
 
 const SpendingByCategoryReport = () => {
 
-    const { loading, error } = useSelector(state => state.transactions);
-    const filteredTransactions = useSelector(state => selectFilteredTransactions(state));
-
+    // fetch the transactions
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchTransactionsThunk());
     }, [dispatch]);
     
+    // get the transactions and assess the state
+    const { loading, error } = useSelector(state => state.transactions);
+    const filteredTransactions = useSelector(state => selectFilteredTransactions(state));
+
+    // return when we don't have transactions
     if (loading) return <div>loading...</div>
-    
     if (error) return <div>error</div>
 
-    console.log(filteredTransactions);
-    
     return (
         // the whole dashboard renders as a row within the container
         <div className="row mx-2 my-2 pt-3 border">

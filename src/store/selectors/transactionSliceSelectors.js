@@ -3,6 +3,9 @@ import { createSelector } from "@reduxjs/toolkit";
 const selectTransactions = state => state.transactions.transactions;
 const selectFilters = state => state.transactions.appliedFilters;
 
+/**
+ * Filters transactions based on filters active in the fi
+ */
 export const selectFilteredTransactions = createSelector(
     [
         selectTransactions, 
@@ -25,7 +28,9 @@ export const selectFilteredTransactions = createSelector(
                         || filteredCategories.includes(transaction.category_group_name)) 
                         : true;
 
-            const passAccount = (filteredAccounts.length > 0) ? (filteredAccounts.includes(transaction.account)) : true;
+            const passAccount = (filteredAccounts.length > 0) ? 
+                                (filteredAccounts.includes(transaction.account)) : 
+                                true;
             
             // let the transaction through if it passes through all filters 
             return (
@@ -36,4 +41,28 @@ export const selectFilteredTransactions = createSelector(
             );
         });
         return filteredTransactions;
-})
+});
+
+/**
+ * Returns the earliest and latest occurring dates (as a month_year) of 
+ * all transactions in the store, stored in an object
+ */
+export const selectTransactionDateRange = createSelector(
+    [selectTransactions], 
+    (transactions) => {
+        return {
+            earliest: transactions.at(0).month_year, 
+            latest: transactions.at(-1).month_year
+        }
+    }
+)
+
+/**
+ * Returns all categories of all transactions in the store, stored in a map of parent : child category
+ */
+export const selectTransactionCategories = createSelector(
+    [selectTransactions],
+    (transactions) => {
+        
+    }
+)

@@ -1,11 +1,13 @@
 import { useDispatch, useSelector } from "react-redux";
 import {useEffect, useState} from 'react'
-import { filterTransactions } from '../../store/slices/transactionsSlice'
-import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
+import { selectTransactionDateMargins } from "../../store/selectors/transactionSliceSelectors";
 
 const FilterBar = () => {
 
-    // otherwise return 
+    const { appliedFilters } = useSelector(state => state.transactions);
+    const [filters, setFilters] = useState(appliedFilters);
+    const {earliest, latest} = useSelector(selectTransactionDateMargins(state));
+
     return (
         <div>Filter Bar Component</div>
     )
