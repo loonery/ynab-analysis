@@ -63,6 +63,34 @@ export const selectTransactionDateRange = createSelector(
 export const selectTransactionCategories = createSelector(
     [selectTransactions],
     (transactions) => {
-        
+        const categoryMap = new Map();
+        for (let transaction of transactions) {
+
+            // get the two types of categories on each transaction
+            const groupName = transaction.category_group_name
+            const childName = transaction.category_name;
+
+            // if the category group is in the map...
+            if (categoryMap.has(groupName)) {
+                const currentChildList = categoryMap.get(groupName);
+                const newChildList = currentChildList.has(childName) ? currentChildList : currentChildList.add(childName);
+                categoryMap.set(groupName, newChildList);
+            
+            // otherwise if we need to add the category group...
+            } else {
+                categoryMap.set(groupName, new Set([childName]));
+            }
+        }
+        return categoryMap;
+    }
+)
+
+export const selectTransactionAccounts = createSelector(
+    [selectTransactions],
+    (transactions) => {
+        const accounts = new Set();
+        for (let transaction of transactions) {
+            accounts.add(transaction.account)
+        }
     }
 )
