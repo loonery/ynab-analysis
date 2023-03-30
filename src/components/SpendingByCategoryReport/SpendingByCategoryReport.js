@@ -5,7 +5,7 @@ import { selectFilteredTransactions } from "../../store/selectors/transactionSli
 
 const SpendingByCategoryReport = () => {
 
-    // fetch the transactions
+    // dispatch to fetch the transactions
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchTransactionsThunk());

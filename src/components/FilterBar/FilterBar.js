@@ -4,9 +4,9 @@ import { selectTransactionDateMargins } from "../../store/selectors/transactionS
 
 const FilterBar = () => {
 
+    const {earliest, latest} = useSelector(state => selectTransactionDateMargins(state));
     const { appliedFilters } = useSelector(state => state.transactions);
     const [filters, setFilters] = useState(appliedFilters);
-    const {earliest, latest} = useSelector(selectTransactionDateMargins(state));
 
     return (
         <div>Filter Bar Component</div>

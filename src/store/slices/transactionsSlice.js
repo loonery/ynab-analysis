@@ -5,6 +5,7 @@ const transactionsSlice = createSlice({
     name: 'transactions',
     initialState: {
         transactions: [],
+        categories: [],
         filteredTransactions: [],
         appliedFilters : {
             startDate: undefined, 
@@ -24,14 +25,14 @@ const transactionsSlice = createSlice({
     extraReducers: {
         [fetchTransactionsThunk.fulfilled]: (state, action) => {
             state.loading = false;
-            state.transactions = action.payload;    // thunk return value is the payload
+            state.transactions = action.payload;    
         },
         [fetchTransactionsThunk.pending]: (state, action) => {
             state.loading = true;
         },
         [fetchTransactionsThunk.rejected]: (state, action) => {
             state.loading = false;
-            state.error = action.error;             // thunk error value returned here
+            state.error = action.error;
         },
     }
 });
