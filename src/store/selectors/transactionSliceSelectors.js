@@ -94,3 +94,21 @@ export const selectTransactionAccounts = createSelector(
         }
     }
 )
+
+export const selectTransactionsByCategoryItem = createSelector(
+    [
+        selectTransactionCategories, 
+        selectTransactions,
+        (state, selectedCategory) => selectedCategory
+    ],
+    (categories, transactions, selectedCategory) => {
+
+        const isCategoryGroup = categories.has(selectedCategory);
+        
+        const returned = isCategoryGroup ? 
+        transactions.filter(transaction => transaction.category_group_name === selectedCategory)
+        : transactions.filter(transaction => transaction.category_name === selectedCategory);
+        
+        return returned;
+    }
+)
