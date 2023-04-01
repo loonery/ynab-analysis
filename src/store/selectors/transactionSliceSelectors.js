@@ -1,6 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
 const selectTransactions = (state) => state.transactions.transactions;
+const selectLoading = (state) => state.transactions.loading;
 const selectFilters = (state) => state.transactions.appliedFilters;
 
 /**
@@ -52,10 +53,13 @@ export const selectFilteredTransactions = createSelector(
  */
 export const selectTransactionDateRange = createSelector(
   [selectTransactions],
-  (transactions) => ({
-    earliest: transactions.at(0).month_year,
-    latest: transactions.at(-1).month_year,
-  }),
+  (transactions) => {
+    return (
+    {
+      earliest: transactions.length ? transactions.at(0).month_year : undefined,
+      latest: transactions.length ? transactions.at(-1).month_year : undefined,
+    }
+  )}
 );
 
 /**
@@ -70,6 +74,7 @@ export const selectTransactionDateRange = createSelector(
 export const selectTransactionCategories = createSelector(
   [selectTransactions],
   (transactions) => {
+
     const categoryHirearchy = {};
     
     for (const transaction of transactions) {
@@ -80,7 +85,7 @@ export const selectTransactionCategories = createSelector(
 
       // if the category group is in the object...
       if (categoryHirearchy[groupName]) {
-        const currentChildList = categoryHirearchy[group];
+        const currentChildList = categoryHirearchy[groupName];
         categoryHirearchy[groupName] = currentChildList.includes(childName) 
           ? currentChildList 
           : [...currentChildList, childName];
