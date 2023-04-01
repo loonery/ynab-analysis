@@ -13,10 +13,12 @@ export const selectFilteredTransactions = createSelector(
   ],
   (transactions, appliedFilters) => {
     const {
-      filteredCategories, startDate, endDate, filteredAccounts,
+      filteredCategories, 
+      startDate, 
+      endDate, 
+      filteredAccounts,
     } = appliedFilters;
 
-    // filter the transactions
     const filteredTransactions = transactions.filter((transaction) => {
       // if filter defined, apply filter. If not defined, let anything through
       const passStart = startDate ? (transaction.month_year >= startDate) : true;
@@ -46,7 +48,7 @@ export const selectFilteredTransactions = createSelector(
 
 /**
  * Returns the earliest and latest occurring dates (as a month_year) of
- * all transactions in the store, stored in an object
+ * all transactions in the store, stored in an object as {earliest: ..., latest: ...}
  */
 export const selectTransactionDateRange = createSelector(
   [selectTransactions],
@@ -58,28 +60,37 @@ export const selectTransactionDateRange = createSelector(
 
 /**
  * Returns all categories of all transactions in the store, stored in a map of parent : child category
- */
+ 
+  {
+    parent: ...,
+    children: [...]
+  }
+
+*/
 export const selectTransactionCategories = createSelector(
   [selectTransactions],
   (transactions) => {
-    const categoryMap = new Map();
+    const categoryHirearchy = {};
+    
     for (const transaction of transactions) {
+
       // get the two types of categories on each transaction
       const groupName = transaction.category_group_name;
       const childName = transaction.category_name;
 
-      // if the category group is in the map...
-      if (categoryMap.has(groupName)) {
-        const currentChildList = categoryMap.get(groupName);
-        const newChildList = currentChildList.has(childName) ? currentChildList : currentChildList.add(childName);
-        categoryMap.set(groupName, newChildList);
-
-        // otherwise if we need to add the category group...
+      // if the category group is in the object...
+      if (categoryHirearchy[groupName]) {
+        const currentChildList = categoryHirearchy[group];
+        categoryHirearchy[groupName] = currentChildList.includes(childName) 
+          ? currentChildList 
+          : [...currentChildList, childName];
+        
+      // otherwise if we need to add the category group...
       } else {
-        categoryMap.set(groupName, new Set([childName]));
+        categoryHirearchy[groupName] = [childName];
       }
     }
-    return categoryMap;
+    return categoryHirearchy;
   },
 );
 
