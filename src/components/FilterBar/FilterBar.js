@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
-import {useEffect, useState} from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { selectTransactionDateRange } from "../../store/selectors/transactionSliceSelectors";
+import CategoryCheckBoxList from "./CategoryCheckBoxList";
 
 const FilterBar = () => {
 
@@ -9,7 +10,10 @@ const FilterBar = () => {
     const [filters, setFilters] = useState(appliedFilters);
     
     return (
-        <div>Filter Bar Component</div>
+        <Fragment>
+            <div>Filter Bar Component</div>
+            <CategoryCheckBoxList/>
+        </Fragment>
     )
 
 }

@@ -10,7 +10,7 @@ const selectFilters = (state) => state.transactions.appliedFilters;
 export const selectFilteredTransactions = createSelector(
   [
     selectTransactions,
-    selectFilters,
+    selectFilters
   ],
   (transactions, appliedFilters) => {
     const {
@@ -75,7 +75,7 @@ export const selectTransactionCategories = createSelector(
   [selectTransactions],
   (transactions) => {
 
-    const categoryHirearchy = {};
+    const transactionCategories = {};
     
     for (const transaction of transactions) {
 
@@ -84,18 +84,18 @@ export const selectTransactionCategories = createSelector(
       const childName = transaction.category_name;
 
       // if the category group is in the object...
-      if (categoryHirearchy[groupName]) {
-        const currentChildList = categoryHirearchy[groupName];
-        categoryHirearchy[groupName] = currentChildList.includes(childName) 
+      if (transactionCategories[groupName]) {
+        const currentChildList = transactionCategories[groupName];
+        transactionCategories[groupName] = currentChildList.includes(childName) 
           ? currentChildList 
           : [...currentChildList, childName];
         
       // otherwise if we need to add the category group...
       } else {
-        categoryHirearchy[groupName] = [childName];
+        transactionCategories[groupName] = [childName];
       }
     }
-    return categoryHirearchy;
+    return transactionCategories;
   },
 );
 
@@ -106,6 +106,7 @@ export const selectTransactionAccounts = createSelector(
     for (const transaction of transactions) {
       accounts.add(transaction.account);
     }
+    return Array.from(accounts);
   },
 );
 
