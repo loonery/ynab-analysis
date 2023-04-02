@@ -28,28 +28,32 @@ const CategoryCheckBoxSection = ({parentName, childNames}) => {
 
 
     return (
-    <Fragment>
-        <Checkbox 
-            labelText={parentName} 
-            id={parentName + ' checkbox'} 
-            onChange={() => {
-                setChecked(!checked);
-                const newObjects = childCheckboxes.map((childObject) => { return {...childObject, checked: !checked}});
-                setChildCheckboxes(newObjects);
-            }} 
-            checked={checked} 
-        />
-        {/* children checkboxes */}
-        {
-            childCheckboxes.map((childCheckbox, index) => 
-                <Checkbox
-                    labelText={childCheckbox.childName}
-                    checked={childCheckbox.checked}
-                    onChange={() => handleCheckChild(childCheckbox)}
-                />
-            )
-        }
-    </Fragment>
+        <Fragment>
+            <Checkbox 
+                labelText={parentName} 
+                checked={checked} 
+                onChange={() => {
+                    setChecked(!checked);
+                    const newObjects = childCheckboxes.map((childObject) => { 
+                        return {
+                            ...childObject, 
+                            checked: !checked
+                        }
+                    });
+                    setChildCheckboxes(newObjects);
+                }} 
+            />
+            {/* children checkboxes */}
+            {
+                childCheckboxes.map((childCheckbox, index) => 
+                    <Checkbox
+                        labelText={childCheckbox.childName}
+                        checked={childCheckbox.checked}
+                        onChange={() => handleCheckChild(childCheckbox)}
+                    />
+                )
+            }
+        </Fragment>
     )
 }
 export default CategoryCheckBoxSection;
