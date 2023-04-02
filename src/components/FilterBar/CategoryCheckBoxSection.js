@@ -6,7 +6,26 @@ const CategoryCheckBoxSection = ({parentName, childNames}) => {
 
     // all categories start un-checked
     const [checked, setChecked] = useState(true);
-    const [childCheckboxes, setChildObjects] = useState(childNames.sort().map((childName) => {return {childName, checked: true}}));
+    const [childCheckboxes, setChildCheckboxes] = useState(childNames.sort().map((childName) => {return {childName, checked: true}}));
+
+    const handleCheckChild = (childCheckbox) => {
+        const newObjects = childCheckboxes.map((checkbox) => {
+            if (checkbox.childName === childCheckbox.childName) {
+                const checked = !childCheckbox.checked;
+                return {...checkbox, checked}
+            }
+            return checkbox;
+        })
+        
+        setChildCheckboxes(newObjects);
+    
+        if (newObjects.every((object) => !object.checked)) {
+            setChecked(false);
+        } else if (newObjects.every((object) => object.checked)) {
+            setChecked(true);
+        }
+    }
+
 
     return (
     <Fragment>
@@ -16,37 +35,19 @@ const CategoryCheckBoxSection = ({parentName, childNames}) => {
             onChange={() => {
                 setChecked(!checked);
                 const newObjects = childCheckboxes.map((childObject) => { return {...childObject, checked: !checked}});
-                setChildObjects(newObjects);
+                setChildCheckboxes(newObjects);
             }} 
             checked={checked} 
         />
         {/* children checkboxes */}
         {
-        childCheckboxes.map((childObject, index) => 
-            <Checkbox
-                labelText={childObject.childName}
-                checked={childObject.checked}
-                onChange={() => {
-
-                    const newObjects = childCheckboxes.map((object) => {
-                        if (object.childName === childObject.childName) {
-                            const checked = !childObject.checked;
-                            return {...object, checked}
-                        }
-                        return object;
-                    })
-                    
-                    setChildObjects(newObjects);
-                
-                    if (newObjects.every((object) => !object.checked)) {
-                        setChecked(false);
-                    } else if (newObjects.every((object) => object.checked)) {
-                        setChecked(true);
-                    }
-                    
-                }}
-            />
-        )
+            childCheckboxes.map((childCheckbox, index) => 
+                <Checkbox
+                    labelText={childCheckbox.childName}
+                    checked={childCheckbox.checked}
+                    onChange={() => handleCheckChild(childCheckbox)}
+                />
+            )
         }
     </Fragment>
     )
