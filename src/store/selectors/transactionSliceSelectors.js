@@ -64,19 +64,22 @@ export const selectTransactionDateRange = createSelector(
 
 /**
  * Returns all categories of all transactions in the store, stored in a map of parent : child category
- 
-  {
-    parent: ...,
-    children: [...]
-  }
-
+ [
+   {
+     parent: ...,
+     children: [...]
+    },
+    {
+      ...
+    }
+  ]
+    
 */
 export const selectTransactionCategories = createSelector(
   [selectTransactions],
   (transactions) => {
 
     const transactionCategories = {};
-    
     for (const transaction of transactions) {
 
       // get the two types of categories on each transaction

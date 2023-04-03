@@ -1,4 +1,5 @@
 import React, {useEffect, useState } from "react";
+import { Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
 import { selectFilteredTransactions } from "../../store/selectors/transactionSliceSelectors";
@@ -21,7 +22,8 @@ const SpendingByCategoryReport = () => {
 
     return (
         // the whole dashboard renders as a row within the container
-        <div className="row mx-2 my-2 pt-3 border">
+        <Row>
+
             <div className="col">
                 Here is where we render the plot
                 {/* House the category dropdown options */}
@@ -32,7 +34,7 @@ const SpendingByCategoryReport = () => {
                     {/* categoryDimension={categoryDimension} */}
                     {/* selectedCategoryItem={selectedCategoryItem}/> */}
             </div>
-        </div>
+        </Row>
     )
 }
 export default SpendingByCategoryReport;
