@@ -3,6 +3,7 @@ import { Checkbox } from "../../../libs/reuse/Checkbox";
 import styled from "styled-components";
 
 const ParentCheckboxContainer = styled.div`
+    font-weight: 600;
 `;
 
 const ChildCheckboxContainer = styled.div`
