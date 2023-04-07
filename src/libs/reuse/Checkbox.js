@@ -1,5 +1,12 @@
 import React from "react"
-export const Checkbox = ({labelText, checked, onChange, id}) => {
+import PropTypes from "prop-types";
+
+export const Checkbox = ({
+    labelText, 
+    checked = false, 
+    onChange, 
+    id
+}) => {
     return (
         <div className="form-check">
             <input 
@@ -18,3 +25,10 @@ export const Checkbox = ({labelText, checked, onChange, id}) => {
         </div>
     )
 }
+
+Checkbox.propTypes = {
+    labelText: PropTypes.string.isRequired,
+    checked: PropTypes.bool,
+    onChange: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired,
+};

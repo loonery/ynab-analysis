@@ -15,7 +15,6 @@ const StyledButton = styled.button`
 
 const buttonClassString = 'btn btn-primary'
 const ButtonBarFooter = ({ buttons }) => {
-  console.log(buttons);
   return (
     <Fragment>
       <ButtonContainer>
@@ -24,7 +23,7 @@ const ButtonBarFooter = ({ buttons }) => {
             key={button.label} 
             onClick={button.onClick} 
             className={button.classString ? button.classString : buttonClassString}
-        >
+          >
             {button.label}
           </StyledButton>
         ))}

@@ -1,7 +1,6 @@
 import { Dropdown } from "../../../libs/reuse/Dropdown";
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import ButtonBarFooter from "../../../libs/reuse/ButtonBarFooter"
-import ButtonBarHr from "../../../libs/reuse/ButtonBarHr";
+import ButtonBar from "../../../libs/reuse/ButtonBar";
 
 const CategoryFilterDropdown = () => {
 
@@ -30,9 +29,9 @@ const CategoryFilterDropdown = () => {
     return (
         <Dropdown dropdownLinkText={"Categories"}>
             <h4>Categories</h4>
-            <ButtonBarHr buttons={HeaderButtons}/>
+            <ButtonBar buttons={HeaderButtons}/>
             <CategoryCheckBoxesContainer />
-            <ButtonBarFooter buttons={FooterButtons}/>
+            <ButtonBar buttons={FooterButtons}/>
         </Dropdown>
     )
 }
