@@ -19,10 +19,6 @@ const commonFilter = (transaction) => {
     return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
 }
 
-const userFilter = (filterObject) => {
-
-}
-
 /**
  * The 'constructor' for the data aggregation object
  */ 

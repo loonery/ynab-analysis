@@ -12,6 +12,10 @@
 /build
 /assets
 
+#linting
+.eslintrc.json
+prettierrc
+
 # misc
 .DS_Store
 .env*

@@ -1,14 +1,19 @@
 import { Route, Routes } from 'react-router'
-import SpendingAnalysisDashboard from './components/SpendingAnalysisDashboard/';
+import FilterBar from './components/FilterBar/FilterBar';
+import SpendingByCategoryReport from './components/SpendingByCategoryReport';
+import { Row, Col } from 'react-bootstrap';
 
 const App = () => {
   return (
-    <div className='row'>
-      <div className='col'>
-          <Routes>
-            <Route path='/' element={<SpendingAnalysisDashboard/>}/>
-          </Routes>
-      </div>
+    <div className='container py-4'>
+      <Row>
+        <Col>
+            <FilterBar />
+            <Routes>
+              <Route path='/' element={<SpendingByCategoryReport />}/>
+            </Routes>
+        </Col>
+      </Row>
     </div>
   );
 }

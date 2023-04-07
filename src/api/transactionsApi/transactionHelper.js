@@ -1,11 +1,6 @@
 // ##############################
-// Sub-Helpers
+// Helpers
 // ##############################
-const handleNullCategories = (transaction) => {
-    
-}
-
-// helper
 const formatTransactionDate = (transaction) => {
 
     const options = {
@@ -49,7 +44,7 @@ const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
 }
 
 // ##############################
-// Main Helper
+// Main Flattener
 // ##############################
 /**
  * 
@@ -82,7 +77,6 @@ export const getFlattenedTransactions = (transactions, categoryGroups) => {
                 delete newTransaction.subtransactions;  // delete the attatched subtransactions
 
                 formatTransactionDate(newTransaction);
-                handleNullCategories(newTransaction);
 
                 // return the subtransaction mutated to hold the same JSON format as the parent transaction
                 return newTransaction;
@@ -102,7 +96,6 @@ export const getFlattenedTransactions = (transactions, categoryGroups) => {
             delete transaction.subtransactions;
 
             formatTransactionDate(transaction);
-            handleNullCategories(transaction);
 
             // move to the next transaction
             i += 1;

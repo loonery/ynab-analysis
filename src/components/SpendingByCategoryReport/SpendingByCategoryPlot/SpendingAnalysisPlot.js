@@ -1,28 +1,10 @@
 import React from "react";
 import Plot from "react-plotly.js";
 import { getTraces } from "./getTraces";
-import { useTransactions } from "../../services/hooks/useTransactions/useTransactions";
 
 const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
-    
-    const {transactions, loading, error} = useTransactions();
 
-    if (loading) {
-        return (
-            <div className="spinner-border" role="status">
-                <span className="sr-only">Loading...</span>
-            </div>
-        )
-    } 
-
-    if (error) {
-        return (
-            <div>
-                Error...
-            </div>
-        )
-    }
-
+    const transactions = '';
     const traceObjects = getTraces(transactions, categoryDimension, selectedCategoryItem);
 
     /* Get the Layout for the Plot */
