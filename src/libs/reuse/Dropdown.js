@@ -21,7 +21,7 @@ export const Dropdown = ({dropdownLinkText, id, children}) => {
                 href={'/#'} 
                 role={'button'}
                 id={id} 
-                data-toggle={dropdown}
+                data-toggle={'dropdown'}
                 data-bs-auto-close={false} 
             >
                 {dropdownLinkText}

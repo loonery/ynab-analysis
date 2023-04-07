@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
-export const ScrollableListContainer = ({children}) => {
+export const ScrollableContentContainer = ({children}) => {
     
     // defines the container that holds the scrollable content
-    const ScrollableListContainer = styled.div`
+    const ScrollableContentContainer = styled.div`
         max-height: 200px;
         width: max-content;
         overflow: auto;
@@ -14,8 +14,8 @@ export const ScrollableListContainer = ({children}) => {
     `
     
     return (
-        <ScrollableListContainer>
+        <ScrollableContentContainer>
             {children}
-        </ScrollableListContainer>
+        </ScrollableContentContainer>
     );
 }
