@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-export const Dropdown = ({dropdownLink, id, children}) => {
+export const Dropdown = ({dropdownLinkText, id, children}) => {
     
     const StyledDropdown = styled.div`
         /* padding top, bottom | left right */
-        padding: 40px 20px;
+        padding: 20px 20px;
     `;
 
     return (
@@ -17,7 +17,7 @@ export const Dropdown = ({dropdownLink, id, children}) => {
                     data-toggle="dropdown"
                     data-bs-auto-close="false" 
                 >
-                    {dropdownLink}
+                    {dropdownLinkText}
                 </a>
                 <StyledDropdown className="dropdown-menu">
                     {children}

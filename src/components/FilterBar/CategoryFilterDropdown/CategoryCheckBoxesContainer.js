@@ -2,7 +2,6 @@ import {ScrollableListContainer} from "../../../libs/reuse/ScrollableListContain
 import CategoryCheckBoxList from "./CategoryCheckBoxList";
 
 const CategoryCheckBoxesContainer = () => {
-    
     return (
         <ScrollableListContainer>
             <CategoryCheckBoxList />

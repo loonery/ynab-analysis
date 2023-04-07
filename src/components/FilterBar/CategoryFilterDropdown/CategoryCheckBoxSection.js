@@ -1,5 +1,13 @@
 import React, { Fragment, useState } from "react"
 import { Checkbox } from "../../../libs/reuse/Checkbox";
+import styled from "styled-components";
+
+const ParentCheckboxContainer = styled.div`
+`;
+
+const ChildCheckboxContainer = styled.div`
+  margin-left: 15px;
+`;
 
 const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
 
@@ -35,32 +43,36 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
 
     return (
     <Fragment>
-        <Checkbox 
-            labelText={categoryGroupName} 
-            id={'parent-checkbox-' + categoryGroupName}
-            checked={checked} 
-            onChange={() => {
-                setChecked(!checked);
+        <ParentCheckboxContainer>
+            <Checkbox 
+                labelText={categoryGroupName} 
+                id={'parent-checkbox-' + categoryGroupName}
+                checked={checked} 
+                onChange={() => {
+                    setChecked(!checked);
 
-                // checking the parent toggles all children in tandem
-                const newObjects = categoryCheckBoxes.map((childObject) => { 
-                    return {
-                        ...childObject, 
-                        checked: !checked
-                    }
-                });
-                setCategoryCheckBoxes(newObjects);
-            }} 
-        />
+                    // checking the parent toggles all children in tandem
+                    const newObjects = categoryCheckBoxes.map((childObject) => { 
+                        return {
+                            ...childObject, 
+                            checked: !checked
+                        }
+                    });
+                    setCategoryCheckBoxes(newObjects);
+                }} 
+            />
+        </ParentCheckboxContainer>
         {/* children checkboxes */}
         {
         categoryCheckBoxes.map((categoryCheckBox, index) => 
+        <ChildCheckboxContainer>
             <Checkbox
                 labelText={categoryCheckBox.categoryName}
                 id={'child-checkbox-' + index}
                 checked={categoryCheckBox.checked}
                 onChange={() => handleCheckChild(categoryCheckBox)}
             />
+        </ChildCheckboxContainer>            
         )
         }
     </Fragment>
