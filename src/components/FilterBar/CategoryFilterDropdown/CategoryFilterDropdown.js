@@ -31,10 +31,15 @@ const CategoryFilterDropdown = () => {
     return (
         <Dropdown dropdownLinkText={"Categories"}>
             <h4>Categories</h4>
-            <ButtonBar buttons={HeaderButtons}/>
+            <hr/>
+            <ButtonBar 
+                buttons={HeaderButtons}
+            />
+            <hr/>
             <CategoryCheckBoxesContainer />
             <ButtonBar 
-                buttons={FooterButtons} 
+                buttons={FooterButtons}
+                className={'pt-3'} 
                 justify={'flex-end'}/>
         </Dropdown>
     )

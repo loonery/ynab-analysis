@@ -6,7 +6,6 @@ import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: ${props => props.justify ? props.justify : 'start'};
-  padding: 10px;
 `;
 
 const StyledButton = styled.button`
@@ -15,7 +14,10 @@ const StyledButton = styled.button`
 
 const ButtonBar = ({ buttons, justify, className}) => {
   return (
-    <ButtonContainer justify={justify}>
+    <ButtonContainer 
+      className={className} 
+      justify={justify}
+    >
       {buttons.map((button) => (
         <StyledButton 
           key={button.label} 
