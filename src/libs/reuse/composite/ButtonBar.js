@@ -5,6 +5,7 @@ import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
 
 const ButtonContainer = styled.div`
   display: flex;
+  padding: ${props => props.padding ? props.padding : '0px'};
   justify-content: ${props => props.justify ? props.justify : 'start'};
 `;
 
@@ -12,10 +13,11 @@ const StyledButton = styled.button`
   margin-right: 10px;
 `;
 
-const ButtonBar = ({ buttons, justify, className}) => {
+const ButtonBar = ({ buttons, justify, padding}) => {
+  console.log(padding);
   return (
     <ButtonContainer 
-      className={className} 
+      padding={padding}
       justify={justify}
     >
       {buttons.map((button) => (
@@ -40,6 +42,7 @@ ButtonBar.propTypes = {
     })
   ).isRequired,
   justify: PropTypes.string,
+  padding: PropTypes.string
 };
 
 export default ButtonBar;

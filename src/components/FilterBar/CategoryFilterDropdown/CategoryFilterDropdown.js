@@ -2,21 +2,20 @@ import { Dropdown } from 'libs/reuse/composite/Dropdown';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import ButtonBar from 'libs/reuse/composite/ButtonBar';
 import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
+import { StyledHr } from 'libs/reuse/foundational/StyledHr';
 
 const CategoryFilterDropdown = () => {
 
     return (
         <Dropdown dropdownLinkText={"Categories"}>
             <h4>Categories</h4>
-            <hr/>
-            <ButtonBar 
-                buttons={HeaderButtons}
-            />
-            <hr/>
+            <StyledHr/>
+                <ButtonBar buttons={HeaderButtons}/>
+            <StyledHr/>
             <CategoryCheckBoxesContainer />
             <ButtonBar 
                 buttons={FooterButtons}
-                className={'pt-3'} 
+                padding={'10px 0px 0px 0px'}
                 justify={'flex-end'}/>
         </Dropdown>
     )
