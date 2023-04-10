@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react"
+import React, { Fragment, useCallback, useState } from "react"
 import { Checkbox } from 'libs/reuse/foundational/Checkbox';
 import styled from "styled-components";
 
@@ -21,8 +21,10 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
         }
     }));
 
-    /* Handles event when a child checkbox is checked */
-    const handleCheckChild = (childCheckbox) => {
+    /**
+     * Handles event when a child checkbox is checked 
+     */
+    const handleCheckChild = useCallback((childCheckbox) => {
         
         // change the checked checkbox's status
         const newObjects = categoryCheckBoxes.map((checkbox) => {
@@ -40,6 +42,21 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
         } else if (newObjects.every(object => object.checked)) {
             setChecked(true);
         }
+    }, [categoryCheckBoxes]);
+
+    /**
+     * Handle when a parent is checked
+     */
+    const handleParentChecked  = () => {
+        setChecked(!checked);
+        // checking the parent toggles all children in tandem
+        const newObjects = categoryCheckBoxes.map((childObject) => { 
+            return {
+                ...childObject, 
+                checked: !checked
+            }
+        });
+        setCategoryCheckBoxes(newObjects);
     }
 
     return (
@@ -49,18 +66,7 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
                 labelText={categoryGroupName} 
                 id={'parent-checkbox-' + categoryGroupName}
                 checked={checked} 
-                onChange={() => {
-                    setChecked(!checked);
-
-                    // checking the parent toggles all children in tandem
-                    const newObjects = categoryCheckBoxes.map((childObject) => { 
-                        return {
-                            ...childObject, 
-                            checked: !checked
-                        }
-                    });
-                    setCategoryCheckBoxes(newObjects);
-                }} 
+                onChange={() => handleParentChecked()} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
