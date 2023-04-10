@@ -7,15 +7,13 @@ import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding-top: 20px; 
 `;
 
 const StyledButton = styled.button`
   margin-right: 10px;
 `;
 
-
-const ButtonBarFooter = ({ buttons }) => {
+const ButtonBar = ({ buttons }) => {
   return (
     <Fragment>
       <ButtonContainer>
@@ -33,7 +31,7 @@ const ButtonBarFooter = ({ buttons }) => {
   );
 };
 
-ButtonBarFooter.propTypes = {
+ButtonBar.propTypes = {
   buttons: PropTypes.arrayOf(
     PropTypes.shape({
       label: PropTypes.string.isRequired,
@@ -43,4 +41,4 @@ ButtonBarFooter.propTypes = {
   ).isRequired,
 };
 
-export default ButtonBarFooter;
+export default ButtonBar;
