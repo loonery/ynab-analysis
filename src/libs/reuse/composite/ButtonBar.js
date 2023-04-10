@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Fragment } from 'react';
+import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -13,7 +14,7 @@ const StyledButton = styled.button`
   margin-right: 10px;
 `;
 
-const buttonClassString = 'btn btn-primary'
+
 const ButtonBarFooter = ({ buttons }) => {
   return (
     <Fragment>
@@ -22,7 +23,7 @@ const ButtonBarFooter = ({ buttons }) => {
           <StyledButton 
             key={button.label} 
             onClick={button.onClick} 
-            className={button.classString ? button.classString : buttonClassString}
+            className={button.classString ? button.classString : DEFAULT_BUTTON_CLASS_STRING}
           >
             {button.label}
           </StyledButton>
