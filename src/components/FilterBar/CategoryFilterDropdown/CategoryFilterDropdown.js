@@ -1,4 +1,5 @@
 import { Dropdown } from 'libs/reuse/composite/Dropdown';
+import styled from 'styled-components';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import ButtonBar from 'libs/reuse/composite/ButtonBar';
 
@@ -9,11 +10,12 @@ const CategoryFilterDropdown = () => {
         {
             label: "Select None",
             onClick: () => {},
-            classString: 'btn btn-outline-dark'
+            classString: 'btn btn-sm btn-outline-dark'
         },
         {
             label: "Select All",
-            onClick: () => {}
+            onClick: () => {},
+            classString: 'btn btn-sm btn-outline-primary'
         },
     ];
 
@@ -22,7 +24,7 @@ const CategoryFilterDropdown = () => {
         {
             label: "Done",
             onClick: () => {},
-            classString: 'btn btn-success'
+            classString: 'btn btn-sm btn-success'
         }
     ];
 
@@ -31,7 +33,9 @@ const CategoryFilterDropdown = () => {
             <h4>Categories</h4>
             <ButtonBar buttons={HeaderButtons}/>
             <CategoryCheckBoxesContainer />
-            <ButtonBar buttons={FooterButtons}/>
+            <ButtonBar 
+                buttons={FooterButtons} 
+                justify={'flex-end'}/>
         </Dropdown>
     )
 }
