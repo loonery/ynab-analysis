@@ -1,11 +1,10 @@
 import { Dropdown } from 'libs/reuse/components/Dropdown';
-import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import ButtonBar from 'libs/reuse/components/ButtonBar';
-import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
+import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
+import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
 
 const CategoryFilterDropdown = () => {
-
     return (
         <Dropdown dropdownLinkText={"Categories"}>
             <h4>Categories</h4>
