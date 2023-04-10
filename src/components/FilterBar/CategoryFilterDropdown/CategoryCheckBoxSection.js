@@ -1,5 +1,5 @@
 import React, { Fragment, useCallback, useState } from "react"
-import { Checkbox } from 'libs/reuse/foundational/StyledCheckbox';
+import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
 
 const ParentCheckboxContainer = styled.div`

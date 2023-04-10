@@ -1,8 +1,8 @@
-import { Dropdown } from 'libs/reuse/composite/Dropdown';
+import { Dropdown } from 'libs/reuse/components/Dropdown';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import ButtonBar from 'libs/reuse/composite/ButtonBar';
+import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
-import { StyledHr } from 'libs/reuse/foundational/StyledHr';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
 
 const CategoryFilterDropdown = () => {
 

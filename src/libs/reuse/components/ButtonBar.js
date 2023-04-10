@@ -14,7 +14,6 @@ const StyledButton = styled.button`
 `;
 
 const ButtonBar = ({ buttons, justify, padding}) => {
-  console.log(padding);
   return (
     <ButtonContainer 
       padding={padding}
