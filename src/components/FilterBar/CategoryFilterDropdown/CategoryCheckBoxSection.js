@@ -14,18 +14,20 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
 
     // all categories start checked
     const [checked, setChecked] = useState(true);
-    const [categoryCheckBoxes, setCategoryCheckBoxes] = useState(categoryNames.sort().map((categoryName) => {
-        return {
-            categoryName, 
-            checked: true
+    // Assemble child checkbox objects
+    const [categoryCheckBoxes, setCategoryCheckBoxes] = useState(
+        categoryNames.sort().map((categoryName) => {
+            return {
+                categoryName, 
+                checked: true
+            }
         }
-    }));
+    ));
 
     /**
      * Handles event when a child checkbox is checked 
      */
     const handleCheckChild = useCallback((childCheckbox) => {
-        
         // change the checked checkbox's status
         const newObjects = categoryCheckBoxes.map((checkbox) => {
             if (checkbox.categoryName === childCheckbox.categoryName) {
