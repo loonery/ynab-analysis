@@ -1,6 +1,6 @@
-import { Dropdown } from "../../../libs/reuse/Dropdown";
+import { Dropdown } from 'libs/reuse/composite/Dropdown';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import ButtonBar from "../../../libs/reuse/ButtonBar";
+import ButtonBar from 'libs/reuse/composite/ButtonBar';
 
 const CategoryFilterDropdown = () => {
 

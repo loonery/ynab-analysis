@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from "react"
-import { Checkbox } from "../../../libs/reuse/Checkbox";
+import { Checkbox } from 'libs/reuse/foundational/Checkbox';
 import styled from "styled-components";
 
 const ParentCheckboxContainer = styled.div`

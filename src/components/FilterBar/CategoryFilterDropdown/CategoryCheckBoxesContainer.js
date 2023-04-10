@@ -1,11 +1,11 @@
-import {ScrollableListContainer} from "../../../libs/reuse/ScrollableListContainer";
+import { ScrollableContentContainer } from 'libs/reuse/styled/ScrollableListContainer';
 import CategoryCheckBoxList from "./CategoryCheckBoxList";
 
 const CategoryCheckBoxesContainer = () => {
     return (
-        <ScrollableListContainer>
+        <ScrollableContentContainer>
             <CategoryCheckBoxList />
-        </ScrollableListContainer>
+        </ScrollableContentContainer>
     );
 }
 export default CategoryCheckBoxesContainer;

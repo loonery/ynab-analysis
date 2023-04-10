@@ -3,10 +3,11 @@ import PropTypes from 'prop-types'
 import styled from "styled-components"
 
 import { 
+    DEFAULT_BUTTON_CLASS_STRING,
     DROPDOWN_DIV_CLASSNAME,
     DROPDOWN_MENU_CLASSNAME, 
     DROPDOWN_TOGGLE_CLASSNAME
-} from "../../consts/consts";
+} from "consts/consts";
 
 const StyledDropdown = styled.div`
     /* padding top, bottom | left right */
@@ -14,18 +15,19 @@ const StyledDropdown = styled.div`
 `;
 
 export const Dropdown = ({dropdownLinkText, id, children}) => {
+
+    const className = DEFAULT_BUTTON_CLASS_STRING + ' ' + DROPDOWN_TOGGLE_CLASSNAME;
     return (
         <div className={DROPDOWN_DIV_CLASSNAME}>
-            <a 
-                className={DROPDOWN_TOGGLE_CLASSNAME} 
-                href={'/#'} 
-                role={'button'}
+            <button 
+                className={className} 
+                type="button"
                 id={id} 
-                data-toggle={'dropdown'}
-                data-bs-auto-close={false} 
+                data-bs-toggle="dropdown"
+                data-bs-auto-close="false"
             >
                 {dropdownLinkText}
-            </a>
+            </button>
             <StyledDropdown className={DROPDOWN_MENU_CLASSNAME}>
                 {children}
             </StyledDropdown>
@@ -38,3 +40,4 @@ Dropdown.propTypes = {
     id: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
 };
+
