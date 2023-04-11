@@ -1,21 +1,47 @@
-import React from "react"
-import { useSelector } from "react-redux"
+import React, { useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { selectTransactionCategories } from "../../../store/selectors/transactionSliceSelectors"
+import { addCheckBoxSection } from "store/slices/filterBarSlice"
 import CategoryCheckBoxSection from './CategoryCheckBoxSection'
 
 const CategoryCheckBoxList = () => {
 
-    const transactionCategories = useSelector(state => selectTransactionCategories(state));
-    const parentCategories = Object.keys(transactionCategories);
+    const dispatch = useDispatch();
 
+    // get all transaction categories and store the parent categories in an array
+    const transactionCategories = useSelector(state => selectTransactionCategories(state));
+    const categoryGroups = Object.keys(transactionCategories);
+
+    useEffect(() => {
+        // Create an object that looks like this for each parent category and 
+        // store it in state.
+        // {
+        //     categoryGroupName: String,
+        //     checked: Boolean
+        //     subCategoryObjects: [{checkboxObject}, {...}, {...}],
+        // }
+        for (let categoryGroupName of categoryGroups) {
+            const subCategories = transactionCategories[categoryGroupName];
+            const subCategoryObjects = subCategories.sort().map((subCategoryName) => {
+                return {
+                    subCategoryName, 
+                    checked: true
+                }
+            });
+            const sectionObject = {
+                categoryGroupName,
+                checked: true,
+                subCategoryObjects
+            }
+            dispatch(addCheckBoxSection(sectionObject));
+        }
+    }, [transactionCategories]);
+
+    const { checkBoxSections } = useSelector(state => state.filterBar.categoryDropdown);
+    
     return (
-        parentCategories.sort().map((categoryGroupName, index) => {
-            const categoryNames = transactionCategories[categoryGroupName];
-            return <CategoryCheckBoxSection 
-                id={'parent-checkbox-'+index}
-                categoryGroupName={categoryGroupName} 
-                categoryNames={categoryNames}
-            />
+        checkBoxSections.map((sectionObject, index) => {
+            return <CategoryCheckBoxSection checkBoxSection={sectionObject}/>
         })
     )
 }

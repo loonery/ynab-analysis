@@ -10,8 +10,8 @@ const transactionsSlice = createSlice({
         appliedFilters : {
             startDate: undefined, 
             endDate: undefined,
-            filteredCategories: new Set(),
-            filteredAccounts: new Set()
+            filteredCategories: [],
+            filteredAccounts: []
         },
         loading: true,
         error: undefined,

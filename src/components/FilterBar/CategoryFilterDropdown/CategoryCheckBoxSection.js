@@ -3,8 +3,8 @@ import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { 
-    addToCategoryFilter, 
-    removeFromCategoryFilter 
+    toggleParentCategory,
+    toggleChildCategory
 } from "store/slices/filterBarSlice";
 
 const ParentCheckboxContainer = styled.div`
@@ -15,68 +15,10 @@ const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
 `;
 
-const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
-    const dispatch = useDispatch();    
+const CategoryCheckBoxSection = ({checkBoxSection}) => {
 
-
-    // all categories start checked
-    const [checked, setChecked] = useState(true);
-    // Assemble child checkbox objects
-    const [categoryCheckBoxes, setCategoryCheckBoxes] = useState(
-        categoryNames.sort().map((categoryName) => {
-            return {
-                categoryName, 
-                checked: true
-            }
-        }
-    ));
-    
-
-    /**
-     * Handles event when a child checkbox is checked 
-     */
-    const handleCheckChild = useCallback((childCheckbox) => {
-        // change the checked checkbox's status
-        const newObjects = categoryCheckBoxes.map((checkbox) => {
-            if (checkbox.categoryName === childCheckbox.categoryName) {
-                
-                // communicate the change to the reducer
-                const checked = !childCheckbox.checked;
-                if (checked) {
-                    dispatch(addToCategoryFilter(childCheckbox.categoryName));
-                } else {
-                    dispatch(removeFromCategoryFilter(childCheckbox.categoryName))
-                }
-                // return the checkbox with its new checked value
-                return {...checkbox, checked}
-            }
-            // otherwise return the original checkbox
-            return checkbox;
-        })
-        setCategoryCheckBoxes(newObjects);
-    
-        // possibly change parent's value depending on status of children checkboxes
-        if (newObjects.every(object => !object.checked)) {
-            setChecked(false);
-        } else if (newObjects.every(object => object.checked)) {
-            setChecked(true);
-        }
-    }, [categoryCheckBoxes]);
-
-    /**
-     * Handle when a parent is checked
-     */
-    const handleParentChecked  = () => {
-        setChecked(!checked);
-        // checking the parent toggles all children in tandem
-        const newObjects = categoryCheckBoxes.map((childObject) => { 
-            return {
-                ...childObject, 
-                checked: !checked
-            }
-        });
-        setCategoryCheckBoxes(newObjects);
-    }
+    const dispatch = useDispatch();
+    const {categoryGroupName, checked, subCategoryObjects} = checkBoxSection;
 
     return (
     <Fragment>
@@ -85,18 +27,23 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
                 labelText={categoryGroupName} 
                 id={'parent-checkbox-' + categoryGroupName}
                 checked={checked} 
-                onChange={() => handleParentChecked()} 
+                onChange={() => dispatch(toggleParentCategory(categoryGroupName))} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
         {
-        categoryCheckBoxes.map((categoryCheckBox, index) => 
+        subCategoryObjects.map((subCategoryCheckBox, index) => 
         <ChildCheckboxContainer>
             <Checkbox
-                labelText={categoryCheckBox.categoryName}
+                labelText={subCategoryCheckBox.subCategoryName}
                 id={'child-checkbox-' + index}
-                checked={categoryCheckBox.checked}
-                onChange={() => handleCheckChild(categoryCheckBox)}
+                checked={subCategoryCheckBox.checked}
+                onChange={() => dispatch(toggleChildCategory(
+                    {
+                        categoryGroupName, 
+                        subCategoryName: subCategoryCheckBox.subCategoryName
+                    }
+                ))}
             />
         </ChildCheckboxContainer>            
         )
