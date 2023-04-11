@@ -2,7 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 
 const selectTransactions = (state) => state.transactions.transactions;
 const selectLoading = (state) => state.transactions.loading;
-const selectFilters = (state) => state.transactions.appliedFilters;
+const selectFilters = (state) => state.filterBar;
 
 /**
  * Filters transactions based on filters active in the fi
@@ -14,9 +14,9 @@ export const selectFilteredTransactions = createSelector(
   ],
   (transactions, appliedFilters) => {
     const {
-      filteredCategories, 
       startDate, 
       endDate, 
+      filteredCategories, 
       filteredAccounts,
     } = appliedFilters;
 

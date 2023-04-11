@@ -1,6 +1,11 @@
 import React, { Fragment, useCallback, useState } from "react"
 import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { 
+    addToCategoryFilter, 
+    removeFromCategoryFilter 
+} from "store/slices/filterBarSlice";
 
 const ParentCheckboxContainer = styled.div`
     font-weight: 600;
@@ -11,6 +16,8 @@ const ChildCheckboxContainer = styled.div`
 `;
 
 const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
+    const dispatch = useDispatch();    
+
 
     // all categories start checked
     const [checked, setChecked] = useState(true);
@@ -23,6 +30,7 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
             }
         }
     ));
+    
 
     /**
      * Handles event when a child checkbox is checked 
@@ -31,9 +39,18 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
         // change the checked checkbox's status
         const newObjects = categoryCheckBoxes.map((checkbox) => {
             if (checkbox.categoryName === childCheckbox.categoryName) {
+                
+                // communicate the change to the reducer
                 const checked = !childCheckbox.checked;
+                if (checked) {
+                    dispatch(addToCategoryFilter(childCheckbox.categoryName));
+                } else {
+                    dispatch(removeFromCategoryFilter(childCheckbox.categoryName))
+                }
+                // return the checkbox with its new checked value
                 return {...checkbox, checked}
             }
+            // otherwise return the original checkbox
             return checkbox;
         })
         setCategoryCheckBoxes(newObjects);

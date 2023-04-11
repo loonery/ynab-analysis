@@ -6,7 +6,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export const HeaderButtons = [
     {
         label: "Select None",
-        onClick: () => {},
+        onClick: () => {
+            
+
+        },
         classString: 'btn btn-sm btn-outline-dark'
     },
     {

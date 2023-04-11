@@ -5,8 +5,8 @@ const filterBarSlice = createSlice({
     initialState: {
         startDate: undefined, 
         endDate: undefined,
-        filteredCategories: [],
-        filteredAccounts: [],
+        filteredCategories: new Set(),
+        filteredAccounts: new Set(),
     },
     reducers: {
         setStartDateFilter(state, action) {
@@ -15,11 +15,17 @@ const filterBarSlice = createSlice({
         setEndDateFilter(state, action) {
             state.endDate = action.payload;
         }, 
-        setCategoryFilter(state, action) {
-            state.filteredCategories = action.payload;
+        addToCategoryFilter(state, action) {
+            state.filteredCategories.add(action.payload);
         },
-        setAccountFilter(state, action) {
-            state.filteredAccounts = action.payload;
+        removeFromCategoryFilter(state, action) {
+            state.filteredCategories.delete(action.payload);
+        },
+        addToAccountFilter(state, action) {
+            state.filteredAccounts.add(action.payload);
+        },
+        removeFromAccountFilter(state, action) {
+            state.filteredAccounts.delete(action.payload);
         },
     }
 });
@@ -27,6 +33,9 @@ const filterBarSlice = createSlice({
 export const {
     setStartDateFilter,
     setEndDateFilter,
-    setCategoryFilter,
-    setAccountFilter
+    addToCategoryFilter,
+    removeFromCategoryFilter,
+    addToAccountFilter,
+    removeFromAccountFilter
 } = filterBarSlice.actions;
+export const filterBarReducer = filterBarSlice.reducer;
