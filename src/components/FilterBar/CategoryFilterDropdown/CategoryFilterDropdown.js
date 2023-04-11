@@ -3,11 +3,12 @@ import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
+import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 
 const CategoryFilterDropdown = () => {
     return (
         <Dropdown dropdownLinkText={"Categories"}>
-            <h4>Categories</h4>
+            <StyledHeader4>Categories</StyledHeader4>
             <StyledHr/>
                 <ButtonBar buttons={HeaderButtons}/>
             <StyledHr/>

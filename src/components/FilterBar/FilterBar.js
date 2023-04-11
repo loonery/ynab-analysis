@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { selectTransactionDateRange } from "../../store/selectors/transactionSliceSelectors";
 import { Row, Col} from "react-bootstrap";
 import CategoryFilterDropdown from "./CategoryFilterDropdown/CategoryFilterDropdown";
+import DateFilterDropdown from "./DateFilterDropdown/DateFilterDropdown";
 
 const FilterBar = () => {
 
@@ -16,7 +17,7 @@ const FilterBar = () => {
                 <CategoryFilterDropdown />
             </Col>
             <Col>
-                <CategoryFilterDropdown />
+                <DateFilterDropdown />
             </Col>
         </Row>
     )
