@@ -10,13 +10,17 @@ const transactionsSlice = createSlice({
         appliedFilters : {
             startDate: undefined, 
             endDate: undefined,
-            filteredCategories: [],
-            filteredAccounts: []
+            filteredCategories: new Set(),
+            filteredAccounts: new Set()
         },
         loading: true,
         error: undefined,
     },
-    reducers: {},
+    reducers: {
+        setActiveFilters(state, action) {
+            state.appliedFilters = action.payload;
+        }
+    },
     extraReducers: {
         [fetchTransactionsThunk.fulfilled]: (state, action) => {
             state.loading = false;

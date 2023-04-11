@@ -1,15 +1,13 @@
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch } from "react-redux";
 
 // header button definitions
 export const HeaderButtons = [
     {
         label: "Select None",
-        onClick: () => {
-            
-
-        },
+        onClick: () => {},
         classString: 'btn btn-sm btn-outline-dark'
     },
     {
@@ -28,7 +26,7 @@ export const FooterButtons = [
     },
     {
         label: <FontAwesomeIcon icon={faFloppyDisk} />,
-        onClick: () => {},
+        onClick: () => {        },
         classString: 'btn btn-sm btn-outline-success'
     }
 ];
