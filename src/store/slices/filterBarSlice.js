@@ -23,3 +23,10 @@ const filterBarSlice = createSlice({
         },
     }
 });
+
+export const {
+    setStartDateFilter,
+    setEndDateFilter,
+    setCategoryFilter,
+    setAccountFilter
+} = filterBarSlice.actions;

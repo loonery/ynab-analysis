@@ -15,6 +15,9 @@ const FilterBar = () => {
             <Col>
                 <CategoryFilterDropdown />
             </Col>
+            <Col>
+                <CategoryFilterDropdown />
+            </Col>
         </Row>
     )
 
