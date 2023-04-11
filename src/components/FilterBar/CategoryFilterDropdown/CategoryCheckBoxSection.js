@@ -1,5 +1,5 @@
-import React, { Fragment, useState } from "react"
-import { Checkbox } from "../../../libs/reuse/Checkbox";
+import React, { Fragment, useCallback, useState } from "react"
+import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
 
 const ParentCheckboxContainer = styled.div`
@@ -14,16 +14,20 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
 
     // all categories start checked
     const [checked, setChecked] = useState(true);
-    const [categoryCheckBoxes, setCategoryCheckBoxes] = useState(categoryNames.sort().map((categoryName) => {
-        return {
-            categoryName, 
-            checked: true
+    // Assemble child checkbox objects
+    const [categoryCheckBoxes, setCategoryCheckBoxes] = useState(
+        categoryNames.sort().map((categoryName) => {
+            return {
+                categoryName, 
+                checked: true
+            }
         }
-    }));
+    ));
 
-    /* Handles event when a child checkbox is checked */
-    const handleCheckChild = (childCheckbox) => {
-        
+    /**
+     * Handles event when a child checkbox is checked 
+     */
+    const handleCheckChild = useCallback((childCheckbox) => {
         // change the checked checkbox's status
         const newObjects = categoryCheckBoxes.map((checkbox) => {
             if (checkbox.categoryName === childCheckbox.categoryName) {
@@ -40,6 +44,21 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
         } else if (newObjects.every(object => object.checked)) {
             setChecked(true);
         }
+    }, [categoryCheckBoxes]);
+
+    /**
+     * Handle when a parent is checked
+     */
+    const handleParentChecked  = () => {
+        setChecked(!checked);
+        // checking the parent toggles all children in tandem
+        const newObjects = categoryCheckBoxes.map((childObject) => { 
+            return {
+                ...childObject, 
+                checked: !checked
+            }
+        });
+        setCategoryCheckBoxes(newObjects);
     }
 
     return (
@@ -49,18 +68,7 @@ const CategoryCheckBoxSection = ({categoryGroupName, categoryNames}) => {
                 labelText={categoryGroupName} 
                 id={'parent-checkbox-' + categoryGroupName}
                 checked={checked} 
-                onChange={() => {
-                    setChecked(!checked);
-
-                    // checking the parent toggles all children in tandem
-                    const newObjects = categoryCheckBoxes.map((childObject) => { 
-                        return {
-                            ...childObject, 
-                            checked: !checked
-                        }
-                    });
-                    setCategoryCheckBoxes(newObjects);
-                }} 
+                onChange={() => handleParentChecked()} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}

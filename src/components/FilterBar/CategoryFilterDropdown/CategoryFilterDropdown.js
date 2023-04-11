@@ -1,37 +1,22 @@
-import { Dropdown } from "../../../libs/reuse/Dropdown";
+import { Dropdown } from 'libs/reuse/components/Dropdown';
+import ButtonBar from 'libs/reuse/components/ButtonBar';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import ButtonBar from "../../../libs/reuse/ButtonBar";
+import { HeaderButtons, FooterButtons } from './DropdownButtonConfig';
+import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 
 const CategoryFilterDropdown = () => {
-
-    // header button definitions
-    const HeaderButtons = [
-        {
-            label: "Select None",
-            onClick: () => {},
-            classString: 'btn btn-outline-dark'
-        },
-        {
-            label: "Select All",
-            onClick: () => {}
-        },
-    ];
-
-    // footer button definitions
-    const FooterButtons = [
-        {
-            label: "Done",
-            onClick: () => {},
-            classString: 'btn btn-success'
-        }
-    ];
-
     return (
         <Dropdown dropdownLinkText={"Categories"}>
-            <h4>Categories</h4>
-            <ButtonBar buttons={HeaderButtons}/>
+            <StyledHeader4>Categories</StyledHeader4>
+            <StyledHr/>
+                <ButtonBar buttons={HeaderButtons}/>
+            <StyledHr/>
             <CategoryCheckBoxesContainer />
-            <ButtonBar buttons={FooterButtons}/>
+            <ButtonBar 
+                buttons={FooterButtons}
+                padding={'10px 0px 0px 0px'}
+                justify={'flex-end'}/>
         </Dropdown>
     )
 }
