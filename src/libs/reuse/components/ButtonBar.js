@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
+import { useDispatch } from 'react-redux';
 
 const ButtonContainer = styled.div`
   display: flex;
@@ -14,20 +15,23 @@ const StyledButton = styled.button`
 `;
 
 const ButtonBar = ({ buttons, justify, padding}) => {
+
   return (
     <ButtonContainer 
       padding={padding}
       justify={justify}
     >
-      {buttons.map((button) => (
-        <StyledButton 
-          key={button.label} 
-          onClick={button.onClick} 
-          className={button.classString ? button.classString : DEFAULT_BUTTON_CLASS_STRING}
-        >
-          {button.label}
-        </StyledButton>
-      ))}
+      {buttons.map((button) => {
+        const {label, onClick, classString} = button;
+        return (
+          <StyledButton 
+            key={label} 
+            onClick={onClick}
+            className={classString ? classString : DEFAULT_BUTTON_CLASS_STRING}
+          >
+            {label}
+          </StyledButton>
+        )})}
     </ButtonContainer>
   );
 };

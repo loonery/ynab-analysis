@@ -15,7 +15,6 @@ const StyledDropdown = styled.div`
 `;
 
 export const Dropdown = ({dropdownLinkText, id, children}) => {
-
     const className = DEFAULT_BUTTON_CLASS_STRING + ' ' + DROPDOWN_TOGGLE_CLASSNAME;
     return (
         <div className={DROPDOWN_DIV_CLASSNAME}>

@@ -37,10 +37,10 @@ const CategoryCheckBoxList = () => {
         }
     }, [transactionCategories]);
 
-    const { checkBoxSections } = useSelector(state => state.filterBar.categoryDropdown);
-    
+
+    const { tempCategoryCheckBoxes } = useSelector(state => state.filterBar.categoryDropdown);    
     return (
-        checkBoxSections.map((sectionObject, index) => {
+        tempCategoryCheckBoxes.map((sectionObject, index) => {
             return <CategoryCheckBoxSection checkBoxSection={sectionObject}/>
         })
     )

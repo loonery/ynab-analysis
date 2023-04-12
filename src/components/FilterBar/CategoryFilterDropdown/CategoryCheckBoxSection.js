@@ -36,7 +36,7 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
         <ChildCheckboxContainer>
             <Checkbox
                 labelText={subCategoryCheckBox.subCategoryName}
-                id={'child-checkbox-' + index}
+                id={'child-checkbox-' + subCategoryCheckBox.subCategoryName}
                 checked={subCategoryCheckBox.checked}
                 onChange={() => dispatch(toggleChildCategory(
                     {
