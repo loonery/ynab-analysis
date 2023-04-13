@@ -1,13 +1,13 @@
-import { Dropdown } from "libs/reuse/components/Dropdown";
+import { CustomDropdown } from "libs/reuse/components/CustomDropdown";
 
 
 const DateFilterDropdown = () => {
 
     return (
-        <Dropdown dropdownLinkText={"Dates" }>
+        <CustomDropdown dropdownLinkText={"Dates"}>
             
         
-        </Dropdown>
+        </CustomDropdown>
     )
 
 }
