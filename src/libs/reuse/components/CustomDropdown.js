@@ -16,6 +16,7 @@ const DropdownContentContainer = styled.div`
 const CustomToggle = React.forwardRef(
   ({ children, onClick, show }, ref) => {
   
+    // show a different arrow if we are dropped down
     const arrow = show ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight}/>;
 
     return (
@@ -29,7 +30,9 @@ const CustomToggle = React.forwardRef(
       >
         {children} {arrow}
       </a>
-)});
+    )
+  }
+);
 
 // custom menu that acts as a dropdown menu
 const CustomMenu = React.forwardRef(
