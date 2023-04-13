@@ -69,9 +69,11 @@ const CategoryFilterDropdown = () => {
             show={show}
             id={CATEGORY_FILTER_DROPDOWN_ID}
         >
-            <StyledHeader4>Categories</StyledHeader4>
+            <StyledHeader4>
+                Categories
+            </StyledHeader4>
             <StyledHr/>
-            <ButtonBar buttons={HeaderButtons}/>
+                <ButtonBar buttons={HeaderButtons}/>
             <StyledHr/>
             <CategoryCheckBoxesContainer />
             <ButtonBar 
@@ -79,6 +81,6 @@ const CategoryFilterDropdown = () => {
                 padding={'10px 0px 0px 0px'}
                 justify={'flex-end'}/>
         </CustomDropdown>
-    )
+    );
 }
 export default CategoryFilterDropdown;

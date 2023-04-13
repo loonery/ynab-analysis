@@ -4,8 +4,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components"
-import { useDispatch, useSelector } from "react-redux";
-import { Button } from "react-bootstrap";
 
 const DropdownContentContainer = styled.div`
     /* padding top, bottom | left right */
@@ -30,7 +28,7 @@ const CustomToggle = React.forwardRef(
       >
         {children} {arrow}
       </a>
-    )
+    );
   }
 );
 

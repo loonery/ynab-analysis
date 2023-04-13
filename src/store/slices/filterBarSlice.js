@@ -10,7 +10,7 @@ const filterBarSlice = createSlice({
             //     checked: Boolean
             //     subCategoryObjects: [{checkboxObject}, {...}, {...}],
             // }
-            categoryCheckBoxes: [],
+            savedCategoryCheckBoxes: [],
             tempCategoryCheckBoxes: [],
             show: false,
         },
@@ -25,13 +25,13 @@ const filterBarSlice = createSlice({
         // used to populate the state with checkboxes for the categories that are found in transactions
         addCheckBoxSection(state, action) {
             const categoryGroupName = action.payload.categoryGroupName;
-            const currentSections = state.categoryDropdown.categoryCheckBoxes;
+            const currentSections = state.categoryDropdown.savedCategoryCheckBoxes;
             const matchedNames = currentSections.find(section => section.categoryGroupName === categoryGroupName);
 
             // we don't want to add duplicate sections that might be added due to several render cycles
             if (!matchedNames) {
                 // load the temp version and the saved version at first
-                state.categoryDropdown.categoryCheckBoxes.push(action.payload);
+                state.categoryDropdown.savedCategoryCheckBoxes.push(action.payload);
                 state.categoryDropdown.tempCategoryCheckBoxes.push(action.payload);
             }
         },
@@ -112,7 +112,7 @@ const filterBarSlice = createSlice({
         setFilteredCategories(state, action) {
             // temp checkbox state now becomes saved checkbox state
             const newCheckboxState = state.categoryDropdown.tempCategoryCheckBoxes
-            state.categoryDropdown.categoryCheckBoxes = newCheckboxState;
+            state.categoryDropdown.savedCategoryCheckBoxes = newCheckboxState;
             
             // filters are gleaned from new checkbox state
             const filteredCategories = newCheckboxState.filter((category) => !category.checked);
@@ -120,7 +120,7 @@ const filterBarSlice = createSlice({
         },
         cancelFilteredCategoriesChanges(state, action) {
             // the temporary state reverts to the saved state
-            state.categoryDropdown.tempCategoryCheckBoxes = state.categoryDropdown.categoryCheckBoxes;
+            state.categoryDropdown.tempCategoryCheckBoxes = state.categoryDropdown.savedCategoryCheckBoxes;
         },
         addToCategoryFilter(state, action) {
             state.filteredCategories.add(action.payload);
