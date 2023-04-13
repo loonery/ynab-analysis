@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from 'prop-types'
 import Dropdown from "react-bootstrap/Dropdown";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
+import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styled from "styled-components"
 import { useDispatch, useSelector } from "react-redux";
@@ -14,18 +14,22 @@ const DropdownContentContainer = styled.div`
 
 // defines the custom toggle element that acts as a dropdown toggle
 const CustomToggle = React.forwardRef(
-  ({ children, onClick }, ref) => (
-    <a
-      href="/#"
-      ref={ref}
-      onClick={(e) => {
-        e.preventDefault(); // prevent navigation of the href
-        onClick(e);
-      }}
-    >
-      {children} <FontAwesomeIcon icon={faCaretDown} />
-    </a>
-));
+  ({ children, onClick, show }, ref) => {
+  
+    const arrow = show ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight}/>;
+
+    return (
+      <a
+        href="/#"
+        ref={ref}
+        onClick={(e) => {
+          e.preventDefault(); // prevent navigation of the href
+          onClick(e);
+        }}
+      >
+        {children} {arrow}
+      </a>
+)});
 
 // custom menu that acts as a dropdown menu
 const CustomMenu = React.forwardRef(
@@ -53,7 +57,7 @@ export const CustomDropdown = ({
 }) => {
   return (
     <Dropdown show={show} onToggle={onToggle}>
-        <Dropdown.Toggle as={CustomToggle} id={id}>
+        <Dropdown.Toggle as={CustomToggle} id={id} show={show}>
             {dropdownLinkText}
         </Dropdown.Toggle>
         <Dropdown.Menu as={CustomMenu}>
