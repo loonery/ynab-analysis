@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { CATEGORY_FILTER_DROPDOWN_ID } from "consts/consts";
-import { closeDropdown } from "libs/utils/closeDropdown";
 
 const filterBarSlice = createSlice({
     name: 'filterBar',
@@ -14,7 +12,7 @@ const filterBarSlice = createSlice({
             // }
             categoryCheckBoxes: [],
             tempCategoryCheckBoxes: [],
-            dropped: false,
+            show: false,
         },
         activeFilters : {
             startDate: undefined, 
@@ -123,7 +121,6 @@ const filterBarSlice = createSlice({
         cancelFilteredCategoriesChanges(state, action) {
             // the temporary state reverts to the saved state
             state.categoryDropdown.tempCategoryCheckBoxes = state.categoryDropdown.categoryCheckBoxes;
-            // closeDropdown(CATEGORY_FILTER_DROPDOWN_ID);
         },
         addToCategoryFilter(state, action) {
             state.filteredCategories.add(action.payload);
@@ -131,6 +128,9 @@ const filterBarSlice = createSlice({
         removeFromCategoryFilter(state, action) {
             state.filteredCategories.delete(action.payload);
         },
+        toggleCategoryDropdown(state, action) {
+            state.categoryDropdown.show = !state.categoryDropdown.show;
+        }
     }
 });
 
@@ -141,6 +141,7 @@ export const {
     selectAllCategories,
     selectNoCategories,
     setFilteredCategories,
-    cancelFilteredCategoriesChanges
+    cancelFilteredCategoriesChanges,
+    toggleCategoryDropdown
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;

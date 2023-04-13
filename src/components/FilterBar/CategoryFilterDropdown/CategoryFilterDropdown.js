@@ -1,4 +1,4 @@
-import { Dropdown } from 'libs/reuse/components/Dropdown';
+import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
@@ -7,11 +7,9 @@ import { CATEGORY_FILTER_DROPDOWN_ID } from 'consts/consts';
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { selectAllCategories, selectNoCategories, setFilteredCategories, cancelFilteredCategoriesChanges} from '../../../store/slices/filterBarSlice'
-import { useDispatch } from 'react-redux';
-import { closeDropdown } from 'libs/utils/closeDropdown';
-
-
+import { selectAllCategories, selectNoCategories, setFilteredCategories, cancelFilteredCategoriesChanges, toggleCategoryDropdown} from '../../../store/slices/filterBarSlice'
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCategoryDropdown } from 'store/selectors/filterBarSelectors';
 
 const CategoryFilterDropdown = () => {
 
@@ -41,7 +39,7 @@ const CategoryFilterDropdown = () => {
 
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
-                closeDropdown(CATEGORY_FILTER_DROPDOWN_ID);
+                dispatch(toggleCategoryDropdown());
                 dispatch(cancelFilteredCategoriesChanges())
             },
             classString: 'btn btn-sm btn-outline-danger'
@@ -49,16 +47,26 @@ const CategoryFilterDropdown = () => {
         {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
+                dispatch(toggleCategoryDropdown());
                 dispatch(setFilteredCategories());
             },
             classString: 'btn btn-sm btn-outline-success'
         }
     ];
 
+    const { show } = useSelector(state => selectCategoryDropdown(state));
+    const onToggle = () => {
+        // toggle the dropdown in state
+        dispatch(toggleCategoryDropdown());
+        // revert temp state back to saved state if clicked away
+        dispatch(cancelFilteredCategoriesChanges());
+    }
 
     return (
-        <Dropdown 
-            dropdownLinkText={"Categories"} 
+        <CustomDropdown 
+            dropdownLinkText={"Categories"}
+            onToggle={onToggle}
+            show={show}
             id={CATEGORY_FILTER_DROPDOWN_ID}
         >
             <StyledHeader4>Categories</StyledHeader4>
@@ -70,7 +78,7 @@ const CategoryFilterDropdown = () => {
                 buttons={FooterButtons}
                 padding={'10px 0px 0px 0px'}
                 justify={'flex-end'}/>
-        </Dropdown>
+        </CustomDropdown>
     )
 }
 export default CategoryFilterDropdown;
