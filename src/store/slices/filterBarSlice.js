@@ -13,7 +13,8 @@ const filterBarSlice = createSlice({
             //     subCategoryObjects: [{checkboxObject}, {...}, {...}],
             // }
             categoryCheckBoxes: [],
-            tempCategoryCheckBoxes: []
+            tempCategoryCheckBoxes: [],
+            dropped: false,
         },
         activeFilters : {
             startDate: undefined, 
