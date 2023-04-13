@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { DEFAULT_BUTTON_CLASS_STRING } from '../../../consts/consts';
+import { DEFAULT_BUTTON_CLASS_STRING } from '../../consts/consts';
 import { useDispatch } from 'react-redux';
 
 const ButtonContainer = styled.div`

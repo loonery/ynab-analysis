@@ -3,7 +3,7 @@ import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { CATEGORY_FILTER_DROPDOWN_ID } from 'consts/consts';
+import { CATEGORY_FILTER_DROPDOWN_ID } from 'libs/consts/consts';
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -69,9 +69,7 @@ const CategoryFilterDropdown = () => {
             show={show}
             id={CATEGORY_FILTER_DROPDOWN_ID}
         >
-            <StyledHeader4>
-                Categories
-            </StyledHeader4>
+            <StyledHeader4>Categories</StyledHeader4>
             <StyledHr/>
                 <ButtonBar buttons={HeaderButtons}/>
             <StyledHr/>

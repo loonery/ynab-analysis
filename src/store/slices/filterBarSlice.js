@@ -4,14 +4,18 @@ const filterBarSlice = createSlice({
     name: 'filterBar',
     initialState: {
         categoryDropdown: {
-            // Each object in the array looks like...
-            // {
-            //     categoryGroupName: String,
-            //     checked: Boolean
-            //     subCategoryObjects: [{checkboxObject}, {...}, {...}],
-            // }
             savedCategoryCheckBoxes: [],
             tempCategoryCheckBoxes: [],
+            show: false,
+        },
+        dateDropdown: {
+            savedDateRange: {stateDate: undefined, endDate: undefined},
+            tempDateRange: {stateDate: undefined, endDate: undefined},
+            show: false,
+        },
+        accountDropdown: {
+            savedAccountCheckBoxes: [],
+            tempAccountCheckBoxes: [],
             show: false,
         },
         activeFilters : {
@@ -23,20 +27,13 @@ const filterBarSlice = createSlice({
     },
     reducers: {
         // used to populate the state with checkboxes for the categories that are found in transactions
-        addCheckBoxSection(state, action) {
-            const categoryGroupName = action.payload.categoryGroupName;
-            const currentSections = state.categoryDropdown.savedCategoryCheckBoxes;
-            const matchedNames = currentSections.find(section => section.categoryGroupName === categoryGroupName);
-
-            // we don't want to add duplicate sections that might be added due to several render cycles
-            if (!matchedNames) {
-                // load the temp version and the saved version at first
-                state.categoryDropdown.savedCategoryCheckBoxes.push(action.payload);
-                state.categoryDropdown.tempCategoryCheckBoxes.push(action.payload);
-            }
+        initCategoryCheckboxes(state, action) {
+            state.categoryDropdown.savedCategoryCheckBoxes = action.payload;
+            state.categoryDropdown.tempCategoryCheckBoxes = action.payload;
         },
         // toggles category group checkboxes
         toggleParentCategory(state, action) {
+          
             // get the data of the parent that was just checked
             const categoryGroupName = action.payload;
             const currrentSections = state.categoryDropdown.tempCategoryCheckBoxes;
@@ -109,9 +106,13 @@ const filterBarSlice = createSlice({
             })
             state.categoryDropdown.tempCategoryCheckBoxes = newSections;
         },
-        setFilteredCategories(state, action) {
+        setActiveFilters(state, action) {
             // temp checkbox state now becomes saved checkbox state
             const newCheckboxState = state.categoryDropdown.tempCategoryCheckBoxes
+            
+            
+            
+            
             state.categoryDropdown.savedCategoryCheckBoxes = newCheckboxState;
             
             // filters are gleaned from new checkbox state
@@ -135,7 +136,7 @@ const filterBarSlice = createSlice({
 });
 
 export const {
-    addCheckBoxSection,
+    initCategoryCheckboxes,
     toggleParentCategory,
     toggleChildCategory,
     selectAllCategories,
