@@ -31,8 +31,7 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
-        {
-        subCategoryObjects.map((subCategoryCheckBox, index) => 
+        {subCategoryObjects.map((subCategoryCheckBox, index) => 
         <ChildCheckboxContainer>
             <Checkbox
                 labelText={subCategoryCheckBox.subCategoryName}
@@ -45,9 +44,8 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
                     }
                 ))}
             />
-        </ChildCheckboxContainer>            
-        )
-        }
+        </ChildCheckboxContainer>
+        )}
     </Fragment>
     )
 }
