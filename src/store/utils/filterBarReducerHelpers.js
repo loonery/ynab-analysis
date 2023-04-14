@@ -2,10 +2,13 @@
 export const getFiltersFromState = (savedState) => {
     const { startDate, endDate, categories, accounts} = savedState;
     
+    // retrieve all the cateogories 
     const filteredCategories = categories.map(
         (checkbox) => [...checkbox.subCategoryObjects]).flat(1).filter(
             (subCategoryObject) => !subCategoryObject.checked
-        ).map((checkedObject) => checkedObject.subCategoryName);
+        ).map(
+            (checkedObject) => checkedObject.subCategoryName
+        );
     
     const filteredAccounts = [];
     const newActiveFilters = {
