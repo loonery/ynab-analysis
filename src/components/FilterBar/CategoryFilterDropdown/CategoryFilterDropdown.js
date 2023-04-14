@@ -7,7 +7,14 @@ import { CATEGORY_FILTER_DROPDOWN_ID } from 'libs/consts/consts';
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { selectAllCategories, selectNoCategories, setFilteredCategories, cancelFilteredCategoriesChanges, toggleCategoryDropdown} from '../../../store/slices/filterBarSlice'
+import { 
+    selectAllCategories, 
+    selectNoCategories, 
+    saveCategoryCheckboxes,
+    setFiltersFromState,
+    cancelCategoryCheckboxChanges,
+    toggleCategoryDropdown
+} from '../../../store/slices/filterBarSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectCategoryDropdown } from 'store/selectors/filterBarSelectors';
 
@@ -40,7 +47,7 @@ const CategoryFilterDropdown = () => {
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
                 dispatch(toggleCategoryDropdown());
-                dispatch(cancelFilteredCategoriesChanges())
+                dispatch(cancelCategoryCheckboxChanges())
             },
             classString: 'btn btn-sm btn-outline-danger'
         },
@@ -48,7 +55,8 @@ const CategoryFilterDropdown = () => {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
                 dispatch(toggleCategoryDropdown());
-                dispatch(setFilteredCategories());
+                dispatch(saveCategoryCheckboxes());
+                dispatch(setFiltersFromState());
             },
             classString: 'btn btn-sm btn-outline-success'
         }
@@ -59,7 +67,7 @@ const CategoryFilterDropdown = () => {
         // toggle the dropdown in state
         dispatch(toggleCategoryDropdown());
         // revert temp state back to saved state if clicked away
-        dispatch(cancelFilteredCategoriesChanges());
+        dispatch(cancelCategoryCheckboxChanges());
     }
 
     return (

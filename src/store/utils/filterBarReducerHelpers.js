@@ -1,7 +1,20 @@
-import { check } from "prettier"
 
-export const getCategoryFiltersFromState = (state) => {
-        
+export const getFiltersFromState = (savedState) => {
+    const { startDate, endDate, categories, accounts} = savedState;
+    
+    const filteredCategories = categories.map(
+        (checkbox) => [...checkbox.subCategoryObjects]).flat(1).filter(
+            (subCategoryObject) => !subCategoryObject.checked
+        ).map((checkedObject) => checkedObject.subCategoryName);
+    
+    const filteredAccounts = [];
+    const newActiveFilters = {
+        startDate,
+        endDate, 
+        filteredCategories,
+        filteredAccounts
+    }
+    return newActiveFilters;
 }
 
 export const setAllCheckboxes = (currentBoxes, value) => {

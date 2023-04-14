@@ -1,5 +1,13 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-import { findChildCheckboxByParent, findParentCheckbox, selectAllCheckboxes, setAllCheckboxes, setAllChildren, toggleCheckboxValue } from "store/utils/filterBarReducerUtils";
+import { createSlice } from "@reduxjs/toolkit";
+import { 
+    findChildCheckboxByParent, 
+    findParentCheckbox, 
+    getFiltersFromState,  
+    setAllCheckboxes, 
+    setAllChildren, 
+    toggleCheckboxValue 
+} from "store/utils/filterBarReducerHelpers";
+
 
 const filterBarSlice = createSlice({
     name: 'filterBar',
@@ -10,8 +18,8 @@ const filterBarSlice = createSlice({
             show: false,
         },
         dateDropdown: {
-            savedDateRange: {stateDate: undefined, endDate: undefined},
-            tempDateRange: {stateDate: undefined, endDate: undefined},
+            savedDateRange: {startDate: undefined, endDate: undefined},
+            tempDateRange: {startDate: undefined, endDate: undefined},
             show: false,
         },
         accountDropdown: {
@@ -19,7 +27,7 @@ const filterBarSlice = createSlice({
             tempAccountCheckBoxes: [],
             show: false,
         },
-        activeFilters : {
+        appliedFilters : {
             startDate: undefined, 
             endDate: undefined,
             filteredCategories: [],
@@ -68,27 +76,25 @@ const filterBarSlice = createSlice({
             const newBoxes = setAllCheckboxes(currentBoxes, false);
             state.categoryDropdown.tempCategoryCheckBoxes = newBoxes;
         },
-        saveFilteredCategoriesChanges(state, action) {
+        saveCategoryCheckboxes(state, action) {
             // temp checkbox state now becomes saved checkbox state
             const newCheckboxState = state.categoryDropdown.tempCategoryCheckBoxes;
             state.categoryDropdown.savedCategoryCheckBoxes = newCheckboxState;
         },
-        cancelFilteredCategoriesChanges(state, action) {
+        cancelCategoryCheckboxChanges(state, action) {
             // the temporary state reverts to the saved state
             const saved = state.categoryDropdown.savedCategoryCheckBoxes;
             state.categoryDropdown.tempCategoryCheckBoxes = saved;
         },
-        getFiltersFromState(state, action) {
-            // filters are gleaned from saved checkbox state
-            const saved = state.categoryDropdown.savedCategoryCheckBoxes
-            const filteredCategories = saved.filter((category) => !category.checked);
-            state.activeFilters.filteredCategories = filteredCategories;
-        },
-        addToCategoryFilter(state, action) {
-            state.filteredCategories.add(action.payload);
-        },
-        removeFromCategoryFilter(state, action) {
-            state.filteredCategories.delete(action.payload);
+        setFiltersFromState(state, action) {
+            // filters are gleaned from saved state
+            const savedState = {
+                startDate: state.dateDropdown.savedDateRange.startDate,
+                endDate: state.dateDropdown.savedDateRange.endDate,
+                categories: state.categoryDropdown.savedCategoryCheckBoxes,
+                accounts: state.accountDropdown.savedAccountCheckBoxes,
+            };
+            state.appliedFilters = getFiltersFromState(savedState);
         },
         toggleCategoryDropdown(state, action) {
             state.categoryDropdown.show = !state.categoryDropdown.show;
@@ -102,8 +108,9 @@ export const {
     toggleChildCategory,
     selectAllCategories,
     selectNoCategories,
-    setFilteredCategories,
-    cancelFilteredCategoriesChanges,
+    saveCategoryCheckboxes,
+    cancelCategoryCheckboxChanges,
+    setFiltersFromState,
     toggleCategoryDropdown
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;
