@@ -21,21 +21,23 @@ export const getFiltersFromState = (savedState) => {
 }
 
 export const setAllCheckboxes = (currentBoxes, value) => {
-    const newBoxes = currentBoxes.map((section) => {
-        return (
-            {
-                ...section,
-                checked: value,
-                subCategoryObjects: section.subCategoryObjects.map(
-                    (object) => {
-                        return {
-                            ...object, 
-                            checked: value
-                        }
-                    })
-            }
-        )
-    })
+    const newBoxes = currentBoxes.map(
+        (section) => {
+            return (
+                {
+                    ...section,
+                    checked: value,
+                    subCategoryObjects: section.subCategoryObjects.map(
+                        (object) => {
+                            return {
+                                ...object, 
+                                checked: value
+                            }
+                        })
+                }
+            )
+        }
+    )
     return newBoxes;
 }
 

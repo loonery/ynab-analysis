@@ -8,7 +8,6 @@ import {
     toggleCheckboxValue 
 } from "store/utils/filterBarReducerHelpers";
 
-
 const filterBarSlice = createSlice({
     name: 'filterBar',
     initialState: {
@@ -41,14 +40,14 @@ const filterBarSlice = createSlice({
             state.categoryDropdown.tempCategoryCheckBoxes = action.payload;
         },
         // toggles category group checkboxes
-        toggleParentCategory(state, action) {
+        toggleParentCheckbox(state, action) {
             const parent = findParentCheckbox(state, action.payload);
             const newParentValue = toggleCheckboxValue(parent);
             parent.checked = newParentValue;
             parent.subCategoryObjects = setAllChildren(parent, newParentValue);
         },
         // toggles subcategory checkboxes when clicked
-        toggleChildCategory(state, action) {
+        toggleChildCheckbox(state, action) {
 
             const { categoryGroupName, subCategoryName } = action.payload;
             const parent = findParentCheckbox(state, categoryGroupName);
@@ -104,8 +103,8 @@ const filterBarSlice = createSlice({
 
 export const {
     initCategoryCheckboxes,
-    toggleParentCategory,
-    toggleChildCategory,
+    toggleParentCheckbox: toggleParentCategory,
+    toggleChildCheckbox: toggleChildCategory,
     selectAllCategories,
     selectNoCategories,
     saveCategoryCheckboxes,

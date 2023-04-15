@@ -20,8 +20,6 @@ export const selectFilteredTransactions = createSelector(
       filteredAccounts,
     } = appliedFilters;
 
-    console.log(filteredCategories);
-
     const filteredTransactions = transactions.filter((transaction) => {
       // if filter defined, apply filter. If not defined, let anything through
       const passStart = startDate ? (transaction.month_year >= startDate) : true;
@@ -30,7 +28,7 @@ export const selectFilteredTransactions = createSelector(
 
       const passCategory = (filteredCategories.length > 0)
         ? (filteredCategories.includes(transaction.category_name)
-                        || filteredCategories.includes(transaction.category_group_name))
+        || filteredCategories.includes(transaction.category_group_name))
         : true;
 
       const passAccount = (filteredAccounts.length > 0)

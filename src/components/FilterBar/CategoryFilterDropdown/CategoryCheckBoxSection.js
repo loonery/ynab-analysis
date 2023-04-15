@@ -3,8 +3,8 @@ import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { 
-    toggleParentCategory,
-    toggleChildCategory
+    toggleParentCheckbox,
+    toggleChildCheckbox
 } from "store/slices/filterBarSlice";
 
 const ParentCheckboxContainer = styled.div`
@@ -27,7 +27,7 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
                 labelText={categoryGroupName} 
                 id={'parent-checkbox-' + categoryGroupName}
                 checked={checked} 
-                onChange={() => dispatch(toggleParentCategory(categoryGroupName))} 
+                onChange={() => dispatch(toggleParentCheckbox(categoryGroupName))} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
@@ -37,7 +37,7 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
                 labelText={subCategoryCheckBox.subCategoryName}
                 id={'child-checkbox-' + subCategoryCheckBox.subCategoryName}
                 checked={subCategoryCheckBox.checked}
-                onChange={() => dispatch(toggleChildCategory(
+                onChange={() => dispatch(toggleChildCheckbox(
                     {
                         categoryGroupName, 
                         subCategoryName: subCategoryCheckBox.subCategoryName
