@@ -3,8 +3,9 @@ export const getFiltersFromState = (savedState) => {
     const { startDate, endDate, categories, accounts} = savedState;
     
     // retrieve all the cateogories 
+    // opportunity to factor out get nested chexkboxes function?
     const filteredCategories = categories.map(
-        (checkbox) => [...checkbox.subCategoryObjects]).flat(1).filter(
+        (checkbox) => [...checkbox.childObjects]).flat(1).filter(
             (subCategoryObject) => !subCategoryObject.checked
         ).map(
             (checkedObject) => checkedObject.subCategoryName
@@ -27,13 +28,12 @@ export const setAllCheckboxes = (currentBoxes, value) => {
                 {
                     ...section,
                     checked: value,
-                    subCategoryObjects: section.subCategoryObjects.map(
-                        (object) => {
-                            return {
-                                ...object, 
-                                checked: value
-                            }
-                        })
+                    childObjects: section.childObjects.map((object) => {
+                        return {
+                            ...object, 
+                            checked: value
+                        }
+                    })
                 }
             )
         }
@@ -42,26 +42,34 @@ export const setAllCheckboxes = (currentBoxes, value) => {
 }
 
 export const setAllChildren = (parent, newParentValue) => {
-    const newSubcategoryObjects = parent.subCategoryObjects.map(
+    const newChildObjects = parent.childObjects.map(
         (childObject) => {
             return {
                 ...childObject, 
                 checked: newParentValue
             }
     });
-    return newSubcategoryObjects;
+    return newChildObjects;
 }
 
-export const findParentCheckbox = (state, categoryGroupName) => {
-    const currrentSections = state.categoryDropdown.tempCategoryCheckBoxes;
+/**
+ * 
+ * @param {*} state 
+ * @param {*} parentName 
+ * @param {*} key 
+ * @returns 
+ */
+export const findParentCheckbox = (state, parentName, keys) => {
+    const { dropdownKey, tempCheckboxKey } = keys;
+    const currrentSections = state[dropdownKey][tempCheckboxKey];
     const matchedSection = currrentSections.find(
-        section => section.categoryGroupName === categoryGroupName);
+        section => section.parentName === parentName);
     return matchedSection;
 }
 
 export const findChildCheckboxByParent = (parent, childName) => {
-    return parent.subCategoryObjects.find(
-        e => e.subCategoryName === childName);
+    return parent.childObjects.find(
+        e => e.childName === childName);
 }
 
 export const toggleCheckboxValue = (checkbox) => {

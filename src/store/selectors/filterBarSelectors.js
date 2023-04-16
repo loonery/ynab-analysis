@@ -1,3 +1,2 @@
-import { createSelector } from '@reduxjs/toolkit';
 
-export const selectCategoryDropdown = (state) => state.filterBar.categoryDropdown;
+export const selectDropdown = (state, { dropdownKey }) => state.filterBar[dropdownKey];

@@ -4,6 +4,7 @@ import { selectTransactionCategories } from "../../../store/selectors/transactio
 import { addCheckBoxSection, initCategoryCheckboxes } from "store/slices/filterBarSlice"
 import CategoryCheckBoxSection from './CategoryCheckBoxSection'
 import { assembleCategoryCheckboxObjects } from "../utils/filterBarUtils"
+import { CATEGORY_DROPDOWN_KEYS } from "../consts/filterBarConsts"
 
 const CategoryCheckBoxList = () => {
 
@@ -16,14 +17,20 @@ const CategoryCheckBoxList = () => {
     // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.
     const { tempCategoryCheckBoxes } = useSelector(state => state.filterBar.categoryDropdown);    
 
+    // assemble and initialize the category checkboxes on start
     useEffect(() => {
         const checkboxes = assembleCategoryCheckboxObjects(transactionCategories);
         dispatch(initCategoryCheckboxes(checkboxes));
     }, [transactionCategories]);
 
+    
+
     return (
         tempCategoryCheckBoxes.map((sectionObject, index) => {
-            return <CategoryCheckBoxSection checkBoxSection={sectionObject}/>
+            return <CategoryCheckBoxSection 
+                checkBoxSection={sectionObject} 
+                keys={CATEGORY_DROPDOWN_KEYS}
+            />
         })
     )
 }

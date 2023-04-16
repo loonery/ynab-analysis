@@ -3,20 +3,21 @@ import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { CATEGORY_FILTER_DROPDOWN_ID } from 'libs/consts/consts';
+import { CATEGORY_FILTER_DROPDOWN_ID } from '../consts/filterBarConsts';
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-    selectAllCategories, 
-    selectNoCategories, 
-    saveCategoryCheckboxes,
+    selectAllCheckboxes, 
+    selectNoCheckboxes, 
+    saveCheckboxes,
+    cancelCheckboxChanges,
     setFiltersFromState,
-    cancelCategoryCheckboxChanges,
-    toggleCategoryDropdown
+    toggleDropdown
 } from '../../../store/slices/filterBarSlice'
 import { useDispatch, useSelector } from 'react-redux';
-import { selectCategoryDropdown } from 'store/selectors/filterBarSelectors';
+import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { CATEGORY_DROPDOWN_KEYS } from '../consts/filterBarConsts';
 
 const CategoryFilterDropdown = () => {
 
@@ -27,14 +28,14 @@ const CategoryFilterDropdown = () => {
         {
             label: "Select None",
             onClick: () => {
-                dispatch(selectNoCategories());
+                dispatch(selectNoCheckboxes(CATEGORY_DROPDOWN_KEYS));
             },
             classString: 'btn btn-sm btn-outline-dark'
         },
         {
             label: "Select All",
             onClick: () => {
-                dispatch(selectAllCategories());
+                dispatch(selectAllCheckboxes(CATEGORY_DROPDOWN_KEYS));
             },
             classString: 'btn btn-sm btn-outline-dark'
         },
@@ -46,28 +47,28 @@ const CategoryFilterDropdown = () => {
 
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
-                dispatch(toggleCategoryDropdown());
-                dispatch(cancelCategoryCheckboxChanges())
+                dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
+                dispatch(cancelCheckboxChanges(CATEGORY_DROPDOWN_KEYS))
             },
             classString: 'btn btn-sm btn-outline-danger'
         },
         {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
-                dispatch(toggleCategoryDropdown());
-                dispatch(saveCategoryCheckboxes());
+                dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
+                dispatch(saveCheckboxes(CATEGORY_DROPDOWN_KEYS));
                 dispatch(setFiltersFromState());
             },
             classString: 'btn btn-sm btn-outline-success'
         }
     ];
 
-    const { show } = useSelector(state => selectCategoryDropdown(state));
+    const { show } = useSelector(state => selectDropdown(state, CATEGORY_DROPDOWN_KEYS));
     const onToggle = () => {
         // toggle the dropdown in state
-        dispatch(toggleCategoryDropdown());
+        dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
         // revert temp state back to saved state if clicked away
-        dispatch(cancelCategoryCheckboxChanges());
+        dispatch(cancelCheckboxChanges(CATEGORY_DROPDOWN_KEYS));
     }
 
     return (

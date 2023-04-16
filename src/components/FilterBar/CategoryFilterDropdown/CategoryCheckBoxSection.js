@@ -15,32 +15,40 @@ const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
 `;
 
-const CategoryCheckBoxSection = ({checkBoxSection}) => {
+const CheckBoxSection = ({ checkBoxSection, keys }) => {
+
+    console.log(keys);
 
     const dispatch = useDispatch();
-    const {categoryGroupName, checked, subCategoryObjects} = checkBoxSection;
+    const { parentName, checked, childObjects } = checkBoxSection;
 
     return (
     <Fragment>
         <ParentCheckboxContainer>
             <Checkbox 
-                labelText={categoryGroupName} 
-                id={'parent-checkbox-' + categoryGroupName}
+                labelText={parentName} 
+                id={'parent-checkbox-' + parentName}
                 checked={checked} 
-                onChange={() => dispatch(toggleParentCheckbox(categoryGroupName))} 
+                onChange={() => dispatch(toggleParentCheckbox(
+                    {
+                        parentName,
+                        keys
+                    }
+                ))} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
-        {subCategoryObjects.map((subCategoryCheckBox, index) => 
+        {childObjects.map(({ childName, checked }, index) => 
         <ChildCheckboxContainer>
             <Checkbox
-                labelText={subCategoryCheckBox.subCategoryName}
-                id={'child-checkbox-' + subCategoryCheckBox.subCategoryName}
-                checked={subCategoryCheckBox.checked}
+                labelText={childName}
+                id={'child-checkbox-' + childName}
+                checked={checked}
                 onChange={() => dispatch(toggleChildCheckbox(
                     {
-                        categoryGroupName, 
-                        subCategoryName: subCategoryCheckBox.subCategoryName
+                        parentName, 
+                        childName,
+                        keys
                     }
                 ))}
             />
@@ -49,4 +57,4 @@ const CategoryCheckBoxSection = ({checkBoxSection}) => {
     </Fragment>
     )
 }
-export default CategoryCheckBoxSection;
+export default CheckBoxSection;

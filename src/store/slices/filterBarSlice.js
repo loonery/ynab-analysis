@@ -41,49 +41,54 @@ const filterBarSlice = createSlice({
         },
         // toggles category group checkboxes
         toggleParentCheckbox(state, action) {
-            const parent = findParentCheckbox(state, action.payload);
+            const { parentName, keys } = action.payload;
+            const parent = findParentCheckbox(state, parentName, keys);
             const newParentValue = toggleCheckboxValue(parent);
             parent.checked = newParentValue;
-            parent.subCategoryObjects = setAllChildren(parent, newParentValue);
+            parent.childObjects = setAllChildren(parent, newParentValue);
         },
         // toggles subcategory checkboxes when clicked
         toggleChildCheckbox(state, action) {
 
-            const { categoryGroupName, subCategoryName } = action.payload;
-            const parent = findParentCheckbox(state, categoryGroupName);
+            const { parentName, childName, keys } = action.payload;
+            const parent = findParentCheckbox(state, parentName, keys);
             
             // toggle the one child in the parent's object
-            const child = findChildCheckboxByParent(parent, subCategoryName);
+            const child = findChildCheckboxByParent(parent, childName);
             child.checked = toggleCheckboxValue(child);
 
             // determine whether all children are checked, whether none are checked 
-            const allChildrenChecked = parent.subCategoryObjects.every(e => e.checked);
-            const noChildrenChecked = parent.subCategoryObjects.every(e => !e.checked);
+            const allChildrenChecked = parent.childObjects.every(e => e.checked);
+            const noChildrenChecked = parent.childObjects.every(e => !e.checked);
 
             // check or uncheck the parent depending on the value of its children
             if (allChildrenChecked) { parent.checked = true; } 
             else if (noChildrenChecked) { parent.checked = false; }
 
         },
-        selectAllCategories(state, action) {
-            const currentBoxes = state.categoryDropdown.tempCategoryCheckBoxes;
+        selectAllCheckboxes(state, action) {
+            const { dropdownKey, tempCheckboxKey } = action.payload;
+            const currentBoxes = state[dropdownKey][tempCheckboxKey];
             const newBoxes = setAllCheckboxes(currentBoxes, true);
-            state.categoryDropdown.tempCategoryCheckBoxes = newBoxes;
+            state[dropdownKey][tempCheckboxKey] = newBoxes;
         },
-        selectNoCategories(state, action) {
-            const currentBoxes = state.categoryDropdown.tempCategoryCheckBoxes;
+        selectNoCheckboxes(state, action) {
+            const { dropdownKey, tempCheckboxKey } = action.payload;
+            const currentBoxes = state[dropdownKey][tempCheckboxKey];
             const newBoxes = setAllCheckboxes(currentBoxes, false);
-            state.categoryDropdown.tempCategoryCheckBoxes = newBoxes;
+            state[dropdownKey][tempCheckboxKey] = newBoxes;
         },
-        saveCategoryCheckboxes(state, action) {
+        saveCheckboxes(state, action) {
+            const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload
             // temp checkbox state now becomes saved checkbox state
-            const newCheckboxState = state.categoryDropdown.tempCategoryCheckBoxes;
-            state.categoryDropdown.savedCategoryCheckBoxes = newCheckboxState;
+            const newCheckboxState = state[dropdownKey][tempCheckboxKey];
+            state[dropdownKey][savedCheckboxKey] = newCheckboxState;
         },
-        cancelCategoryCheckboxChanges(state, action) {
+        cancelCheckboxChanges(state, action) {
+            const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload
             // the temporary state reverts to the saved state
-            const saved = state.categoryDropdown.savedCategoryCheckBoxes;
-            state.categoryDropdown.tempCategoryCheckBoxes = saved;
+            const saved = state[dropdownKey][savedCheckboxKey];
+            state[dropdownKey][tempCheckboxKey] = saved;
         },
         setFiltersFromState(state, action) {
             // filters are gleaned from saved state
@@ -95,21 +100,22 @@ const filterBarSlice = createSlice({
             };
             state.appliedFilters = getFiltersFromState(savedState);
         },
-        toggleCategoryDropdown(state, action) {
-            state.categoryDropdown.show = !state.categoryDropdown.show;
+        toggleDropdown(state, action) {
+            const { dropdownKey } = action.payload;
+            state[dropdownKey].show = !state[dropdownKey].show;
         }
     }
 });
 
 export const {
     initCategoryCheckboxes,
-    toggleParentCheckbox: toggleParentCategory,
-    toggleChildCheckbox: toggleChildCategory,
-    selectAllCategories,
-    selectNoCategories,
-    saveCategoryCheckboxes,
-    cancelCategoryCheckboxChanges,
+    toggleParentCheckbox,
+    toggleChildCheckbox,
+    selectAllCheckboxes,
+    selectNoCheckboxes,
+    saveCheckboxes,
+    cancelCheckboxChanges,
     setFiltersFromState,
-    toggleCategoryDropdown
+    toggleDropdown
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;
