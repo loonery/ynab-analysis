@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { check } from "prettier";
 import { 
     findChildCheckboxByParent, 
     findParentCheckbox, 
@@ -35,9 +36,11 @@ const filterBarSlice = createSlice({
     },
     reducers: {
         // used to populate the state with checkboxes for the categories that are found in transactions
-        initCategoryCheckboxes(state, action) {
-            state.categoryDropdown.savedCategoryCheckBoxes = action.payload;
-            state.categoryDropdown.tempCategoryCheckBoxes = action.payload;
+        initCheckboxes(state, action) {
+            const { keys, checkboxes } = action.payload;
+            const { dropdownKey, tempCheckboxKey, savedCheckboxKey } = keys;
+            state[dropdownKey][savedCheckboxKey] = checkboxes;
+            state[dropdownKey][tempCheckboxKey] = checkboxes;
         },
         // toggles category group checkboxes
         toggleParentCheckbox(state, action) {
@@ -108,7 +111,7 @@ const filterBarSlice = createSlice({
 });
 
 export const {
-    initCategoryCheckboxes,
+    initCheckboxes,
     toggleParentCheckbox,
     toggleChildCheckbox,
     selectAllCheckboxes,

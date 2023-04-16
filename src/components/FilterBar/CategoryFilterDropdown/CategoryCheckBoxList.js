@@ -1,7 +1,7 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { selectTransactionCategories } from "../../../store/selectors/transactionSliceSelectors"
-import { addCheckBoxSection, initCategoryCheckboxes } from "store/slices/filterBarSlice"
+import { initCheckboxes } from "store/slices/filterBarSlice"
 import CategoryCheckBoxSection from './CategoryCheckBoxSection'
 import { assembleCategoryCheckboxObjects } from "../utils/filterBarUtils"
 import { CATEGORY_DROPDOWN_KEYS } from "../consts/filterBarConsts"
@@ -20,10 +20,8 @@ const CategoryCheckBoxList = () => {
     // assemble and initialize the category checkboxes on start
     useEffect(() => {
         const checkboxes = assembleCategoryCheckboxObjects(transactionCategories);
-        dispatch(initCategoryCheckboxes(checkboxes));
+        dispatch(initCheckboxes({checkboxes, keys: CATEGORY_DROPDOWN_KEYS}));
     }, [transactionCategories]);
-
-    
 
     return (
         tempCategoryCheckBoxes.map((sectionObject, index) => {
