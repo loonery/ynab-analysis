@@ -1,4 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { create } from 'd3';
 
 const selectTransactions = (state) => state.transactions.transactions;
 const selectLoading = (state) => state.transactions.loading;
@@ -61,6 +62,17 @@ export const selectTransactionDateRange = createSelector(
     }
   )}
 );
+
+export const selectTransactionDates = createSelector(
+  [selectTransactions],
+  (transactions) => {
+    const dates = new Set();
+    for (let transaction of transactions) {
+      dates.add(transaction.month_year);
+    }    
+    return Array.from(dates.values());
+  }
+)
 
 /**
  * Returns all categories of all transactions in the store, stored in a map of parent : child category

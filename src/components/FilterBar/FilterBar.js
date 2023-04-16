@@ -7,10 +7,6 @@ import DateFilterDropdown from "./DateFilterDropdown/DateFilterDropdown";
 
 const FilterBar = () => {
 
-    const {earliest, latest} = useSelector(state => selectTransactionDateRange(state));
-    const { appliedFilters } = useSelector(state => state.transactions);
-    const [filters, setFilters] = useState(appliedFilters);
-
     return (
         <Row className="border rounded p-3">
             <Col>

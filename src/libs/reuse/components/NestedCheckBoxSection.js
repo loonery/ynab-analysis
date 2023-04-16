@@ -15,7 +15,7 @@ const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
 `;
 
-export const CheckBoxSection = ({ checkBoxSection, keys }) => {
+export const NestedCheckBoxSection = ({ checkBoxSection, keys }) => {
 
     const dispatch = useDispatch();
     const { parentName, checked, childObjects } = checkBoxSection;

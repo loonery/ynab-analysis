@@ -1,11 +1,11 @@
-import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
-import ButtonBar from 'libs/reuse/components/ButtonBar';
-import { StyledHr } from 'libs/reuse/elements/StyledHr';
-import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { CATEGORY_FILTER_DROPDOWN_ID } from '../consts/filterBarConsts';
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import ButtonBar from 'libs/reuse/components/ButtonBar';
+import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
+import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
+import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
+import { CATEGORY_FILTER_DROPDOWN_ID } from '../consts/filterBarConsts';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     selectAllCheckboxes, 
@@ -24,7 +24,7 @@ const CategoryFilterDropdown = () => {
     const dispatch = useDispatch();
 
     // header button definitions
-    const HeaderButtons = [
+    const headerButtons = [
         {
             label: "Select None",
             onClick: () => {
@@ -42,7 +42,7 @@ const CategoryFilterDropdown = () => {
     ];
 
     // footer button definitions
-    const FooterButtons = [
+    const footerButtons = [
         {
 
             label: <FontAwesomeIcon icon={faXmark} />,
@@ -80,11 +80,11 @@ const CategoryFilterDropdown = () => {
         >
             <StyledHeader4>Categories</StyledHeader4>
             <StyledHr/>
-                <ButtonBar buttons={HeaderButtons}/>
+                <ButtonBar buttons={headerButtons}/>
             <StyledHr/>
             <CategoryCheckBoxesContainer />
             <ButtonBar 
-                buttons={FooterButtons}
+                buttons={footerButtons}
                 padding={'10px 0px 0px 0px'}
                 justify={'flex-end'}/>
         </CustomDropdown>
