@@ -15,9 +15,7 @@ const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
 `;
 
-const CheckBoxSection = ({ checkBoxSection, keys }) => {
-
-    console.log(keys);
+export const CheckBoxSection = ({ checkBoxSection, keys }) => {
 
     const dispatch = useDispatch();
     const { parentName, checked, childObjects } = checkBoxSection;
@@ -57,4 +55,3 @@ const CheckBoxSection = ({ checkBoxSection, keys }) => {
     </Fragment>
     )
 }
-export default CheckBoxSection;

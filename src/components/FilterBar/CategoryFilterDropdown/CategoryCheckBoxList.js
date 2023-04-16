@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { selectTransactionCategories } from "../../../store/selectors/transactionSliceSelectors"
 import { initCheckboxes } from "store/slices/filterBarSlice"
-import CategoryCheckBoxSection from './CategoryCheckBoxSection'
+import { NestedCheckBoxSection } from '../../../libs/reuse/components/NestedCheckBoxSection'
 import { assembleCategoryCheckboxObjects } from "../utils/filterBarUtils"
 import { CATEGORY_DROPDOWN_KEYS } from "../consts/filterBarConsts"
 
@@ -25,7 +25,7 @@ const CategoryCheckBoxList = () => {
 
     return (
         tempCategoryCheckBoxes.map((sectionObject, index) => {
-            return <CategoryCheckBoxSection 
+            return <NestedCheckBoxSection 
                 checkBoxSection={sectionObject} 
                 keys={CATEGORY_DROPDOWN_KEYS}
             />
