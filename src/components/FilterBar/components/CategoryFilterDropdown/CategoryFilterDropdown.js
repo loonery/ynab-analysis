@@ -5,7 +5,7 @@ import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import CategoryCheckBoxesContainer from './CategoryCheckBoxesContainer'
-import { CATEGORY_FILTER_DROPDOWN_ID } from '../consts/filterBarConsts';
+import { CATEGORY_FILTER_DROPDOWN_ID } from '../../consts/filterBarConsts';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     selectAllCheckboxes, 
@@ -14,10 +14,10 @@ import {
     cancelDropdownChanges,
     setFiltersFromState,
     toggleDropdown
-} from '../../../store/slices/filterBarSlice'
+} from '../../../../store/slices/filterBarSlice'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDropdown } from 'store/selectors/filterBarSelectors';
-import { CATEGORY_DROPDOWN_KEYS } from '../consts/filterBarConsts';
+import { CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
 
 const CategoryFilterDropdown = () => {
 

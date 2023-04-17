@@ -15,6 +15,8 @@ const Label = styled.label`
 
 const StyledSelect = styled.select`
   width: 100%;
+  max-height: 30px;
+  overflow-y: auto;
 `;
 
 const Select = ({ label, id, options, onChange, value }) => {

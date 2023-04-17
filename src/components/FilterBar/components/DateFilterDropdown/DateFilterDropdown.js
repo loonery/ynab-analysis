@@ -4,7 +4,7 @@ import { StyledHeader4 } from "libs/reuse/elements/StyledHeader4";
 import { 
     DATE_DROPDOWN_KEYS, 
     DATE_FILTER_DROPDOWN_ID 
-} from "../consts/filterBarConsts";
+} from "../../consts/filterBarConsts";
 
 import { selectDropdown } from "store/selectors/filterBarSelectors";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,7 @@ import {
     cancelDropdownChanges,
     saveDropdownState,
     toggleDropdown
-} from '../../../store/slices/filterBarSlice'
+} from '../../../../store/slices/filterBarSlice'
 
 const DateFilterDropdown = () => {
 

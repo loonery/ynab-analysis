@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {fetchTransactionsThunk} from '../../../api/thunks/fetchTransactionsThunk';
+import {fetchTransactionsThunk} from '../../../../api/thunks/fetchTransactionsThunk';
 
 const CategorySelector = () => {
 

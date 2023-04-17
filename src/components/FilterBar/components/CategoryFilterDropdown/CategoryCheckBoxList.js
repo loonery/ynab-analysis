@@ -1,10 +1,10 @@
 import React, { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { selectTransactionCategories } from "../../../store/selectors/transactionSliceSelectors"
+import { selectTransactionCategories } from "../../../../store/selectors/transactionSliceSelectors"
 import { initCheckboxes } from "store/slices/filterBarSlice"
-import { NestedCheckBoxSection } from '../../../libs/reuse/components/NestedCheckBoxSection'
-import { assembleCategoryCheckboxObjects } from "../utils/filterBarUtils"
-import { CATEGORY_DROPDOWN_KEYS } from "../consts/filterBarConsts"
+import { NestedCheckBoxSection } from '../../../../libs/reuse/components/NestedCheckBoxSection'
+import { assembleCategoryCheckboxObjects } from "../../utils/filterBarUtils"
+import { CATEGORY_DROPDOWN_KEYS } from "../../consts/filterBarConsts"
 
 const CategoryCheckBoxList = () => {
 

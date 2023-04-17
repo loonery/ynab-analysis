@@ -1,8 +1,8 @@
 import React, {useEffect, useState } from "react";
 import { Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
-import { selectFilteredTransactions } from "../../store/selectors/transactionSliceSelectors";
+import { fetchTransactionsThunk } from "../../../api/thunks/fetchTransactionsThunk";
+import { selectFilteredTransactions } from "../../../store/selectors/transactionSliceSelectors";
 
 const SpendingByCategoryReport = () => {
 

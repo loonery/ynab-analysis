@@ -8,7 +8,7 @@ import {
     DATE_DROPDOWN_TO_ID,
     DATE_DROPDOWN_TO_LABEL,
     DATE_DROPDOWN_KEYS
-} from "../consts/filterBarConsts";
+} from "../../consts/filterBarConsts";
 import { selectDatesAfterStartDate, selectTempDateRange } from "store/selectors/filterBarSelectors";
 import { initDateDropdown, updateStartDate, updateEndDate } from "store/slices/filterBarSlice";
 
