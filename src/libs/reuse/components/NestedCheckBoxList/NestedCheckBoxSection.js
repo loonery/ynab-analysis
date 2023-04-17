@@ -1,11 +1,6 @@
-import React, { Fragment, useCallback, useState } from "react"
+import React, { Fragment } from "react"
 import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
 import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { 
-    toggleParentCheckbox,
-    toggleChildCheckbox
-} from "store/slices/filterBarSlice";
 
 const ParentCheckboxContainer = styled.div`
     font-weight: 600;
@@ -15,9 +10,8 @@ const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
 `;
 
-export const NestedCheckBoxSection = ({ checkBoxSection, keys }) => {
+export const NestedCheckBoxSection = ({ checkBoxSection, parentOnClick, childOnClick }) => {
 
-    const dispatch = useDispatch();
     const { parentName, checked, childObjects } = checkBoxSection;
 
     return (
@@ -27,12 +21,7 @@ export const NestedCheckBoxSection = ({ checkBoxSection, keys }) => {
                 labelText={parentName} 
                 id={'parent-checkbox-' + parentName}
                 checked={checked} 
-                onChange={() => dispatch(toggleParentCheckbox(
-                    {
-                        parentName,
-                        keys
-                    }
-                ))} 
+                onChange={() => parentOnClick(parentName)} 
             />
         </ParentCheckboxContainer>
         {/* children checkboxes */}
@@ -42,13 +31,7 @@ export const NestedCheckBoxSection = ({ checkBoxSection, keys }) => {
                 labelText={childName}
                 id={'child-checkbox-' + childName}
                 checked={checked}
-                onChange={() => dispatch(toggleChildCheckbox(
-                    {
-                        parentName, 
-                        childName,
-                        keys
-                    }
-                ))}
+                onChange={() => childOnClick(parentName, childName)}
             />
         </ChildCheckboxContainer>
         )}

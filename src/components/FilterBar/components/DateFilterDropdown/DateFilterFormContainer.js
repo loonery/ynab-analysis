@@ -1,7 +1,7 @@
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
 import DateFilterForm from './DateFilterForm';
 
-const DateRangeFormContainer = () => {
+const DateFilterFormContainer = () => {
 
     return (
         <FlexContainer className={'justify-content-around'}>
@@ -9,4 +9,4 @@ const DateRangeFormContainer = () => {
         </FlexContainer>
     )
 }
-export default DateRangeFormContainer
+export default DateFilterFormContainer

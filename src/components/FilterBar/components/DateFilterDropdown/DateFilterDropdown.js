@@ -13,7 +13,7 @@ import ButtonBar from "libs/reuse/components/ButtonBar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
-import DateRangeFormContainer from "./DateRangeFormContainer";
+import DateFilterFormContainer from "./DateFilterFormContainer";
 
 
 import { 
@@ -94,7 +94,7 @@ const DateFilterDropdown = () => {
             <ButtonBar buttons={headerButtons} />
             <StyledHr/>
 
-            <DateRangeFormContainer />
+            <DateFilterFormContainer />
 
             <ButtonBar 
                 buttons={footerButtons}
