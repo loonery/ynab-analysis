@@ -2,9 +2,7 @@
  * Category Dropdown consts 
 */
 export const CATEGORY_FILTER_DROPDOWN_ID = 'category-filter-dropdown';
-
 export const CATEGORY_DROPDOWN_TOGGLE_LABEL = 'Categories';
-
 export const CATEGORY_DROPDOWN_REDUCER_KEY = 'categoryDropdown';
 export const CATEGORY_DROPDOWN_SAVED_STATE_REDUCER_KEY = 'savedCategoryCheckBoxes';
 export const CATEGORY_DROPDOWN_TEMP_STATE_REDUCER_KEY = 'tempCategoryCheckBoxes';
@@ -29,8 +27,8 @@ export const DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY = 'tempDateRange';
 
 export const DATE_DROPDOWN_KEYS = {
     dropdownKey: DATE_DROPDOWN_REDUCER_KEY,
-    tempCheckboxKey: DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY,
-    savedCheckboxKey: DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY,
+    tempCheckboxKey: DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY,
+    savedCheckboxKey: DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY,
 }
 
 export const DATE_DROPDOWN_FROM_LABEL = 'From';

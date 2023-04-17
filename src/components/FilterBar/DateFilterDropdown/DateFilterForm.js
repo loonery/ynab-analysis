@@ -1,33 +1,33 @@
 import SelectElement from "libs/reuse/elements/Select";
 import { useDispatch, useSelector } from "react-redux";
-import { selectTransactionDates } from "store/selectors/transactionSliceSelectors";
-import { Fragment } from "react";
-
+import { selectTransactionDateRange, selectTransactionDates } from "store/selectors/transactionSliceSelectors";
+import { Fragment, useEffect } from "react";
 import { 
     DATE_DROPDOWN_FROM_ID, 
     DATE_DROPDOWN_FROM_LABEL,
     DATE_DROPDOWN_TO_ID,
-    DATE_DROPDOWN_TO_LABEL
+    DATE_DROPDOWN_TO_LABEL,
+    DATE_DROPDOWN_KEYS
 } from "../consts/filterBarConsts";
-import { selectDatesAfterStartDate, selectTempStartDate } from "store/selectors/filterBarSelectors";
-
+import { selectDatesAfterStartDate, selectTempDateRange } from "store/selectors/filterBarSelectors";
+import { initDateDropdown, updateStartDate, updateEndDate } from "store/slices/filterBarSlice";
 
 const DateFilterForm = () => {
 
     const dispatch = useDispatch();
-    const fromOptions = useSelector(state => selectTransactionDates(state));
-    const selectedFrom = useSelector(state => selectTempStartDate(state));
+    const largestRange = useSelector(state => selectTransactionDateRange(state));
+    useEffect(() => {
+        dispatch(initDateDropdown(largestRange))
+    }, [largestRange])
 
+    // get the currently selected startDate and endDate from state
+    const { startDate, endDate } = useSelector(state => selectTempDateRange(state));
+    console.log({startDate, endDate});
+    
     // only should be allowed to select dates that occur after any selected start date
+    const fromOptions = useSelector(state => selectTransactionDates(state));
     const toOptions = useSelector(state => selectDatesAfterStartDate(state));
 
-    const handleToChange = () => {
-        
-    }
-
-    const handleFromChange = () => {
-
-    }
     
     return (
         <Fragment>
@@ -35,13 +35,15 @@ const DateFilterForm = () => {
                 options={fromOptions} 
                 label={DATE_DROPDOWN_FROM_LABEL} 
                 id={DATE_DROPDOWN_FROM_ID}
-                onChange={handleToChange}
+                value={startDate}
+                onChange={(e) => dispatch(updateStartDate(e.target.value))}
             />
             <SelectElement 
                 options={toOptions} 
                 label={DATE_DROPDOWN_TO_LABEL} 
                 id={DATE_DROPDOWN_TO_ID}
-                onChange={handleFromChange}
+                value={endDate}
+                onChange={(e) => dispatch(updateEndDate(e.target.value))}
             />
         </Fragment>
     );

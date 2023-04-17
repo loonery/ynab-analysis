@@ -1,5 +1,4 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { create } from 'd3';
 
 const selectTransactions = (state) => state.transactions.transactions;
 const selectLoading = (state) => state.transactions.loading;

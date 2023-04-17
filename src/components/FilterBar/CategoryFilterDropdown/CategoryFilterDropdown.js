@@ -10,8 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     selectAllCheckboxes, 
     selectNoCheckboxes, 
-    saveCheckboxes,
-    cancelCheckboxChanges,
+    saveDropdownState,
+    cancelDropdownChanges,
     setFiltersFromState,
     toggleDropdown
 } from '../../../store/slices/filterBarSlice'
@@ -48,7 +48,7 @@ const CategoryFilterDropdown = () => {
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
                 dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
-                dispatch(cancelCheckboxChanges(CATEGORY_DROPDOWN_KEYS))
+                dispatch(cancelDropdownChanges(CATEGORY_DROPDOWN_KEYS))
             },
             classString: 'btn btn-sm btn-outline-danger'
         },
@@ -56,7 +56,7 @@ const CategoryFilterDropdown = () => {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
                 dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
-                dispatch(saveCheckboxes(CATEGORY_DROPDOWN_KEYS));
+                dispatch(saveDropdownState(CATEGORY_DROPDOWN_KEYS));
                 dispatch(setFiltersFromState());
             },
             classString: 'btn btn-sm btn-outline-success'
@@ -68,7 +68,7 @@ const CategoryFilterDropdown = () => {
         // toggle the dropdown in state
         dispatch(toggleDropdown(CATEGORY_DROPDOWN_KEYS));
         // revert temp state back to saved state if clicked away
-        dispatch(cancelCheckboxChanges(CATEGORY_DROPDOWN_KEYS));
+        dispatch(cancelDropdownChanges(CATEGORY_DROPDOWN_KEYS));
     }
 
     return (

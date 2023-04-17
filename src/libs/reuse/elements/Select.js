@@ -17,13 +17,14 @@ const StyledSelect = styled.select`
   width: 100%;
 `;
 
-const Select = ({ label, id, options, onChange }) => {
+const Select = ({ label, id, options, onChange, value }) => {
   return (
     <Container>
       <Label htmlFor={id}>{label}</Label>
       <StyledSelect 
         id={id} 
         className={SELECT_ELEMENT_CLASS_STRING} 
+        value={value}
         onChange={onChange}
       >
         {options.map((option) => (

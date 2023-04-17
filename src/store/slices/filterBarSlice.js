@@ -43,9 +43,10 @@ const filterBarSlice = createSlice({
             state[dropdownKey][tempCheckboxKey] = checkboxes;
         },
         initDateDropdown(state, action) {
-            const { keys, dates } = action.payload;
-            state[dropdownKey][savedDateRange] = dates;
-            state[dropdownKey][tempDateRange] = dates;
+            const { earliest, latest } = action.payload;
+            const initalSettings = {startDate: earliest, endDate: latest}
+            state.dateDropdown.savedDateRange = initalSettings;
+            state.dateDropdown.tempDateRange = initalSettings;
         },
         // toggles category group checkboxes
         toggleParentCheckbox(state, action) {
@@ -86,17 +87,17 @@ const filterBarSlice = createSlice({
             const newBoxes = setAllCheckboxes(currentBoxes, false);
             state[dropdownKey][tempCheckboxKey] = newBoxes;
         },
-        saveCheckboxes(state, action) {
+        saveDropdownState(state, action) {
             const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload
             // temp checkbox state now becomes saved checkbox state
-            const newCheckboxState = state[dropdownKey][tempCheckboxKey];
-            state[dropdownKey][savedCheckboxKey] = newCheckboxState;
+            const newState = state[dropdownKey][tempCheckboxKey];
+            state[dropdownKey][savedCheckboxKey] = newState;
         },
-        cancelCheckboxChanges(state, action) {
+        cancelDropdownChanges(state, action) {
             const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload
             // the temporary state reverts to the saved state
-            const saved = state[dropdownKey][savedCheckboxKey];
-            state[dropdownKey][tempCheckboxKey] = saved;
+            const newState = state[dropdownKey][savedCheckboxKey];
+            state[dropdownKey][tempCheckboxKey] = newState;
         },
         setFiltersFromState(state, action) {
             // filters are gleaned from saved state
@@ -111,7 +112,22 @@ const filterBarSlice = createSlice({
         toggleDropdown(state, action) {
             const { dropdownKey } = action.payload;
             state[dropdownKey].show = !state[dropdownKey].show;
-        }
+        },
+        updateStartDate(state, action) {
+            const startDate = action.payload;
+            const currentEndDate = state.dateDropdown.tempDateRange.endDate;
+            
+            // if the start date occurs after the currently selected endDate,
+            // then move the endDate
+            if (new Date(startDate) > new Date(currentEndDate)) {
+                state.dateDropdown.tempDateRange.endDate = startDate;
+            }
+            state.dateDropdown.tempDateRange.startDate = startDate;
+        },
+        updateEndDate(state, action) {
+            const endDate = action.payload;
+            state.dateDropdown.tempDateRange.endDate = endDate;
+        },
     }
 });
 
@@ -121,9 +137,12 @@ export const {
     toggleChildCheckbox,
     selectAllCheckboxes,
     selectNoCheckboxes,
-    saveCheckboxes,
-    cancelCheckboxChanges,
+    saveDropdownState,
+    cancelDropdownChanges,
+    initDateDropdown,
     setFiltersFromState,
-    toggleDropdown
+    toggleDropdown,
+    updateStartDate,
+    updateEndDate
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;

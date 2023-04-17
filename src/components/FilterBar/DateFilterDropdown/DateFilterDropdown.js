@@ -1,6 +1,11 @@
 import { CustomDropdown } from "libs/reuse/components/CustomDropdown";
 import { StyledHeader4 } from "libs/reuse/elements/StyledHeader4";
-import { DATE_DROPDOWN_KEYS, DATE_FILTER_DROPDOWN_ID } from "../consts/filterBarConsts";
+
+import { 
+    DATE_DROPDOWN_KEYS, 
+    DATE_FILTER_DROPDOWN_ID 
+} from "../consts/filterBarConsts";
+
 import { selectDropdown } from "store/selectors/filterBarSelectors";
 import { useDispatch, useSelector } from "react-redux";
 import { StyledHr } from "libs/reuse/elements/StyledHr";
@@ -10,12 +15,10 @@ import { faFloppyDisk } from "@fortawesome/free-regular-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import DateRangeFormContainer from "./DateRangeFormContainer";
 
+
 import { 
-    selectAllCheckboxes, 
-    selectNoCheckboxes, 
-    saveCheckboxes,
-    cancelCheckboxChanges,
-    setFiltersFromState,
+    cancelDropdownChanges,
+    saveDropdownState,
     toggleDropdown
 } from '../../../store/slices/filterBarSlice'
 
@@ -58,12 +61,14 @@ const DateFilterDropdown = () => {
 
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
+                dispatch(cancelDropdownChanges(DATE_DROPDOWN_KEYS));
             },
             classString: 'btn btn-sm btn-outline-danger'
         },
         {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
+                dispatch(saveDropdownState(DATE_DROPDOWN_KEYS));
             },
             classString: 'btn btn-sm btn-outline-success'
         }
@@ -73,6 +78,7 @@ const DateFilterDropdown = () => {
     const onToggle = () => {
         // toggle the dropdown in state
         dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
+        dispatch(cancelDropdownChanges(DATE_DROPDOWN_KEYS));
     }
 
     return (
