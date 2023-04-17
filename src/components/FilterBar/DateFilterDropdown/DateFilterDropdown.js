@@ -58,17 +58,12 @@ const DateFilterDropdown = () => {
 
             label: <FontAwesomeIcon icon={faXmark} />,
             onClick: () => {
-                dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
-                dispatch(cancelCheckboxChanges(DATE_DROPDOWN_KEYS))
             },
             classString: 'btn btn-sm btn-outline-danger'
         },
         {
             label: <FontAwesomeIcon icon={faFloppyDisk} />,
             onClick: () => {
-                dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
-                dispatch(saveCheckboxes(DATE_DROPDOWN_KEYS));
-                dispatch(setFiltersFromState());
             },
             classString: 'btn btn-sm btn-outline-success'
         }
@@ -94,6 +89,11 @@ const DateFilterDropdown = () => {
             <StyledHr/>
 
             <DateRangeFormContainer />
+
+            <ButtonBar 
+                buttons={footerButtons}
+                padding={'25px 0px 0px 0px'}
+                justify={'flex-end'}/>
         </CustomDropdown>
     )
 

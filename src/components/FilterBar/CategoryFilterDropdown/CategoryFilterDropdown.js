@@ -85,7 +85,7 @@ const CategoryFilterDropdown = () => {
             <CategoryCheckBoxesContainer />
             <ButtonBar 
                 buttons={footerButtons}
-                padding={'10px 0px 0px 0px'}
+                padding={'30px 0px 0px 0px'}
                 justify={'flex-end'}/>
         </CustomDropdown>
     );

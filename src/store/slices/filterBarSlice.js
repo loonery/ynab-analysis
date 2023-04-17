@@ -42,6 +42,11 @@ const filterBarSlice = createSlice({
             state[dropdownKey][savedCheckboxKey] = checkboxes;
             state[dropdownKey][tempCheckboxKey] = checkboxes;
         },
+        initDateDropdown(state, action) {
+            const { keys, dates } = action.payload;
+            state[dropdownKey][savedDateRange] = dates;
+            state[dropdownKey][tempDateRange] = dates;
+        },
         // toggles category group checkboxes
         toggleParentCheckbox(state, action) {
             const { parentName, keys } = action.payload;

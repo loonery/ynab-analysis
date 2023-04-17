@@ -13,23 +13,26 @@ const Label = styled.label`
   font-weight: 600px;
 `;
 
-const Select = styled.select`
+const StyledSelect = styled.select`
   width: 100%;
 `;
 
-const SelectElement = ({ label, id, options }) => {
+const Select = ({ label, id, options, onChange }) => {
   return (
     <Container>
       <Label htmlFor={id}>{label}</Label>
-      <Select id={id} className={SELECT_ELEMENT_CLASS_STRING}>
+      <StyledSelect 
+        id={id} 
+        className={SELECT_ELEMENT_CLASS_STRING} 
+        onChange={onChange}
+      >
         {options.map((option) => (
           <option key={option} value={option}>
             {option}
           </option>
         ))}
-      </Select>
+      </StyledSelect>
     </Container>
   );
 };
-
-export default SelectElement;
+export default Select;
