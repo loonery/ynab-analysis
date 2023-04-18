@@ -1,7 +1,5 @@
-
 export const assembleCategoryCheckboxObjects = (checkboxHirearchy) => {
-
-  // all checkboxes start checked 
+  // all checkboxes start checked
   const checked = true;
 
   // Create an object that looks like this for each parent category and return them
@@ -16,14 +14,14 @@ export const assembleCategoryCheckboxObjects = (checkboxHirearchy) => {
     const childNames = checkboxHirearchy[parentName];
     const childObjects = childNames.sort().map((childName) => {
       return {
-        childName, 
-        checked
+        childName,
+        checked,
       };
     });
     return {
       parentName,
       checked,
-      childObjects
+      childObjects,
     };
   });
   return checkboxObjects;

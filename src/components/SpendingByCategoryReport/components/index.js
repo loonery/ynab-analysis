@@ -1,1 +1,1 @@
-export {default} from "./SpendingByCategoryReport";
+export { default } from './SpendingByCategoryReport';

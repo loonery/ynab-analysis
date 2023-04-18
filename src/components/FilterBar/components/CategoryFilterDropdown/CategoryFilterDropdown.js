@@ -17,7 +17,10 @@ import {
   setFiltersFromState,
   toggleDropdown,
 } from '../../../../store/slices/filterBarSlice';
-import { CATEGORY_DROPDOWN_ID, CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
+import {
+  CATEGORY_DROPDOWN_ID,
+  CATEGORY_DROPDOWN_KEYS,
+} from '../../consts/filterBarConsts';
 
 import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';
 
@@ -85,7 +88,11 @@ const CategoryFilterDropdown = () => {
       <ButtonBar buttons={headerButtons} />
       <StyledHr />
       <CategoryCheckboxesContainer />
-      <ButtonBar buttons={footerButtons} padding={'30px 0px 0px 0px'} justify={'flex-end'} />
+      <ButtonBar
+        buttons={footerButtons}
+        padding={'30px 0px 0px 0px'}
+        justify={'flex-end'}
+      />
     </CustomDropdown>
   );
 };

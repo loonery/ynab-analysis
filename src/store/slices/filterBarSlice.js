@@ -1,16 +1,16 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { check } from "prettier";
-import { 
-  findChildCheckboxByParent, 
-  findParentCheckbox, 
-  getFiltersFromState,  
-  setAllCheckboxes, 
-  setAllChildren, 
-  toggleCheckboxValue 
-} from "store/utils/filterBarReducerHelpers";
+import { createSlice } from '@reduxjs/toolkit';
+import { check } from 'prettier';
+import {
+  findChildCheckboxByParent,
+  findParentCheckbox,
+  getFiltersFromState,
+  setAllCheckboxes,
+  setAllChildren,
+  toggleCheckboxValue,
+} from 'store/utils/filterBarReducerHelpers';
 
 const filterBarSlice = createSlice({
-  name: "filterBar",
+  name: 'filterBar',
   initialState: {
     categoryDropdown: {
       savedCategoryCheckBoxes: [],
@@ -18,8 +18,8 @@ const filterBarSlice = createSlice({
       show: false,
     },
     dateDropdown: {
-      savedDateRange: {startDate: undefined, endDate: undefined},
-      tempDateRange: {startDate: undefined, endDate: undefined},
+      savedDateRange: { startDate: undefined, endDate: undefined },
+      tempDateRange: { startDate: undefined, endDate: undefined },
       show: false,
     },
     accountDropdown: {
@@ -27,12 +27,12 @@ const filterBarSlice = createSlice({
       tempAccountCheckBoxes: [],
       show: false,
     },
-    appliedFilters : {
-      startDate: undefined, 
+    appliedFilters: {
+      startDate: undefined,
       endDate: undefined,
       filteredCategories: [],
-      filteredAccounts: []
-    }
+      filteredAccounts: [],
+    },
   },
   reducers: {
     // used to populate the state with checkboxes for the categories that are found in transactions
@@ -44,7 +44,7 @@ const filterBarSlice = createSlice({
     },
     initDateDropdown(state, action) {
       const { earliest, latest } = action.payload;
-      const initalSettings = {startDate: earliest, endDate: latest};
+      const initalSettings = { startDate: earliest, endDate: latest };
       state.dateDropdown.savedDateRange = initalSettings;
       state.dateDropdown.tempDateRange = initalSettings;
     },
@@ -58,22 +58,23 @@ const filterBarSlice = createSlice({
     },
     // toggles subcategory checkboxes when clicked
     toggleChildCheckbox(state, action) {
-
       const { parentName, childName, keys } = action.payload;
       const parent = findParentCheckbox(state, parentName, keys);
-            
+
       // toggle the one child in the parent's object
       const child = findChildCheckboxByParent(parent, childName);
       child.checked = toggleCheckboxValue(child);
 
-      // determine whether all children are checked, whether none are checked 
-      const allChildrenChecked = parent.childObjects.every(e => e.checked);
-      const noChildrenChecked = parent.childObjects.every(e => !e.checked);
+      // determine whether all children are checked, whether none are checked
+      const allChildrenChecked = parent.childObjects.every((e) => e.checked);
+      const noChildrenChecked = parent.childObjects.every((e) => !e.checked);
 
       // check or uncheck the parent depending on the value of its children
-      if (allChildrenChecked) { parent.checked = true; } 
-      else if (noChildrenChecked) { parent.checked = false; }
-
+      if (allChildrenChecked) {
+        parent.checked = true;
+      } else if (noChildrenChecked) {
+        parent.checked = false;
+      }
     },
     selectAllCheckboxes(state, action) {
       const { dropdownKey, tempCheckboxKey } = action.payload;
@@ -88,13 +89,13 @@ const filterBarSlice = createSlice({
       state[dropdownKey][tempCheckboxKey] = newBoxes;
     },
     saveDropdownState(state, action) {
-      const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload;
+      const { dropdownKey, tempCheckboxKey, savedCheckboxKey } = action.payload;
       // temp checkbox state now becomes saved checkbox state
       const newState = state[dropdownKey][tempCheckboxKey];
       state[dropdownKey][savedCheckboxKey] = newState;
     },
     cancelDropdownChanges(state, action) {
-      const {dropdownKey, tempCheckboxKey, savedCheckboxKey} = action.payload;
+      const { dropdownKey, tempCheckboxKey, savedCheckboxKey } = action.payload;
       // the temporary state reverts to the saved state
       const newState = state[dropdownKey][savedCheckboxKey];
       state[dropdownKey][tempCheckboxKey] = newState;
@@ -116,7 +117,7 @@ const filterBarSlice = createSlice({
     updateStartDate(state, action) {
       const startDate = action.payload;
       const currentEndDate = state.dateDropdown.tempDateRange.endDate;
-            
+
       // if the start date occurs after the currently selected endDate,
       // then move the endDate
       if (new Date(startDate) > new Date(currentEndDate)) {
@@ -128,7 +129,7 @@ const filterBarSlice = createSlice({
       const endDate = action.payload;
       state.dateDropdown.tempDateRange.endDate = endDate;
     },
-  }
+  },
 });
 
 export const {
@@ -143,6 +144,6 @@ export const {
   setFiltersFromState,
   toggleDropdown,
   updateStartDate,
-  updateEndDate
+  updateEndDate,
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;

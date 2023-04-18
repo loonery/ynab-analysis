@@ -6,8 +6,15 @@ import {
   selectTransactionDates,
 } from 'store/selectors/transactionSliceSelectors';
 import { Fragment, useEffect } from 'react';
-import { selectDatesAfterStartDate, selectTempDateRange } from 'store/selectors/filterBarSelectors';
-import { initDateDropdown, updateStartDate, updateEndDate } from 'store/slices/filterBarSlice';
+import {
+  selectDatesAfterStartDate,
+  selectTempDateRange,
+} from 'store/selectors/filterBarSelectors';
+import {
+  initDateDropdown,
+  updateStartDate,
+  updateEndDate,
+} from 'store/slices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_FROM_ID,
@@ -19,13 +26,17 @@ import {
 
 const DateFilterForm = () => {
   const dispatch = useDispatch();
-  const largestRange = useSelector((state) => selectTransactionDateRange(state));
+  const largestRange = useSelector((state) =>
+    selectTransactionDateRange(state),
+  );
   useEffect(() => {
     dispatch(initDateDropdown(largestRange));
   }, [largestRange]);
 
   // get the currently selected startDate and endDate from state
-  const { startDate, endDate } = useSelector((state) => selectTempDateRange(state));
+  const { startDate, endDate } = useSelector((state) =>
+    selectTempDateRange(state),
+  );
   console.log({ startDate, endDate });
 
   // only should be allowed to select dates that occur after any selected start date

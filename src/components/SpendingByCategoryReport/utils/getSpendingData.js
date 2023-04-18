@@ -1,66 +1,72 @@
-import {group, sort} from "d3";
+import { group, sort } from 'd3';
 
 /**
- * 
- * @param {*} transaction 
- * @returns 
+ *
+ * @param {*} transaction
+ * @returns
  */
 const commonFilter = (transaction) => {
-
   // if category group is undefined
-  const undefinedGroup = typeof transaction.category_group_name === "undefined";
+  const undefinedGroup = typeof transaction.category_group_name === 'undefined';
 
   // if category has one of the 'bad' category groups that don't relate to spending
-  const badCategoryGroups = ["Internal Master Category", "Reimbursements"];
-  const isBadCategoryGroup = badCategoryGroups.includes(transaction.category_group_name);
+  const badCategoryGroups = ['Internal Master Category', 'Reimbursements'];
+  const isBadCategoryGroup = badCategoryGroups.includes(
+    transaction.category_group_name,
+  );
 
   const deleted = transaction.deleted;
 
-  return (undefinedGroup || isBadCategoryGroup || deleted) ? false : true; 
+  return undefinedGroup || isBadCategoryGroup || deleted ? false : true;
 };
 
 /**
  * The 'constructor' for the data aggregation object
- */ 
+ */
 export const getTransactionHirearchy = (transactions) => {
-    
   const filteredTransactions = transactions.filter(commonFilter);
 
   const groupedTransactions = group(
-    filteredTransactions, 
-    t => t.category_group_name, 
-    t => t.category_name,
-    t => t.month_year
+    filteredTransactions,
+    (t) => t.category_group_name,
+    (t) => t.category_name,
+    (t) => t.month_year,
   );
   return groupedTransactions;
 };
 
 /**
- * 
- * @param {*} transactionHirearchy 
- * @param {*} categoryDimension 
- * @param {*} selectedCategoryItem 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @param {*} categoryDimension
+ * @param {*} selectedCategoryItem
+ * @returns
  */
-export const getCategories = (transactionHirearchy, categoryDimension, selectedCategoryItem) => {
-  if (categoryDimension === "category_group_name") // when we want all categories
-  {  
+export const getCategories = (
+  transactionHirearchy,
+  categoryDimension,
+  selectedCategoryItem,
+) => {
+  if (categoryDimension === 'category_group_name') {
+    // when we want all categories
     return getCategoryGroups(transactionHirearchy);
-  } 
-  else if (categoryDimension === "category_name") // when we want one set of subcategories
-  { 
-    return getSubcategories(transactionHirearchy, categoryDimension, selectedCategoryItem);
-  } 
-  else if (categoryDimension === "single_category") // when we want a single category
-  {
+  } else if (categoryDimension === 'category_name') {
+    // when we want one set of subcategories
+    return getSubcategories(
+      transactionHirearchy,
+      categoryDimension,
+      selectedCategoryItem,
+    );
+  } else if (categoryDimension === 'single_category') {
+    // when we want a single category
     return [selectedCategoryItem];
   }
 };
 
 /**
- * 
- * @param {*} transactionHirearchy 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @returns
  */
 export const getCategoryGroups = (transactionHirearchy) => {
   const categoryGroups = sort(Array.from(transactionHirearchy.keys()));
@@ -68,105 +74,125 @@ export const getCategoryGroups = (transactionHirearchy) => {
 };
 
 /**
- * 
- * @param {*} transactionHirearchy 
- * @param {*} categoryDimension 
- * @param {*} selectedCategoryItem 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @param {*} categoryDimension
+ * @param {*} selectedCategoryItem
+ * @returns
  */
-export const getSubcategories = (transactionHirearchy, categoryDimension, selectedCategoryItem) => {
-  if (categoryDimension === "category_group_name") // when we want all categories
-  {  
+export const getSubcategories = (
+  transactionHirearchy,
+  categoryDimension,
+  selectedCategoryItem,
+) => {
+  if (categoryDimension === 'category_group_name') {
+    // when we want all categories
     return [];
-  } 
-  else if (categoryDimension === "category_name") // when we want one set of subcategories
-  { 
-    const subcategories = sort(Array.from(transactionHirearchy.get(selectedCategoryItem).keys()));
+  } else if (categoryDimension === 'category_name') {
+    // when we want one set of subcategories
+    const subcategories = sort(
+      Array.from(transactionHirearchy.get(selectedCategoryItem).keys()),
+    );
     return subcategories;
-  } 
-  else if (categoryDimension === "single_category") // when we want a single category
-  {
-    const parent = getParentOfSubcategory(transactionHirearchy, selectedCategoryItem);
-    const subcategories = sort(Array.from(transactionHirearchy.get(parent).keys()));
+  } else if (categoryDimension === 'single_category') {
+    // when we want a single category
+    const parent = getParentOfSubcategory(
+      transactionHirearchy,
+      selectedCategoryItem,
+    );
+    const subcategories = sort(
+      Array.from(transactionHirearchy.get(parent).keys()),
+    );
     return subcategories;
   }
 };
 
 /**
- * 
- * @param {*} transactionHirearchy 
- * @param {*} categoryDimension 
- * @param {*} selectedCategoryItem 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @param {*} categoryDimension
+ * @param {*} selectedCategoryItem
+ * @returns
  */
-export const getActiveMonthsSums = (transactionHirearchy, categoryDimension, selectedCategoryItem) => {
-
+export const getActiveMonthsSums = (
+  transactionHirearchy,
+  categoryDimension,
+  selectedCategoryItem,
+) => {
   const sumsByMonth = new Map();
-  if (categoryDimension === "category_group_name") // // when the selectedCategoryItem is a categoryGroup...
-  {   
+  if (categoryDimension === 'category_group_name') {
+    // // when the selectedCategoryItem is a categoryGroup...
     // for each subcategory of the selected parentCategory...
     const categoryGroupMap = transactionHirearchy.get(selectedCategoryItem);
     categoryGroupMap.forEach((monthToTransactionMap) => {
       populateMonthlySumMap(monthToTransactionMap, sumsByMonth);
     });
-  } 
-  else // when the selectedCategoryItem is a subcategory
-  { 
-    const parent = getParentOfSubcategory(transactionHirearchy, selectedCategoryItem);
-    const singleCategoryMap = transactionHirearchy.get(parent).get(selectedCategoryItem);   // the spending for just the subcategory
+  } // when the selectedCategoryItem is a subcategory
+  else {
+    const parent = getParentOfSubcategory(
+      transactionHirearchy,
+      selectedCategoryItem,
+    );
+    const singleCategoryMap = transactionHirearchy
+      .get(parent)
+      .get(selectedCategoryItem); // the spending for just the subcategory
     // map that subcategory's activemonths to sums of each active month
-    populateMonthlySumMap(singleCategoryMap, sumsByMonth);  
-  } 
+    populateMonthlySumMap(singleCategoryMap, sumsByMonth);
+  }
 
   return sumsByMonth;
 };
 
 /**
- * 
- * @param {*} transactionHirearchy 
- * @param {*} categoryDimension 
- * @param {*} categoryItem 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @param {*} categoryDimension
+ * @param {*} categoryItem
+ * @returns
  */
-export const getTotalSpending = (transactionHirearchy, categoryDimension, categoryItem) => {
-    
+export const getTotalSpending = (
+  transactionHirearchy,
+  categoryDimension,
+  categoryItem,
+) => {
   // if we want total spending for all categories
   const totalsByMonth = new Map();
-  if (categoryDimension === "category_group_name") {
-    transactionHirearchy.forEach(categoryGroupMap => {
-      categoryGroupMap.forEach(subCategoryMap => {
+  if (categoryDimension === 'category_group_name') {
+    transactionHirearchy.forEach((categoryGroupMap) => {
+      categoryGroupMap.forEach((subCategoryMap) => {
         populateMonthlySumMap(subCategoryMap, totalsByMonth);
       });
     });
-  } 
-  else if (categoryDimension === "category_name")  
-  { // if we want total spending for some category group
+  } else if (categoryDimension === 'category_name') {
+    // if we want total spending for some category group
     const parent = getParentOfSubcategory(transactionHirearchy, categoryItem);
-    const parentCategoryGroupMap = parent ? transactionHirearchy.get(parent) : transactionHirearchy.get(categoryItem);
+    const parentCategoryGroupMap = parent
+      ? transactionHirearchy.get(parent)
+      : transactionHirearchy.get(categoryItem);
     parentCategoryGroupMap.forEach((monthToTransactionMap) => {
       populateMonthlySumMap(monthToTransactionMap, totalsByMonth);
     });
-  } 
-  else if (categoryDimension === "single_category") 
-  { // if we want total spending for some subcategory
+  } else if (categoryDimension === 'single_category') {
+    // if we want total spending for some subcategory
     const parent = getParentOfSubcategory(transactionHirearchy, categoryItem);
-    const monthToTransactionMap = transactionHirearchy.get(parent).get(categoryItem);
+    const monthToTransactionMap = transactionHirearchy
+      .get(parent)
+      .get(categoryItem);
     populateMonthlySumMap(monthToTransactionMap, totalsByMonth);
   }
   return totalsByMonth;
 };
 
-
 /**
- * 
- * @param {*} transactionHirearchy 
- * @param {*} subcategory 
- * @returns 
+ *
+ * @param {*} transactionHirearchy
+ * @param {*} subcategory
+ * @returns
  */
 export const getParentOfSubcategory = (transactionHirearchy, subcategory) => {
   let returned;
   transactionHirearchy.forEach((_, key) => {
-    if (transactionHirearchy.get(key).has(subcategory)){
+    if (transactionHirearchy.get(key).has(subcategory)) {
       returned = key;
     }
   });
@@ -182,9 +208,13 @@ export const getParentOfSubcategory = (transactionHirearchy, subcategory) => {
 const populateMonthlySumMap = (subCategoryMap, sumsByMonth) => {
   // map a subcategory's activemonths to sums of each active month
   subCategoryMap.forEach((monthlyTransactions, month) => {
-    const categoryValues = monthlyTransactions.map(transaction => transaction.amount);    // get just amounts from objects
-    const monthlyCategorySum = Math.abs(categoryValues.reduce((acc, curr) => acc + curr));          // get sum of amounts for month
-        
+    const categoryValues = monthlyTransactions.map(
+      (transaction) => transaction.amount,
+    ); // get just amounts from objects
+    const monthlyCategorySum = Math.abs(
+      categoryValues.reduce((acc, curr) => acc + curr),
+    ); // get sum of amounts for month
+
     if (sumsByMonth.has(month)) {
       const currentSum = sumsByMonth.get(month);
       sumsByMonth.set(month, currentSum + monthlyCategorySum);

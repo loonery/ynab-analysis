@@ -1,8 +1,9 @@
-import { createSlice, current } from "@reduxjs/toolkit";
-import { fetchTransactionsThunk } from "../../api/thunks/fetchTransactionsThunk";
+import { createSlice, current } from '@reduxjs/toolkit';
+
+import { fetchTransactionsThunk } from '../../api/thunks/fetchTransactionsThunk';
 
 const transactionsSlice = createSlice({
-  name: "transactions",
+  name: 'transactions',
   initialState: {
     transactions: [],
     categories: [],
@@ -14,7 +15,7 @@ const transactionsSlice = createSlice({
   extraReducers: {
     [fetchTransactionsThunk.fulfilled]: (state, action) => {
       state.loading = false;
-      state.transactions = action.payload;    
+      state.transactions = action.payload;
     },
     [fetchTransactionsThunk.pending]: (state, action) => {
       state.loading = true;
@@ -23,8 +24,8 @@ const transactionsSlice = createSlice({
       state.loading = false;
       state.error = action.error;
     },
-  }
+  },
 });
 
-export const {setFilters, applyFilters} = transactionsSlice.actions;
+export const { setFilters, applyFilters } = transactionsSlice.actions;
 export const transactionsReducer = transactionsSlice.reducer;

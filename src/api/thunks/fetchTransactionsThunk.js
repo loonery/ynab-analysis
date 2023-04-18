@@ -1,9 +1,13 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getTransactionsService } from "../transactionsApi/transactionServices";
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const fetchTransactionsThunk = createAsyncThunk("transactions/fetch", async () => {
-  const transactions = await getTransactionsService();
-  return transactions;
-});
+import { getTransactionsService } from '../transactionsApi/transactionServices';
+
+const fetchTransactionsThunk = createAsyncThunk(
+  'transactions/fetch',
+  async () => {
+    const transactions = await getTransactionsService();
+    return transactions;
+  },
+);
 
 export { fetchTransactionsThunk };

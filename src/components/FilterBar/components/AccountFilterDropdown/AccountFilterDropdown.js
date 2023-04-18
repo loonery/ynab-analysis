@@ -81,7 +81,11 @@ const AccountFilterDropdown = () => {
       <ButtonBar buttons={headerButtons} />
       <StyledHr />
       <CategoryCheckboxesContainer />
-      <ButtonBar buttons={footerButtons} padding={'30px 0px 0px 0px'} justify={'flex-end'} />
+      <ButtonBar
+        buttons={footerButtons}
+        padding={'30px 0px 0px 0px'}
+        justify={'flex-end'}
+      />
     </CustomDropdown>
   );
 };

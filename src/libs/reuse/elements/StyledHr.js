@@ -1,5 +1,5 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledHr = styled.hr`
-    margin: .7rem 0;
+  margin: 0.7rem 0;
 `;
