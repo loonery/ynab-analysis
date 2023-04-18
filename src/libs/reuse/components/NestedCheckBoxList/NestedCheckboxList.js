@@ -2,11 +2,7 @@ import React from 'react';
 
 import { NestedCheckBoxSection } from './NestedCheckBoxSection';
 
-const NestedCheckBoxList = ({
-  checkboxSections,
-  parentOnClick,
-  childOnClick,
-}) => {
+const NestedCheckBoxList = ({ checkboxSections, parentOnClick, childOnClick }) => {
   return checkboxSections.map((sectionObject, index) => {
     return (
       <NestedCheckBoxSection

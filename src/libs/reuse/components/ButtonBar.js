@@ -1,7 +1,8 @@
 import React from 'react';
+
+import { DEFAULT_BUTTON_CLASS_STRING } from 'libs/consts/reuseConsts';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { DEFAULT_BUTTON_CLASS_STRING } from 'libs/consts/reuseConsts';
 
 const ButtonContainer = styled.div`
   display: flex;

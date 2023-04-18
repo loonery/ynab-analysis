@@ -1,12 +1,15 @@
 import React from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
+
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
-import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useDispatch, useSelector } from 'react-redux';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { selectDropdown } from 'store/selectors/filterBarSelectors';
 
 import {

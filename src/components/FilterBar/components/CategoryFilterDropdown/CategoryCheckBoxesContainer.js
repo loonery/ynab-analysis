@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
-import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
+
 import { useDispatch, useSelector } from 'react-redux';
+
+import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
+import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
+import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
+import { selectTransactionCategories } from 'store/selectors/transactionSliceSelectors';
 import {
   initCheckboxes,
   toggleChildCheckbox,
   toggleParentCheckbox,
 } from 'store/slices/filterBarSlice';
-import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
 
-import NestedCheckBoxList from '../../../../libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
-import { selectTransactionCategories } from '../../../../store/selectors/transactionSliceSelectors';
 import { assembleCategoryCheckboxObjects } from '../../utils/filterBarUtils';
 
 const CategoryCheckboxesContainer = () => {

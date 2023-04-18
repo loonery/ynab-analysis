@@ -10,8 +10,7 @@ const selectFilters = (state) => state.filterBar.appliedFilters;
 export const selectFilteredTransactions = createSelector(
   [selectTransactions, selectFilters],
   (transactions, appliedFilters) => {
-    const { startDate, endDate, filteredCategories, filteredAccounts } =
-      appliedFilters;
+    const { startDate, endDate, filteredCategories, filteredAccounts } = appliedFilters;
 
     const filteredTransactions = transactions.filter((transaction) => {
       // if filter defined, apply filter. If not defined, let anything through

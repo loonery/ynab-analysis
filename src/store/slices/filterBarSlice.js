@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { check } from 'prettier';
 import {
   findChildCheckboxByParent,
   findParentCheckbox,

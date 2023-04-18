@@ -1,5 +1,5 @@
-import { Row } from 'react-bootstrap';
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
+import { Row } from 'react-bootstrap';
 
 import CategoryFilterDropdown from './CategoryFilterDropdown/CategoryFilterDropdown';
 import DateFilterDropdown from './DateFilterDropdown/DateFilterDropdown';

@@ -1,24 +1,29 @@
-import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
-import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import React from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { StyledHr } from 'libs/reuse/elements/StyledHr';
-import ButtonBar from 'libs/reuse/components/ButtonBar';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import ButtonBar from 'libs/reuse/components/ButtonBar';
+import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
+import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
+import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import {
+  cancelDropdownChanges,
+  saveDropdownState,
+  toggleDropdown,
+} from 'store/slices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_KEYS,
   DATE_FILTER_DROPDOWN_ID,
 } from '../../consts/filterBarConsts';
-import {
-  cancelDropdownChanges,
-  saveDropdownState,
-  toggleDropdown,
-} from '../../../../store/slices/filterBarSlice';
 
 import DateFilterFormContainer from './DateFilterFormContainer';
+
 const DateFilterDropdown = () => {
   const dispatch = useDispatch();
 
@@ -69,9 +74,7 @@ const DateFilterDropdown = () => {
     },
   ];
 
-  const { show } = useSelector((state) =>
-    selectDropdown(state, DATE_DROPDOWN_KEYS),
-  );
+  const { show } = useSelector((state) => selectDropdown(state, DATE_DROPDOWN_KEYS));
   const onToggle = () => {
     // toggle the dropdown in state
     dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));

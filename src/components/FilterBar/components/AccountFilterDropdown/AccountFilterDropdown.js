@@ -1,11 +1,13 @@
 import React from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+
 import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
+import { selectDropdown } from 'store/selectors/filterBarSelectors';
+
 import {
   selectAllCheckboxes,
   selectNoCheckboxes,
@@ -14,6 +16,7 @@ import {
   setFiltersFromState,
   toggleDropdown,
 } from '../../../../store/slices/filterBarSlice';
+import { CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
 import { CATEGORY_FILTER_DROPDOWN_ID } from '../../consts/filterBarConsts';
 
 import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';

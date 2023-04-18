@@ -1,8 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Dropdown from 'react-bootstrap/Dropdown';
+
 import { faCaretDown, faCaretRight } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import PropTypes from 'prop-types';
+import Dropdown from 'react-bootstrap/Dropdown';
 import styled from 'styled-components';
 
 const DropdownContentContainer = styled.div`
@@ -44,13 +46,7 @@ const CustomMenu = React.forwardRef(({ children, style, className }, ref) => {
   );
 });
 
-export const CustomDropdown = ({
-  dropdownLinkText,
-  id,
-  onToggle,
-  show,
-  children,
-}) => {
+export const CustomDropdown = ({ dropdownLinkText, id, onToggle, show, children }) => {
   return (
     <Dropdown show={show} onToggle={onToggle}>
       <Dropdown.Toggle as={CustomToggle} id={id} show={show}>
