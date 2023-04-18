@@ -1,5 +1,5 @@
-import React, { Fragment } from "react"
-import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
+import React, { Fragment } from "react";
+import { Checkbox } from "libs/reuse/elements/StyledCheckbox";
 import styled from "styled-components";
 
 const ParentCheckboxContainer = styled.div`
@@ -12,29 +12,29 @@ const ChildCheckboxContainer = styled.div`
 
 export const NestedCheckBoxSection = ({ checkBoxSection, parentOnClick, childOnClick }) => {
 
-    const { parentName, checked, childObjects } = checkBoxSection;
+  const { parentName, checked, childObjects } = checkBoxSection;
 
-    return (
+  return (
     <Fragment>
-        <ParentCheckboxContainer>
-            <Checkbox 
-                labelText={parentName} 
-                id={'parent-checkbox-' + parentName}
-                checked={checked} 
-                onChange={() => parentOnClick(parentName)} 
-            />
-        </ParentCheckboxContainer>
-        {/* children checkboxes */}
-        {childObjects.map(({ childName, checked }, index) => 
-        <ChildCheckboxContainer>
-            <Checkbox
-                labelText={childName}
-                id={'child-checkbox-' + childName}
-                checked={checked}
-                onChange={() => childOnClick(parentName, childName)}
-            />
-        </ChildCheckboxContainer>
-        )}
+      <ParentCheckboxContainer>
+        <Checkbox 
+          labelText={parentName} 
+          id={"parent-checkbox-" + parentName}
+          checked={checked} 
+          onChange={() => parentOnClick(parentName)}
+        />
+      </ParentCheckboxContainer>
+      {/* children checkboxes */}
+      {childObjects.map(({ childName, checked }, index) => 
+        (<ChildCheckboxContainer>
+          <Checkbox
+            labelText={childName}
+            id={"child-checkbox-" + childName}
+            checked={checked}
+            onChange={() => childOnClick(parentName, childName)}
+          />
+        </ChildCheckboxContainer>)
+      )}
     </Fragment>
-    )
-}
+  );
+};

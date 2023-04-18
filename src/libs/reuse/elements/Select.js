@@ -1,6 +1,6 @@
 import React from "react";
 import { SELECT_ELEMENT_CLASS_STRING } from "libs/consts/reuseConsts";
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Container = styled.div`
   display: flex;
@@ -20,23 +20,23 @@ const StyledSelect = styled.select`
 
 const Option = styled.option`
   overflow-y: scroll;
-`
+`;
 
 const Select = ({ label, id, options, onChange, value }) => {
   return (
     <Container>
-      <Label htmlFor={id}>{label}</Label>
+      <Label htmlFor={id}>
+        {label}
+      </Label>
       <StyledSelect 
         id={id} 
         className={SELECT_ELEMENT_CLASS_STRING} 
         value={value}
-        onChange={onChange}
-      >
+        onChange={onChange}>
         {options.map((option) => (
           <Option 
             key={option} 
-            value={option}
-          >
+            value={option}>
             {option}
           </Option>
         ))}

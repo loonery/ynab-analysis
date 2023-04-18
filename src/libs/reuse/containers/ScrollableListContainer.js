@@ -6,4 +6,4 @@ export const ScrollableContentContainer = styled.div`
     width: max-content;
     overflow: auto;
     padding: 6px;
-`
+`;

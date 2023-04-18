@@ -1,9 +1,9 @@
 import React from "react";
-import PropTypes from 'prop-types'
+import PropTypes from "prop-types";
 import Dropdown from "react-bootstrap/Dropdown";
 import { faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import styled from "styled-components"
+import styled from "styled-components";
 
 const DropdownContentContainer = styled.div`
     /* padding top, bottom | left right */
@@ -15,18 +15,19 @@ const CustomToggle = React.forwardRef(
   ({ children, onClick, show }, ref) => {
   
     // show a different arrow if we are dropped down
-    const arrow = show ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight}/>;
+    const arrow = show ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight} />;
 
     return (
       <a
-        href="/#"
         ref={ref}
+        href="/#"
         onClick={(e) => {
           e.preventDefault(); // prevent navigation of the href
           onClick(e);
-        }}
-      >
-        {children} {arrow}
+        }}>
+        {children} 
+        {" "}
+        {arrow}
       </a>
     );
   }
@@ -35,19 +36,18 @@ const CustomToggle = React.forwardRef(
 // custom menu that acts as a dropdown menu
 const CustomMenu = React.forwardRef(
   ({ children, style, className }, ref) => {
-      return (
-          // the dropdown content container inherits the styling of the
-          // bootstrap dropdown menu via a ref
-          <DropdownContentContainer
-            ref={ref}
-            style={style}
-            className={className}
-          >
-            { children }
-          </DropdownContentContainer>
-      );
-    },
-  );
+    return (
+    // the dropdown content container inherits the styling of the
+    // bootstrap dropdown menu via a ref
+      <DropdownContentContainer
+        ref={ref}
+        style={style}
+        className={className}>
+        {children}
+      </DropdownContentContainer>
+    );
+  },
+);
 
 export const CustomDropdown = ({ 
   dropdownLinkText, 
@@ -58,15 +58,15 @@ export const CustomDropdown = ({
 }) => {
   return (
     <Dropdown show={show} onToggle={onToggle}>
-        <Dropdown.Toggle as={CustomToggle} id={id} show={show}>
-            {dropdownLinkText}
-        </Dropdown.Toggle>
-        <Dropdown.Menu as={CustomMenu}>
-            {children}
-        </Dropdown.Menu>
+      <Dropdown.Toggle as={CustomToggle} id={id} show={show}>
+        {dropdownLinkText}
+      </Dropdown.Toggle>
+      <Dropdown.Menu as={CustomMenu}>
+        {children}
+      </Dropdown.Menu>
     </Dropdown>
-    )
-}
+  );
+};
 
 CustomDropdown.propTypes = {
   dropdownLinkText: PropTypes.string.isRequired,

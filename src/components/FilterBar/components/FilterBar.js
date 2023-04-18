@@ -5,14 +5,14 @@ import { FlexContainer } from "libs/reuse/containers/FlexContainer";
 
 const FilterBar = () => {
 
-    return (
-        <Row className="border rounded p-3">
-            <FlexContainer>
-                <CategoryFilterDropdown />
-                <DateFilterDropdown />
-            </FlexContainer>
-        </Row>
-    )
+  return (
+    <Row className="border rounded p-3">
+      <FlexContainer>
+        <CategoryFilterDropdown />
+        <DateFilterDropdown />
+      </FlexContainer>
+    </Row>
+  );
 
-}
+};
 export default FilterBar;

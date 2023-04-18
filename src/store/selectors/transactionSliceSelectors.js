@@ -1,4 +1,4 @@
-import { createSelector } from '@reduxjs/toolkit';
+import { createSelector } from "@reduxjs/toolkit";
 
 const selectTransactions = (state) => state.transactions.transactions;
 const selectLoading = (state) => state.transactions.loading;
@@ -55,11 +55,11 @@ export const selectTransactionDateRange = createSelector(
   [selectTransactions],
   (transactions) => {
     return (
-    {
-      earliest: transactions.length ? transactions.at(0).month_year : undefined,
-      latest: transactions.length ? transactions.at(-1).month_year : undefined,
-    }
-  )}
+      {
+        earliest: transactions.length ? transactions.at(0).month_year : undefined,
+        latest: transactions.length ? transactions.at(-1).month_year : undefined,
+      }
+    );}
 );
 
 export const selectTransactionDates = createSelector(
@@ -71,7 +71,7 @@ export const selectTransactionDates = createSelector(
     }    
     return Array.from(dates.values());
   }
-)
+);
 
 /**
  * Returns all categories of all transactions in the store, stored in a map of parent : child category

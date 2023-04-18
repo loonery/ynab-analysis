@@ -1,1 +1,1 @@
-export { default } from './SpendingAnalysisPlot.js'
+export { default } from "./SpendingAnalysisPlot.js";

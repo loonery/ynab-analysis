@@ -5,17 +5,17 @@ export const selectDropdown = (state, { dropdownKey }) => state.filterBar[dropdo
 export const selectTempDateRange = (state) => state.filterBar.dateDropdown.tempDateRange;
 
 export const selectDatesAfterStartDate = createSelector(
-    [
-      selectTempDateRange,
-      selectTransactionDates,
-    ],
+  [
+    selectTempDateRange,
+    selectTransactionDates,
+  ],
   (dates, allDates) => {
 
     const { startDate } = dates;
     const datesAfterStart = allDates.filter(date => {
-        const constructedDate = new Date(date);
-        const constructedStartDate = new Date(startDate);
-        return constructedDate >= constructedStartDate;
+      const constructedDate = new Date(date);
+      const constructedStartDate = new Date(startDate);
+      return constructedDate >= constructedStartDate;
     });
     return datesAfterStart;
-  })
+  });

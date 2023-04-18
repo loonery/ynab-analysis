@@ -14,7 +14,8 @@
 
 #linting
 .eslintrc.json
-prettierrc
+.prettierrc
+.babelrc
 
 # misc
 .DS_Store

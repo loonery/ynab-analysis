@@ -1,14 +1,11 @@
 import React from 'react';
-import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
-import ButtonBar from 'libs/reuse/components/ButtonBar';
-import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
-import { StyledHr } from 'libs/reuse/elements/StyledHr';
-import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
 import {
   selectAllCheckboxes,
   selectNoCheckboxes,
@@ -17,11 +14,11 @@ import {
   setFiltersFromState,
   toggleDropdown,
 } from '../../../../store/slices/filterBarSlice';
-import { CATEGORY_DROPDOWN_ID, CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
+import { CATEGORY_FILTER_DROPDOWN_ID } from '../../consts/filterBarConsts';
 
 import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';
 
-const CategoryFilterDropdown = () => {
+const AccountFilterDropdown = () => {
   const dispatch = useDispatch();
 
   const keys = CATEGORY_DROPDOWN_KEYS;
@@ -64,7 +61,6 @@ const CategoryFilterDropdown = () => {
       classString: 'btn btn-sm btn-outline-success',
     },
   ];
-
   const { show } = useSelector((state) => selectDropdown(state, keys));
   const onToggle = () => {
     // toggle the dropdown in state
@@ -77,7 +73,7 @@ const CategoryFilterDropdown = () => {
     <CustomDropdown
       dropdownLinkText={'Categories'}
       show={show}
-      id={CATEGORY_DROPDOWN_ID}
+      id={CATEGORY_FILTER_DROPDOWN_ID}
       onToggle={onToggle}
     >
       <StyledHeader4>Categories</StyledHeader4>
@@ -89,4 +85,4 @@ const CategoryFilterDropdown = () => {
     </CustomDropdown>
   );
 };
-export default CategoryFilterDropdown;
+export default AccountFilterDropdown;
