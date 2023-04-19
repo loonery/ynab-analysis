@@ -26,7 +26,7 @@ const CategoryCheckboxesContainer = () => {
 
   // the checkboxes we render are the ones that the user is manipulating,
   // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.
-  const { tempCategoryCheckBoxes } = useSelector((state) => selectDropdown(state));
+  const { tempCategoryCheckBoxes } = useSelector((state) => selectDropdown(state, keys));
 
   // assemble and initialize the category checkboxes on start
   useEffect(() => {
