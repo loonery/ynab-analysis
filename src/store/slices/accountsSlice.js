@@ -1,12 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-import { fetchTransactionsThunk } from '../../api/thunks/fetchTransactionsThunk';
-
-const transactionsSlice = createSlice({
+const accountsSlice = createSlice({
   name: 'transactions',
   initialState: {
-    transactions: [],
-    categories: [],
+    accounts: [],
     loading: true,
     error: undefined,
   },
@@ -25,6 +22,3 @@ const transactionsSlice = createSlice({
     },
   },
 });
-
-export const { setFilters, applyFilters } = transactionsSlice.actions;
-export const transactionsReducer = transactionsSlice.reducer;

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { getTransactionsService } from 'api/transactionsApi/transactionServices';
+import { getTransactionsService } from 'api/services/transactionServices';
 
 const fetchTransactionsThunk = createAsyncThunk('transactions/fetch', async () => {
   const transactions = await getTransactionsService();

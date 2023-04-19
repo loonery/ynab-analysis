@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
+import { selectDropdown } from 'store/selectors/filterBarSelectors';
 import { selectTransactionCategories } from 'store/selectors/transactionSliceSelectors';
 import {
   initCheckboxes,
@@ -16,6 +17,7 @@ import { assembleCategoryCheckboxObjects } from '../../utils/filterBarUtils';
 
 const CategoryCheckboxesContainer = () => {
   const dispatch = useDispatch();
+  const keys = CATEGORY_DROPDOWN_KEYS;
 
   // get all transaction categories and store the parent categories in an array
   const transactionCategories = useSelector((state) =>
@@ -24,21 +26,19 @@ const CategoryCheckboxesContainer = () => {
 
   // the checkboxes we render are the ones that the user is manipulating,
   // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.
-  const { tempCategoryCheckBoxes } = useSelector(
-    (state) => state.filterBar.categoryDropdown,
-  );
+  const { tempCategoryCheckBoxes } = useSelector((state) => selectDropdown(state));
 
   // assemble and initialize the category checkboxes on start
   useEffect(() => {
     const checkboxes = assembleCategoryCheckboxObjects(transactionCategories);
-    dispatch(initCheckboxes({ checkboxes, keys: CATEGORY_DROPDOWN_KEYS }));
+    dispatch(initCheckboxes({ checkboxes, keys }));
   }, [transactionCategories]);
 
   const parentOnClick = (parentName) =>
     dispatch(
       toggleParentCheckbox({
         parentName,
-        keys: CATEGORY_DROPDOWN_KEYS,
+        keys,
       }),
     );
 
@@ -47,7 +47,7 @@ const CategoryCheckboxesContainer = () => {
       toggleChildCheckbox({
         parentName,
         childName,
-        keys: CATEGORY_DROPDOWN_KEYS,
+        keys,
       }),
     );
 

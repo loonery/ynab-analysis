@@ -1,7 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-
-import { filterBarReducer } from './slices/filterBarSlice';
-import { transactionsReducer } from './slices/transactionsSlice';
+import { filterBarReducer } from 'store/slices/filterBarSlice';
+import { transactionsReducer } from 'store/slices/transactionsSlice';
 
 const store = configureStore({
   reducer: {

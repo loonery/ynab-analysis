@@ -6,7 +6,7 @@ import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { ButtonBar } from 'libs/reuse/components/ButtonBar';
+import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
@@ -22,7 +22,7 @@ import {
 
 import { ACCOUNT_DROPDOWN_KEYS, ACCOUNT_DROPDOWN_ID } from '../../consts/filterBarConsts';
 
-import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';
+import AccountCheckboxesContainer from './AccountCheckboxesContainer';
 
 const AccountFilterDropdown = () => {
   const dispatch = useDispatch();
@@ -86,7 +86,7 @@ const AccountFilterDropdown = () => {
       <StyledHr />
       <ButtonBar buttons={headerButtons} />
       <StyledHr />
-      <CategoryCheckboxesContainer />
+      <AccountCheckboxesContainer />
       <ButtonBar
         buttons={footerButtons}
         padding={'30px 0px 0px 0px'}
