@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-
-import { fetchTransactionsThunk } from '../../api/thunks/fetchTransactionsThunk';
+import { fetchTransactionsThunk } from 'api/thunks/fetchTransactionsThunk';
 
 const transactionsSlice = createSlice({
   name: 'transactions',

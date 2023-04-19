@@ -1,18 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Row } from 'react-bootstrap';
 
-import { fetchTransactionsThunk } from '../../../api/thunks/fetchTransactionsThunk';
 import { selectFilteredTransactions } from '../../../store/selectors/transactionSliceSelectors';
 
 const SpendingByCategoryReport = () => {
   // dispatch to fetch the transactions
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchTransactionsThunk());
-  }, [dispatch]);
 
   // get the transactions and assess the state
   const { loading, error } = useSelector((state) => state.transactions);

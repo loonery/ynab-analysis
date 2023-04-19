@@ -10,4 +10,5 @@ const store = configureStore({
 });
 
 export * from '../api/thunks/fetchTransactionsThunk';
+export * from '../api/thunks/fetchAccountsThunk';
 export { store };

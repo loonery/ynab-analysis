@@ -1,21 +1,20 @@
 import axios from 'axios';
 
-import { API_BASE, BUDGET_ID, defaultHeaders } from '../apiUtils';
-
-import { getFlattenedTransactions } from './transactionHelper';
+import { API_BASE, BUDGET_ID, DEFAULT_HEADERS } from '../consts/apiConsts';
+import { getFlattenedTransactions } from '../utils/transactionHelpers';
 
 export const getTransactionsService = async () => {
   const transactionsResponse = await axios.get(
     `${API_BASE}/budgets/${BUDGET_ID}/transactions`,
     {
-      headers: defaultHeaders,
+      headers: DEFAULT_HEADERS,
     },
   );
   // to render the transactions as we want we need categories to determine category groups
   const categoriesResponse = await axios.get(
     `${API_BASE}/budgets/${BUDGET_ID}/categories`,
     {
-      headers: defaultHeaders,
+      headers: DEFAULT_HEADERS,
     },
   );
 
