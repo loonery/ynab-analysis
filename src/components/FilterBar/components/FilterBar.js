@@ -1,6 +1,9 @@
+import React from 'react';
+
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
 import { Row } from 'react-bootstrap';
 
+import AccountFilterDropdown from './AccountFilterDropdown/AccountFilterDropdown';
 import CategoryFilterDropdown from './CategoryFilterDropdown/CategoryFilterDropdown';
 import DateFilterDropdown from './DateFilterDropdown/DateFilterDropdown';
 
@@ -10,6 +13,7 @@ const FilterBar = () => {
       <FlexContainer>
         <CategoryFilterDropdown />
         <DateFilterDropdown />
+        <AccountFilterDropdown />
       </FlexContainer>
     </Row>
   );

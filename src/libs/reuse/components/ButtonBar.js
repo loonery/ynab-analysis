@@ -44,5 +44,4 @@ ButtonBar.propTypes = {
   justify: PropTypes.string,
   padding: PropTypes.string,
 };
-
 export default ButtonBar;

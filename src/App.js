@@ -1,5 +1,7 @@
-import { Route, Routes } from 'react-router';
+import React from 'react';
+
 import { Row, Col } from 'react-bootstrap';
+import { Route, Routes } from 'react-router';
 
 import FilterBar from './components/FilterBar/components/FilterBar';
 import SpendingByCategoryReport from './components/SpendingByCategoryReport/components';

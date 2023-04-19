@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { Row } from 'react-bootstrap';
+import React, { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
+
+import { Row } from 'react-bootstrap';
 
 import { fetchTransactionsThunk } from '../../../api/thunks/fetchTransactionsThunk';
 import { selectFilteredTransactions } from '../../../store/selectors/transactionSliceSelectors';
@@ -14,10 +16,8 @@ const SpendingByCategoryReport = () => {
 
   // get the transactions and assess the state
   const { loading, error } = useSelector((state) => state.transactions);
-  const filteredTransactions = useSelector((state) =>
-    selectFilteredTransactions(state),
-  );
-
+  const filteredTransactions = useSelector((state) => selectFilteredTransactions(state));
+  console.log(filteredTransactions);
   // return when we don't have transactions
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;

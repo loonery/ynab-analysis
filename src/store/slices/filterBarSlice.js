@@ -99,7 +99,7 @@ const filterBarSlice = createSlice({
       const newState = state[dropdownKey][savedCheckboxKey];
       state[dropdownKey][tempCheckboxKey] = newState;
     },
-    setFiltersFromState(state, action) {
+    setFiltersFromState(state) {
       // filters are gleaned from saved state
       const savedState = {
         startDate: state.dateDropdown.savedDateRange.startDate,

@@ -2,6 +2,7 @@ import { createSelector } from '@reduxjs/toolkit';
 
 const selectTransactions = (state) => state.transactions.transactions;
 const selectLoading = (state) => state.transactions.loading;
+console.log(selectLoading);
 const selectFilters = (state) => state.filterBar.appliedFilters;
 
 /**

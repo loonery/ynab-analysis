@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { SELECT_ELEMENT_CLASS_STRING } from 'libs/consts/reuseConsts';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -43,3 +44,10 @@ const Select = ({ label, id, options, onChange, value }) => {
   );
 };
 export default Select;
+Select.propTypes = {
+  label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  options: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.string.isRequired,
+};

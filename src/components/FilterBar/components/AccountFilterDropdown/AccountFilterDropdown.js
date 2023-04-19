@@ -6,8 +6,11 @@ import { faFloppyDisk } from '@fortawesome/free-regular-svg-icons';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import { ButtonBar } from 'libs/reuse/components/ButtonBar';
+import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
+import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
+import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { selectDropdown } from 'store/selectors/filterBarSelectors';
-
 import {
   selectAllCheckboxes,
   selectNoCheckboxes,
@@ -15,16 +18,16 @@ import {
   cancelDropdownChanges,
   setFiltersFromState,
   toggleDropdown,
-} from '../../../../store/slices/filterBarSlice';
-import { CATEGORY_DROPDOWN_KEYS } from '../../consts/filterBarConsts';
-import { CATEGORY_FILTER_DROPDOWN_ID } from '../../consts/filterBarConsts';
+} from 'store/slices/filterBarSlice';
+
+import { ACCOUNT_DROPDOWN_KEYS, ACCOUNT_DROPDOWN_ID } from '../../consts/filterBarConsts';
 
 import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';
 
 const AccountFilterDropdown = () => {
   const dispatch = useDispatch();
 
-  const keys = CATEGORY_DROPDOWN_KEYS;
+  const keys = ACCOUNT_DROPDOWN_KEYS;
 
   // header button definitions
   const headerButtons = [
@@ -76,7 +79,7 @@ const AccountFilterDropdown = () => {
     <CustomDropdown
       dropdownLinkText={'Categories'}
       show={show}
-      id={CATEGORY_FILTER_DROPDOWN_ID}
+      id={ACCOUNT_DROPDOWN_ID}
       onToggle={onToggle}
     >
       <StyledHeader4>Categories</StyledHeader4>

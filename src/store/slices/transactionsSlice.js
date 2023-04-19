@@ -17,7 +17,7 @@ const transactionsSlice = createSlice({
       state.loading = false;
       state.transactions = action.payload;
     },
-    [fetchTransactionsThunk.pending]: (state, action) => {
+    [fetchTransactionsThunk.pending]: (state) => {
       state.loading = true;
     },
     [fetchTransactionsThunk.rejected]: (state, action) => {

@@ -23,7 +23,6 @@ import {
   DATE_DROPDOWN_FROM_LABEL,
   DATE_DROPDOWN_TO_ID,
   DATE_DROPDOWN_TO_LABEL,
-  DATE_DROPDOWN_KEYS,
 } from '../../consts/filterBarConsts';
 
 const DateFilterForm = () => {

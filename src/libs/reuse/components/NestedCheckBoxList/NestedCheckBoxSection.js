@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 
 import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
 const ParentCheckboxContainer = styled.div`
@@ -28,9 +29,10 @@ export const NestedCheckBoxSection = ({
           onChange={() => parentOnClick(parentName)}
         />
       </ParentCheckboxContainer>
+
       {/* children checkboxes */}
       {childObjects.map(({ childName, checked }, index) => (
-        <ChildCheckboxContainer>
+        <ChildCheckboxContainer key={'child-checkbox-' + childName + index}>
           <Checkbox
             labelText={childName}
             id={'child-checkbox-' + childName}
@@ -41,4 +43,18 @@ export const NestedCheckBoxSection = ({
       ))}
     </Fragment>
   );
+};
+NestedCheckBoxSection.propTypes = {
+  checkBoxSection: PropTypes.shape({
+    parentName: PropTypes.string.isRequired,
+    checked: PropTypes.bool.isRequired,
+    childObjects: PropTypes.arrayOf(
+      PropTypes.shape({
+        childName: PropTypes.string.isRequired,
+        checked: PropTypes.bool.isRequired,
+      }),
+    ).isRequired,
+  }).isRequired,
+  parentOnClick: PropTypes.func.isRequired,
+  childOnClick: PropTypes.func.isRequired,
 };
