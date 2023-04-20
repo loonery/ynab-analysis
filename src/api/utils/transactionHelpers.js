@@ -1,3 +1,5 @@
+import { convertAmount } from './generalHelpers';
+
 // ##############################
 // Helpers
 // ##############################
@@ -47,7 +49,7 @@ const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
  *
  * @returns
  */
-export const getFlattenedTransactions = (transactions, categoryGroups) => {
+export const processTransactions = (transactions, categoryGroups) => {
   // copy the data to allow for direct mutation in the helper functions
   let transactionsCopy = transactions.map((transaction) =>
     Object.assign({}, transaction),
@@ -90,7 +92,7 @@ export const getFlattenedTransactions = (transactions, categoryGroups) => {
         categoryGroups,
         transaction.category_id,
       );
-      transaction.amount = transaction.amount / 1000;
+      transaction.amount = convertAmount(transaction.amount);
 
       delete transaction.subtransactions;
 

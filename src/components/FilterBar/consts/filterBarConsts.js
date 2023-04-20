@@ -45,9 +45,6 @@ export const ACCOUNT_DROPDOWN_REDUCER_KEY = 'accountDropdown';
 export const ACCOUNT_DROPDOWN_SAVED_STATE_REDUCER_KEY = 'savedAccountCheckBoxes';
 export const ACCOUNT_DROPDOWN_TEMP_STATE_REDUCER_KEY = 'tempAccountCheckBoxes';
 
-// the keys allow the use of the same reducer action to access
-// different keys in the state object. In this case we are
-// accessing keys related to the categoryCheckbox dropdown
 export const ACCOUNT_DROPDOWN_KEYS = {
   dropdownKey: ACCOUNT_DROPDOWN_REDUCER_KEY,
   tempCheckboxKey: ACCOUNT_DROPDOWN_TEMP_STATE_REDUCER_KEY,

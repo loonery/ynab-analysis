@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { API_BASE, BUDGET_ID, DEFAULT_HEADERS } from '../consts/apiConsts';
-import { getFlattenedTransactions } from '../utils/transactionHelpers';
+import { processTransactions } from '../utils/transactionHelpers';
 
 export const getTransactionsService = async () => {
   const transactionsResponse = await axios.get(
@@ -23,7 +23,7 @@ export const getTransactionsService = async () => {
   let categories = categoriesResponse.data.data.category_groups;
 
   // flatten the transactions
-  transactions = getFlattenedTransactions(transactions, categories);
+  transactions = processTransactions(transactions, categories);
 
   return transactions;
 };

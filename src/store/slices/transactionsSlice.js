@@ -5,8 +5,7 @@ const transactionsSlice = createSlice({
   name: 'transactions',
   initialState: {
     transactions: [],
-    categories: [],
-    loading: true,
+    loading: false,
     error: undefined,
   },
   reducers: {},

@@ -5,7 +5,7 @@ const accountsSlice = createSlice({
   name: 'accounts',
   initialState: {
     accounts: [],
-    loading: true,
+    loading: false,
     error: undefined,
   },
   reducers: {},
