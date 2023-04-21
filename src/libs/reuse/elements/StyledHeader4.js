@@ -1,3 +1,2 @@
-import styled from "styled-components"
-export const StyledHeader4 = styled.h4`
-`
+import styled from 'styled-components';
+export const StyledHeader4 = styled.h4``;

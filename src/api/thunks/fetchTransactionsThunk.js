@@ -1,9 +1,10 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
-import { getTransactionsService } from "../transactionsApi/transactionServices";
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { getTransactionsService } from 'api/services/transactionServices';
 
 const fetchTransactionsThunk = createAsyncThunk('transactions/fetch', async () => {
-    const transactions = await getTransactionsService();
-    return transactions;
+  const transactions = await getTransactionsService();
+  console.log(transactions);
+  return transactions;
 });
 
-export { fetchTransactionsThunk }
+export { fetchTransactionsThunk };
