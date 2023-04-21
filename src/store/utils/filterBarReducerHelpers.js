@@ -2,14 +2,13 @@ const getFiltersFromNestedCheckboxes = (checkboxes) => {
   return checkboxes
     .map((checkbox) => [...checkbox.childObjects])
     .flat(1)
-    .filter((subCategoryObject) => !subCategoryObject.checked)
-    .map((checkedObject) => checkedObject.subCategoryName);
+    .filter((childObject) => !childObject.checked)
+    .map((checkedObject) => checkedObject.childName);
 };
 
 export const getFiltersFromState = (savedState) => {
   const { startDate, endDate, categories, accounts } = savedState;
 
-  // retrieve all the cateogories
   // opportunity to factor out get nested chexkboxes function?
   const filteredCategories = getFiltersFromNestedCheckboxes(categories);
   const filteredAccounts = getFiltersFromNestedCheckboxes(accounts);

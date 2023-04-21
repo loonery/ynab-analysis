@@ -15,6 +15,7 @@ import {
   cancelDropdownChanges,
   saveDropdownState,
   toggleDropdown,
+  setFiltersFromState,
 } from 'store/slices/filterBarSlice';
 
 import {
@@ -70,6 +71,7 @@ const DateFilterDropdown = () => {
       onClick: () => {
         dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
         dispatch(saveDropdownState(DATE_DROPDOWN_KEYS));
+        dispatch(setFiltersFromState());
       },
       classString: 'btn btn-sm btn-outline-success',
     },
