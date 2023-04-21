@@ -11,9 +11,7 @@ const commonFilter = (transaction) => {
 
   // if category has one of the 'bad' category groups that don't relate to spending
   const badCategoryGroups = ['Internal Master Category', 'Reimbursements'];
-  const isBadCategoryGroup = badCategoryGroups.includes(
-    transaction.category_group_name,
-  );
+  const isBadCategoryGroup = badCategoryGroups.includes(transaction.category_group_name);
 
   const deleted = transaction.deleted;
 
@@ -96,13 +94,8 @@ export const getSubcategories = (
     return subcategories;
   } else if (categoryDimension === 'single_category') {
     // when we want a single category
-    const parent = getParentOfSubcategory(
-      transactionHirearchy,
-      selectedCategoryItem,
-    );
-    const subcategories = sort(
-      Array.from(transactionHirearchy.get(parent).keys()),
-    );
+    const parent = getParentOfSubcategory(transactionHirearchy, selectedCategoryItem);
+    const subcategories = sort(Array.from(transactionHirearchy.get(parent).keys()));
     return subcategories;
   }
 };
@@ -129,13 +122,8 @@ export const getActiveMonthsSums = (
     });
   } // when the selectedCategoryItem is a subcategory
   else {
-    const parent = getParentOfSubcategory(
-      transactionHirearchy,
-      selectedCategoryItem,
-    );
-    const singleCategoryMap = transactionHirearchy
-      .get(parent)
-      .get(selectedCategoryItem); // the spending for just the subcategory
+    const parent = getParentOfSubcategory(transactionHirearchy, selectedCategoryItem);
+    const singleCategoryMap = transactionHirearchy.get(parent).get(selectedCategoryItem); // the spending for just the subcategory
     // map that subcategory's activemonths to sums of each active month
     populateMonthlySumMap(singleCategoryMap, sumsByMonth);
   }
@@ -175,9 +163,7 @@ export const getTotalSpending = (
   } else if (categoryDimension === 'single_category') {
     // if we want total spending for some subcategory
     const parent = getParentOfSubcategory(transactionHirearchy, categoryItem);
-    const monthToTransactionMap = transactionHirearchy
-      .get(parent)
-      .get(categoryItem);
+    const monthToTransactionMap = transactionHirearchy.get(parent).get(categoryItem);
     populateMonthlySumMap(monthToTransactionMap, totalsByMonth);
   }
   return totalsByMonth;
@@ -208,12 +194,8 @@ export const getParentOfSubcategory = (transactionHirearchy, subcategory) => {
 const populateMonthlySumMap = (subCategoryMap, sumsByMonth) => {
   // map a subcategory's activemonths to sums of each active month
   subCategoryMap.forEach((monthlyTransactions, month) => {
-    const categoryValues = monthlyTransactions.map(
-      (transaction) => transaction.amount,
-    ); // get just amounts from objects
-    const monthlyCategorySum = Math.abs(
-      categoryValues.reduce((acc, curr) => acc + curr),
-    ); // get sum of amounts for month
+    const categoryValues = monthlyTransactions.map((transaction) => transaction.amount); // get just amounts from objects
+    const monthlyCategorySum = Math.abs(categoryValues.reduce((acc, curr) => acc + curr)); // get sum of amounts for month
 
     if (sumsByMonth.has(month)) {
       const currentSum = sumsByMonth.get(month);
