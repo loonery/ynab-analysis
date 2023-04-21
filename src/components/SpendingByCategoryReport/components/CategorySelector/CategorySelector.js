@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { useDispatch, useSelector } from 'react-redux';
 
 import { fetchTransactionsThunk } from '../../../../api/thunks/fetchTransactionsThunk';
@@ -37,14 +38,14 @@ const CategorySelector = () => {
 
               {/* Category Group select box */}
               <select
-                className="custom-select"
-                id="categoryGroupDrilldownSelect"
+                className='custom-select'
+                id='categoryGroupDrilldownSelect'
                 onChange={() => {}}
                 // value in the dropdown is the selected item, or the parent
                 // of the selected item if the selected item is a subcategory
-                value={""}>
+                value={''}
               >
-                > > > > > > > > >{/* enumerate the choices */}
+                > > > > > > > > > > > > > > > > > > > > >{/* enumerate the choices */}
                 {['', '', ''].map(() => {
                   return (
                     <option className='btn dropdown-toggle' value={'option'}>
