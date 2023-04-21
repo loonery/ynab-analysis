@@ -4,15 +4,11 @@ import { useSelector } from 'react-redux';
 
 import { Row } from 'react-bootstrap';
 
-import { selectFilteredTransactions } from '../../../store/selectors/transactionSliceSelectors';
-
 const SpendingByCategoryReport = () => {
   // dispatch to fetch the transactions
 
   // get the transactions and assess the state
   const { loading, error } = useSelector((state) => state.transactions);
-  const filteredTransactions = useSelector((state) => selectFilteredTransactions(state));
-  console.log(filteredTransactions);
   // return when we don't have transactions
   if (loading) return <div>loading...</div>;
   if (error) return <div>error</div>;

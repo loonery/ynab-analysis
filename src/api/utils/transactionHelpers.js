@@ -37,9 +37,16 @@ const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
 
     // if any of those ids match the queried id, return the name of the category group
     if (subcategories.includes(subCategoryId)) {
-      return categoryGroup.name;
+      return {
+        categoryGroupName: categoryGroup.name,
+        categoryGroupId: categoryGroup.id,
+      };
     }
   }
+  return {
+    categoryGroupName: undefined,
+    categoryGroupId: undefined,
+  };
 };
 
 // ##############################
@@ -67,10 +74,13 @@ export const processTransactions = (transactions, categoryGroups) => {
       let newSubtransactions = subtransactions.map((subtransaction) => {
         // modify each subtransaction to have the same fields as its parent transaction
         const newTransaction = { ...transaction, ...subtransaction };
-        newTransaction.category_group_name = getCategoryGroupBySubcategoryId(
+        const { categoryGroupName, categoryGroupId } = getCategoryGroupBySubcategoryId(
           categoryGroups,
           newTransaction.category_id,
         );
+        newTransaction.category_group_name = categoryGroupName;
+        newTransaction.category_group_id = categoryGroupId;
+
         newTransaction.amount = newTransaction.amount / 1000;
 
         delete newTransaction.transaction_id; // deletes the parent transaction id
@@ -88,10 +98,13 @@ export const processTransactions = (transactions, categoryGroups) => {
       i += newSubtransactions.length;
     } else {
       // if there are no subtransactions, just mutate the transaction's data
-      transaction.category_group_name = getCategoryGroupBySubcategoryId(
+      const { categoryGroupName, categoryGroupId } = getCategoryGroupBySubcategoryId(
         categoryGroups,
         transaction.category_id,
       );
+      transaction.category_group_name = categoryGroupName;
+      transaction.category_group_id = categoryGroupId;
+
       transaction.amount = convertAmount(transaction.amount);
 
       delete transaction.subtransactions;

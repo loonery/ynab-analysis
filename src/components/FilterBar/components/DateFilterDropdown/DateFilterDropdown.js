@@ -68,6 +68,7 @@ const DateFilterDropdown = () => {
     {
       label: <FontAwesomeIcon icon={faFloppyDisk} />,
       onClick: () => {
+        dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
         dispatch(saveDropdownState(DATE_DROPDOWN_KEYS));
       },
       classString: 'btn btn-sm btn-outline-success',

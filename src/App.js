@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { Row, Col } from 'react-bootstrap';
 import { Route, Routes } from 'react-router';
+import { fetchCategoriesThunk } from 'store';
 import { fetchTransactionsThunk } from 'store';
 import { fetchAccountsThunk } from 'store';
 
@@ -16,6 +17,7 @@ const App = () => {
   useEffect(() => {
     dispatch(fetchAccountsThunk());
     dispatch(fetchTransactionsThunk());
+    dispatch(fetchCategoriesThunk());
   }, [dispatch]);
 
   return (

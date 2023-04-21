@@ -1,9 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-const selectTransactions = (state) => state.transactions.transactions;
-const selectLoading = (state) => state.transactions.loading;
-console.log(selectLoading);
-const selectFilters = (state) => state.filterBar.appliedFilters;
+export const selectTransactions = (state) => state.transactions.transactions;
+export const selectFilters = (state) => state.filterBar.appliedFilters;
 
 /**
  * Filters transactions based on filters active in the fi
@@ -75,59 +73,59 @@ export const selectTransactionDates = createSelector(
   ]
     
 */
-export const selectTransactionCategories = createSelector(
-  [selectTransactions],
-  (transactions) => {
-    const transactionCategories = {};
-    for (const transaction of transactions) {
-      // get the two types of categories on each transaction
-      const groupName = transaction.category_group_name;
-      const childName = transaction.category_name;
+// export const selectTransactionCategories = createSelector(
+//   [selectTransactions],
+//   (transactions) => {
+//     const transactionCategories = {};
+//     for (const transaction of transactions) {
+//       // get the two types of categories on each transaction
+//       const groupName = transaction.category_group_name;
+//       const childName = transaction.category_name;
 
-      // if the category group is in the object...
-      if (transactionCategories[groupName]) {
-        const currentChildList = transactionCategories[groupName];
-        transactionCategories[groupName] = currentChildList.includes(childName)
-          ? currentChildList
-          : [...currentChildList, childName];
+//       // if the category group is in the object...
+//       if (transactionCategories[groupName]) {
+//         const currentChildList = transactionCategories[groupName];
+//         transactionCategories[groupName] = currentChildList.includes(childName)
+//           ? currentChildList
+//           : [...currentChildList, childName];
 
-        // otherwise if we need to add the category group...
-      } else {
-        transactionCategories[groupName] = [childName];
-      }
-    }
-    return transactionCategories;
-  },
-);
+//         // otherwise if we need to add the category group...
+//       } else {
+//         transactionCategories[groupName] = [childName];
+//       }
+//     }
+//     return transactionCategories;
+//   },
+// );
 
-export const selectTransactionAccounts = createSelector(
-  [selectTransactions],
-  (transactions) => {
-    const accounts = new Set();
-    for (const transaction of transactions) {
-      accounts.add(transaction.account);
-    }
-    return Array.from(accounts);
-  },
-);
+// export const selectTransactionAccounts = createSelector(
+//   [selectTransactions],
+//   (transactions) => {
+//     const accounts = new Set();
+//     for (const transaction of transactions) {
+//       accounts.add(transaction.account);
+//     }
+//     return Array.from(accounts);
+//   },
+// );
 
-export const selectTransactionsByCategoryItem = createSelector(
-  [
-    selectTransactionCategories,
-    selectTransactions,
-    (state, selectedCategory) => selectedCategory,
-  ],
-  (categories, transactions, selectedCategory) => {
-    const isCategoryGroup = categories.has(selectedCategory);
+// export const selectTransactionsByCategoryItem = createSelector(
+//   [
+//     selectTransactionCategories,
+//     selectTransactions,
+//     (state, selectedCategory) => selectedCategory,
+//   ],
+//   (categories, transactions, selectedCategory) => {
+//     const isCategoryGroup = categories.has(selectedCategory);
 
-    const returned = isCategoryGroup
-      ? transactions.filter(
-          (transaction) => transaction.category_group_name === selectedCategory,
-        )
-      : transactions.filter(
-          (transaction) => transaction.category_name === selectedCategory,
-        );
+//     const returned = isCategoryGroup
+//       ? transactions.filter(
+//           (transaction) => transaction.category_group_name === selectedCategory,
+//         )
+//       : transactions.filter(
+//           (transaction) => transaction.category_name === selectedCategory,
+//         );
 
-    return returned;
-  },
-);
+//     return returned;
+//   },
+// );

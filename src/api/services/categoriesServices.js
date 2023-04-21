@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { API_BASE, BUDGET_ID, DEFAULT_HEADERS } from '../consts/apiConsts';
-import { processCategories } from '../utils/accountHelpers';
+import { processCategories } from '../utils/categoriesHelpers';
 
 export const getCategoriesService = async () => {
   const categoriesResponse = await axios.get(
@@ -10,7 +10,7 @@ export const getCategoriesService = async () => {
       headers: DEFAULT_HEADERS,
     },
   );
-  let categories = categoriesResponse.data.data.categories;
+  let categories = categoriesResponse.data.data.category_groups;
   categories = processCategories(categories);
   return categories;
 };

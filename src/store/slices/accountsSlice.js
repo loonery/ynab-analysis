@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { fetchAccountsThunk } from 'api/thunks/fetchTransactionsThunk';
+import { fetchAccountsThunk } from 'api/thunks/fetchAccountsThunk';
 
 const accountsSlice = createSlice({
   name: 'accounts',

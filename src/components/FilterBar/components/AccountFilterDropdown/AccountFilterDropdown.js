@@ -20,6 +20,7 @@ import {
   toggleDropdown,
 } from 'store/slices/filterBarSlice';
 
+import { ACCOUNT_DROPDOWN_TOGGLE_LABEL } from '../../consts/filterBarConsts';
 import { ACCOUNT_DROPDOWN_KEYS, ACCOUNT_DROPDOWN_ID } from '../../consts/filterBarConsts';
 
 import AccountCheckboxesContainer from './AccountCheckboxesContainer';
@@ -77,7 +78,7 @@ const AccountFilterDropdown = () => {
 
   return (
     <CustomDropdown
-      dropdownLinkText={'Categories'}
+      dropdownLinkText={ACCOUNT_DROPDOWN_TOGGLE_LABEL}
       show={show}
       id={ACCOUNT_DROPDOWN_ID}
       onToggle={onToggle}
