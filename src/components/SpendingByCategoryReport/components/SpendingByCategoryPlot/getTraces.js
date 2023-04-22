@@ -5,33 +5,17 @@ import {
   getTotalSpending,
 } from '../../utils/getSpendingData';
 
-export const getTraces = (
-  transactions,
-  categoryDimension,
-  selectedCategoryItem,
-) => {
+export const getTraces = (transactions, categoryDimension, selectedCategoryItem) => {
   const traces = [];
-  const barTraces = getBarTraces(
-    transactions,
-    categoryDimension,
-    selectedCategoryItem,
-  );
-  const lineTrace = getLineTrace(
-    transactions,
-    categoryDimension,
-    selectedCategoryItem,
-  );
+  const barTraces = getBarTraces(transactions, categoryDimension, selectedCategoryItem);
+  const lineTrace = getLineTrace(transactions, categoryDimension, selectedCategoryItem);
 
   traces.push(...barTraces);
   traces.push(lineTrace);
   return traces;
 };
 
-const getBarTraces = (
-  transactions,
-  categoryDimension,
-  selectedCategoryItem,
-) => {
+const getBarTraces = (transactions, categoryDimension, selectedCategoryItem) => {
   const transactionHirearchy = getTransactionHirearchy(
     transactions,
     categoryDimension,
@@ -91,11 +75,7 @@ const getBarTraces = (
   return traceData;
 };
 
-const getLineTrace = (
-  transactions,
-  categoryDimension,
-  selectedCategoryItem,
-) => {
+const getLineTrace = (transactions, categoryDimension, selectedCategoryItem) => {
   const transactionHirearchy = getTransactionHirearchy(
     transactions,
     categoryDimension,

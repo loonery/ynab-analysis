@@ -8,6 +8,7 @@ const formatTransactionDate = (transaction) => {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
+    timeZone: 'UTC',
   };
 
   const transactionDate = new Date(transaction.date);
@@ -81,6 +82,10 @@ export const processTransactions = (transactions, categoryGroups) => {
         newTransaction.category_group_name = categoryGroupName;
         newTransaction.category_group_id = categoryGroupId;
 
+        if (newTransaction.category_id === null) {
+          newTransaction.category_id = undefined;
+        }
+
         newTransaction.amount = newTransaction.amount / 1000;
 
         delete newTransaction.transaction_id; // deletes the parent transaction id
@@ -104,6 +109,9 @@ export const processTransactions = (transactions, categoryGroups) => {
       );
       transaction.category_group_name = categoryGroupName;
       transaction.category_group_id = categoryGroupId;
+      if (transaction.category_id === null) {
+        transaction.category_id = undefined;
+      }
 
       transaction.amount = convertAmount(transaction.amount);
 

@@ -1,15 +1,12 @@
 import React from 'react';
+
 import Plot from 'react-plotly.js';
 
 import { getTraces } from './getTraces';
 
-const SpendingAnalysisPlot = ({ categoryDimension, selectedCategoryItem }) => {
+const SpendingAnalysisPlot = () => {
   const transactions = '';
-  const traceObjects = getTraces(
-    transactions,
-    categoryDimension,
-    selectedCategoryItem,
-  );
+  const traceObjects = getTraces(transactions, categoryDimension, selectedCategoryItem);
 
   /* Get the Layout for the Plot */
   const getLayout = () => {

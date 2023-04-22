@@ -19,7 +19,7 @@ import {
   cancelDropdownChanges,
   setFiltersFromState,
   toggleDropdown,
-} from '../../../../store/slices/filterBarSlice';
+} from '../../../../store/componentSlices/filterBarSlice';
 import {
   CATEGORY_DROPDOWN_ID,
   CATEGORY_DROPDOWN_KEYS,

@@ -12,5 +12,6 @@ export const getCategoriesService = async () => {
   );
   let categories = categoriesResponse.data.data.category_groups;
   categories = processCategories(categories);
+  console.log(categories);
   return categories;
 };

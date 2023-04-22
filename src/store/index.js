@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { accountsReducer } from 'store/slices/accountsSlice';
-import { categoriesReducer } from 'store/slices/categoriesSlice';
-import { filterBarReducer } from 'store/slices/filterBarSlice';
-import { transactionsReducer } from 'store/slices/transactionsSlice';
+import { filterBarReducer } from 'store/componentSlices/filterBarSlice';
+import { accountsReducer } from 'store/dataSlices/accountsSlice';
+import { categoriesReducer } from 'store/dataSlices/categoriesSlice';
+import { transactionsReducer } from 'store/dataSlices/transactionsSlice';
 
 const store = configureStore({
   reducer: {

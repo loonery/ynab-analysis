@@ -16,7 +16,7 @@ import {
   initDateDropdown,
   updateStartDate,
   updateEndDate,
-} from 'store/slices/filterBarSlice';
+} from 'store/componentSlices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_FROM_ID,

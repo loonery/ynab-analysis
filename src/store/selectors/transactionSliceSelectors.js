@@ -1,4 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { rollup, sum } from 'd3';
+import { READY_TO_ASSIGN_CATEGORY_ID } from 'store/consts/consts';
+import { getUniqueValues } from 'store/utils/storeHelpers';
+
+import { selectAllCategoryGroupNames, selectAllCategoryNames } from './categorySelectors';
 
 export const selectTransactions = (state) => state.transactions.transactions;
 export const selectFilters = (state) => state.filterBar.appliedFilters;
@@ -7,13 +12,24 @@ export const selectFilters = (state) => state.filterBar.appliedFilters;
  * Filters transactions based on filters active in the fi
  */
 export const selectFilteredTransactions = createSelector(
-  [selectTransactions, selectFilters],
-  (transactions, appliedFilters) => {
+  [selectTransactions, selectFilters, (state, onlySpending = true) => onlySpending],
+  (transactions, appliedFilters, onlySpending) => {
     const { startDate, endDate, filteredCategories, filteredAccounts } = appliedFilters;
-    console.log(appliedFilters);
+
+    // if we only want to have the transactions related to spending
+    // we filter out the starting balances and income
+    if (onlySpending) {
+      transactions = transactions.filter((transaction) => {
+        const { category_id } = transaction;
+        const categorized = category_id !== undefined;
+        const notInflow = category_id !== READY_TO_ASSIGN_CATEGORY_ID;
+        return categorized && notInflow;
+      });
+    }
 
     const filteredTransactions = transactions.filter((transaction) => {
       // if filter defined, apply filter. If not defined, let anything through
+
       const passStart = startDate
         ? new Date(transaction.month_year) >= new Date(startDate)
         : true;
@@ -39,6 +55,13 @@ export const selectFilteredTransactions = createSelector(
   },
 );
 
+export const selectTransactionDates = createSelector(
+  [selectTransactions],
+  (transactions) => {
+    return getUniqueValues(transactions, 'month_year');
+  },
+);
+
 /**
  * Returns the earliest and latest occurring dates (as a month_year) of
  * all transactions in the store, stored in an object as {earliest: ..., latest: ...}
@@ -53,17 +76,54 @@ export const selectTransactionDateRange = createSelector(
   },
 );
 
-export const selectTransactionDates = createSelector(
-  [selectTransactions],
+export const selectFilteredSpendingByMonth = createSelector(
+  [selectFilteredTransactions],
   (transactions) => {
-    const dates = new Set();
-    for (let transaction of transactions) {
-      dates.add(transaction.month_year);
-    }
-    return Array.from(dates.values());
+    const spendingByMonthMap = rollup(
+      transactions,
+      (t) => sum(t, (t) => t.amount),
+      (t) => t.month_year,
+    );
+    const spendingByMonth = Object.fromEntries(spendingByMonthMap);
+    return spendingByMonth;
   },
 );
 
+export const selectFilteredTransactionsByCategoryItem = createSelector(
+  [
+    selectFilteredTransactions,
+    selectAllCategoryGroupNames,
+    selectAllCategoryNames,
+    (state, selectedCategory) => selectedCategory,
+  ],
+  (transactions, categoryGroupNames, selectedCategory) => {
+    const isCategoryGroup = categoryGroupNames.includes(selectedCategory);
+
+    const returned = isCategoryGroup
+      ? transactions.filter(
+          (transaction) => transaction.category_group_name === selectedCategory,
+        )
+      : transactions.filter(
+          (transaction) => transaction.category_name === selectedCategory,
+        );
+
+    return returned;
+  },
+);
+
+export const selectFilteredTransactionCategories = createSelector(
+  [selectFilteredTransactions],
+  (transactions) => {
+    return getUniqueValues(transactions, 'category_name');
+  },
+);
+
+export const selectFilteredTransactionCategoryGroups = createSelector(
+  [selectFilteredTransactions],
+  (transactions) => {
+    return getUniqueValues(transactions, 'category_group_name');
+  },
+);
 /**
  * Returns all categories of all transactions in the store, stored in a map of parent : child category
  [
@@ -110,26 +170,5 @@ export const selectTransactionDates = createSelector(
 //       accounts.add(transaction.account);
 //     }
 //     return Array.from(accounts);
-//   },
-// );
-
-// export const selectTransactionsByCategoryItem = createSelector(
-//   [
-//     selectTransactionCategories,
-//     selectTransactions,
-//     (state, selectedCategory) => selectedCategory,
-//   ],
-//   (categories, transactions, selectedCategory) => {
-//     const isCategoryGroup = categories.has(selectedCategory);
-
-//     const returned = isCategoryGroup
-//       ? transactions.filter(
-//           (transaction) => transaction.category_group_name === selectedCategory,
-//         )
-//       : transactions.filter(
-//           (transaction) => transaction.category_name === selectedCategory,
-//         );
-
-//     return returned;
 //   },
 // );
