@@ -3,16 +3,16 @@ export const selectAllCategories = (state) => {
 };
 
 export const selectAllCategoryGroupNames = (state) => {
-  return state.categories.categories.map(({ name, id }) => {
-    return { name, id };
+  return state.categories.categories.map(({ name }) => {
+    return name;
   });
 };
 
 export const selectAllCategoryNames = (state) => {
   return state.categories.categories.map((category) => {
     const subCategories = category.categories;
-    return subCategories.map(({ name, id }) => {
-      return { name, id };
+    return subCategories.map(({ name }) => {
+      return name;
     });
   });
 };

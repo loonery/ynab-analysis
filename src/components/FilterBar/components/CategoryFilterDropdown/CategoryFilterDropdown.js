@@ -11,7 +11,6 @@ import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { selectDropdown } from 'store/selectors/filterBarSelectors';
-
 import {
   selectAllCheckboxes,
   selectNoCheckboxes,
@@ -19,7 +18,8 @@ import {
   cancelDropdownChanges,
   setFiltersFromState,
   toggleDropdown,
-} from '../../../../store/componentSlices/filterBarSlice';
+} from 'store/slices/componentSlices/filterBarSlice';
+
 import {
   CATEGORY_DROPDOWN_ID,
   CATEGORY_DROPDOWN_KEYS,

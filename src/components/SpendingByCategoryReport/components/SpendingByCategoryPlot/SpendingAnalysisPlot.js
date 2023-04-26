@@ -1,12 +1,30 @@
 import React from 'react';
 
+import { useSelector } from 'react-redux';
+
+import {
+  fetchCategoryTotalsSelector,
+  fetchTotalsSelector,
+} from 'components/SpendingByCategoryReport/utils/fetchSelectorUtils';
 import Plot from 'react-plotly.js';
+import { selectCategoryDimension } from 'store/selectors/spendingAnalysisSelectors';
 
 import { getTraces } from './getTraces';
 
 const SpendingAnalysisPlot = () => {
-  const transactions = '';
-  const traceObjects = getTraces(transactions, categoryDimension, selectedCategoryItem);
+  const { loading } = useSelector((state) => state.transactions);
+  const categoryDimension = useSelector((state) => selectCategoryDimension(state));
+
+  const categorySpendingSelector = fetchCategoryTotalsSelector(categoryDimension);
+  const categorySpendingData = useSelector((state) => categorySpendingSelector(state));
+
+  const totalSpendingSelector = fetchTotalsSelector(categoryDimension);
+  const totalSpendingData = useSelector((state) => totalSpendingSelector(state));
+
+  if (loading || totalSpendingData === undefined || categorySpendingData === undefined)
+    return <div>loading...</div>;
+
+  const traceObjects = getTraces(categorySpendingData, totalSpendingData);
 
   /* Get the Layout for the Plot */
   const getLayout = () => {

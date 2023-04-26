@@ -6,4 +6,6 @@ export const ALL_CATEGORIES_DIMENSION = 'all-categories';
 export const CATEGORY_GROUP_DIMENSION = 'category-group';
 export const SINGLE_CATEGORY_DIMENSION = 'single-category';
 
-export const DEFAULT_CATEGORY_ITEM = 'all-items';
+export const ALL_CATEGORIES_ITEM = 'All Categories';
+export const ALL_CATEGORY_GROUPS_ITEM = 'All Category Groups';
+export const NO_PARENT = 'no parent';

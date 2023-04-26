@@ -1,9 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { rollup, sum } from 'd3';
 import { READY_TO_ASSIGN_CATEGORY_ID } from 'store/consts/consts';
 import { getUniqueValues } from 'store/utils/storeHelpers';
-
-import { selectAllCategoryGroupNames, selectAllCategoryNames } from './categorySelectors';
 
 export const selectTransactions = (state) => state.transactions.transactions;
 export const selectFilters = (state) => state.filterBar.appliedFilters;
@@ -73,41 +70,6 @@ export const selectTransactionDateRange = createSelector(
       earliest: transactions.length ? transactions.at(0).month_year : undefined,
       latest: transactions.length ? transactions.at(-1).month_year : undefined,
     };
-  },
-);
-
-export const selectFilteredSpendingByMonth = createSelector(
-  [selectFilteredTransactions],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => sum(t, (t) => t.amount),
-      (t) => t.month_year,
-    );
-    const spendingByMonth = Object.fromEntries(spendingByMonthMap);
-    return spendingByMonth;
-  },
-);
-
-export const selectFilteredTransactionsByCategoryItem = createSelector(
-  [
-    selectFilteredTransactions,
-    selectAllCategoryGroupNames,
-    selectAllCategoryNames,
-    (state, selectedCategory) => selectedCategory,
-  ],
-  (transactions, categoryGroupNames, selectedCategory) => {
-    const isCategoryGroup = categoryGroupNames.includes(selectedCategory);
-
-    const returned = isCategoryGroup
-      ? transactions.filter(
-          (transaction) => transaction.category_group_name === selectedCategory,
-        )
-      : transactions.filter(
-          (transaction) => transaction.category_name === selectedCategory,
-        );
-
-    return returned;
   },
 );
 

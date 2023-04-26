@@ -18,7 +18,7 @@ import {
   cancelDropdownChanges,
   setFiltersFromState,
   toggleDropdown,
-} from 'store/componentSlices/filterBarSlice';
+} from 'store/slices/componentSlices/filterBarSlice';
 
 import { ACCOUNT_DROPDOWN_TOGGLE_LABEL } from '../../consts/filterBarConsts';
 import { ACCOUNT_DROPDOWN_KEYS, ACCOUNT_DROPDOWN_ID } from '../../consts/filterBarConsts';
