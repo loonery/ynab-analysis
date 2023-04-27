@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { InternMap, rollup, sum } from 'd3';
+import { rollup, sum } from 'd3';
 import {
   ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORIES_ITEM,
@@ -15,6 +15,7 @@ import {
   selectFilteredTransactionCategoryGroups,
 } from './transactionSliceSelectors';
 
+// atomic selectors
 export const selectSelectedCategory = (state) => {
   return state.spendingAnalysis.selectedCategory;
 };
@@ -31,29 +32,51 @@ export const selectParentOfSelectedCategory = (state) => {
   return state.spendingAnalysis.parentOfSelected;
 };
 
-export const selectFilteredTransactionsByCategoryItem = createSelector(
+// selectors for selectFilteredTransactionsByCategoryDimension
+const selectTransactionsForCategoryGroupDimension = createSelector(
+  [selectFilteredTransactions, selectSelectedCategoryGroup],
+  (filteredTransactions, selectedCategoryGroup) => {
+    return filteredTransactions.filter(
+      (transaction) => transaction.category_group_name === selectedCategoryGroup,
+    );
+  },
+);
+
+const selectTransactionsForSingleCategoryDimension = createSelector(
+  [selectFilteredTransactions, selectSelectedCategory],
+  (filteredTransactions, selectedCategory) => {
+    return filteredTransactions.filter(
+      (transaction) => transaction.category_name === selectedCategory,
+    );
+  },
+);
+
+const selectTransactionsForAllCategoryDimension = createSelector(
+  [selectFilteredTransactions],
+  (filteredTransactions) => {
+    return filteredTransactions;
+  },
+);
+
+export const selectFilteredTransactionsByCategoryDimension = createSelector(
   [
-    selectFilteredTransactions,
     selectCategoryDimension,
-    selectSelectedCategory,
-    selectSelectedCategoryGroup,
+    selectTransactionsForAllCategoryDimension,
+    selectTransactionsForCategoryGroupDimension,
+    selectTransactionsForSingleCategoryDimension,
   ],
-  (transactions, categoryDimension, selectedCategory, selectedCategoryGroup) => {
-    // if the selected category item is 'all', return everything
+  (categoryDimension, transactionsAll, transactionsGroup, transactionsSingle) => {
     if (categoryDimension === ALL_CATEGORIES_DIMENSION) {
-      return transactions;
+      return transactionsAll;
     } else if (categoryDimension === CATEGORY_GROUP_DIMENSION) {
-      return transactions.filter(
-        (transaction) => transaction.category_group_name === selectedCategoryGroup,
-      );
+      return transactionsGroup;
     } else if (categoryDimension === SINGLE_CATEGORY_DIMENSION) {
-      return transactions.filter(
-        (transaction) => transaction.category_name === selectedCategory,
-      );
+      return transactionsSingle;
     }
   },
 );
 
+// selectors for category selector component
 export const selectCategorySelectorGroupOptions = createSelector(
   [selectFilteredTransactionCategoryGroups],
   (categoryGroupNames) => {
@@ -67,29 +90,18 @@ export const selectCategorySelectorCategoryOptions = createSelector(
   [
     selectAllCategories,
     selectSelectedCategoryGroup,
-    selectParentOfSelectedCategory,
     selectCategoryDimension,
     selectFilteredTransactionCategories,
   ],
-  (
-    categoryHirearchy,
-    selectedCategoryGroup,
-    selectedCategoryParent,
-    categoryDimension,
-    filteredCategories,
-  ) => {
+  (categoryHirearchy, selectedCategoryGroup, categoryDimension, filteredCategories) => {
     // if there is no parent, we don't want any drilldown options
-    let options;
-    if (categoryDimension === ALL_CATEGORIES_DIMENSION) {
-      return [];
-      // drilldown options are the selected categories children
-    } else if (categoryDimension === CATEGORY_GROUP_DIMENSION) {
-      options = categoryHirearchy.find((el) => el.name === selectedCategoryGroup);
-      // drilldown options are the selected category's siblings
-    } else if (categoryDimension === SINGLE_CATEGORY_DIMENSION) {
-      options = categoryHirearchy.find((el) => el.name === selectedCategoryParent);
-    }
+    if (categoryDimension === ALL_CATEGORIES_DIMENSION) return [];
 
+    // drilldown options are the selected categories children
+    const options = categoryHirearchy.find((el) => el.name === selectedCategoryGroup);
+
+    // get names of all child categories and filter them based upon which are
+    // included in the analysis
     const returnedOptions = options.categories
       .map(({ name }) => name)
       .filter((name) => filteredCategories.includes(name));
@@ -99,40 +111,122 @@ export const selectCategorySelectorCategoryOptions = createSelector(
   },
 );
 
-export const selectFilteredTotalsByMonth = createSelector(
-  [selectFilteredTransactions],
+// selectors for getting spending along the lines of category and category group
+const selectFilteredTotalsForAllCategoryDimension = createSelector(
+  [selectTransactionsForAllCategoryDimension],
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
       (t) => sum(t, (t) => t.amount),
       (t) => t.month_year,
-    );
-    return spendingByMonthMap;
-  },
-);
-
-export const selectFilteredCategoryGroupTotalsByMonth = createSelector(
-  [selectFilteredTransactions],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => sum(t, (t) => t.amount),
       (t) => t.category_group_name,
+    );
+    return spendingByMonthMap;
+  },
+);
+
+const selectFilteredTotalsForCategoryGroupDimension = createSelector(
+  [selectTransactionsForCategoryGroupDimension],
+  (transactions) => {
+    const spendingByMonthMap = rollup(
+      transactions,
+      (t) => sum(t, (t) => t.amount),
+      (t) => t.month_year,
+      (t) => t.category_name,
+    );
+    return spendingByMonthMap;
+  },
+);
+
+const selectFilteredTotalsForSingleCategoryDimension = createSelector(
+  [selectTransactionsForSingleCategoryDimension],
+  (transactions) => {
+    const spendingByMonthMap = rollup(
+      transactions,
+      (t) => sum(t, (t) => t.amount),
+      (t) => t.month_year,
+      (t) => t.category_name,
+    );
+    return spendingByMonthMap;
+  },
+);
+
+export const selectCategorySpendingDataByDimension = createSelector(
+  [
+    selectCategoryDimension,
+    selectFilteredTotalsForAllCategoryDimension,
+    selectFilteredTotalsForCategoryGroupDimension,
+    selectFilteredTotalsForSingleCategoryDimension,
+  ],
+  (categoryDimension, all, group, single) => {
+    switch (categoryDimension) {
+      case ALL_CATEGORIES_DIMENSION:
+        return all;
+      case CATEGORY_GROUP_DIMENSION:
+        return group;
+      case SINGLE_CATEGORY_DIMENSION:
+        return single;
+    }
+    return undefined;
+  },
+);
+
+// selectors for getting total spending
+const selectFilteredTotalsForAllCategoryGroups = createSelector(
+  [selectFilteredTransactions],
+  (transactions) => {
+    const spendingByMonthMap = rollup(
+      transactions,
+      (t) => sum(t, (t) => t.amount),
       (t) => t.month_year,
     );
     return spendingByMonthMap;
   },
 );
 
-export const selectFilteredCategoryTotalsByMonth = createSelector(
-  [selectFilteredTransactions, selectSelectedCategory],
+const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
+  [selectTransactionsForCategoryGroupDimension],
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
       (t) => sum(t, (t) => t.amount),
-      (t) => t.category_name,
       (t) => t.month_year,
     );
     return spendingByMonthMap;
+  },
+);
+
+export const selectTotalSpendingDataByDimension = createSelector(
+  [
+    selectCategoryDimension,
+    selectFilteredTotalsForAllCategoryGroups,
+    selectFilteredTotalsForSelectedCategoryGroup,
+  ],
+  (categoryDimension, all, group) => {
+    switch (categoryDimension) {
+      case ALL_CATEGORIES_DIMENSION:
+        return all;
+      case CATEGORY_GROUP_DIMENSION:
+        return group;
+    }
+    return undefined;
+  },
+);
+
+// selects the keys that will be used to represent the data in the graph
+export const selectDataKeysByCategoryDimension = createSelector(
+  [
+    selectCategoryDimension,
+    selectFilteredTransactionCategories,
+    selectFilteredTransactionCategoryGroups,
+  ],
+  (categoryDimension, categories, categoryGroups) => {
+    if (categoryDimension === ALL_CATEGORIES_DIMENSION)
+      return categoryGroups.map((e) => {
+        return { [e]: 0 };
+      });
+    return categories.map((e) => {
+      return { [e]: 0 };
+    });
   },
 );
