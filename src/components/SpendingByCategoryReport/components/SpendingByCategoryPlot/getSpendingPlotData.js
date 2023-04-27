@@ -16,7 +16,7 @@ export const getSpendingPlotData = (
 
   const activeMonths = Array.from(totalSpendingData.keys());
   const data = activeMonths.map((month) => {
-    // add all of the keys for each category to the object for each month
+    // add all of the keys for each category to the data object that is assembled for each active month
     const monthlySpendingDataObject = { month };
     for (const dataKey of dataKeys) {
       const key = Object.keys(dataKey);

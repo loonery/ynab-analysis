@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { SPENDING_CATEGORIES_COLORS } from 'components/SpendingByCategoryReport/consts/plotConsts';
+console.log(SPENDING_CATEGORIES_COLORS);
 import PropTypes from 'prop-types';
 import {
   BarChart,
@@ -14,12 +16,7 @@ import {
 export const ComposedSpendingChart = ({ data }) => {
   // remove the month key when generating keys
   const haveData = data.length > 0;
-  const barObjects = haveData
-    ? data.map((barData) => {
-        const keys = Object.keys(barData).slice(2);
-        return keys;
-      })
-    : [];
+  const keys = haveData ? Object.keys(data[0]).slice(2) : [];
 
   return (
     <ResponsiveContainer width={'100%'} height={500}>
@@ -37,17 +34,19 @@ export const ComposedSpendingChart = ({ data }) => {
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey={'month'} />
         <YAxis />
-        {barObjects.map((object, index) => (
-          <Bar
-            key={index}
-            stackId={'a'}
-            dataKey={object.key}
-            fill={'red'}
-            onClick={(data) => {
-              console.log(data);
-            }}
-          />
-        ))}
+        {keys.map((key, index) => {
+          return (
+            <Bar
+              key={index}
+              stackId={'a'}
+              dataKey={key}
+              fill={SPENDING_CATEGORIES_COLORS[key]}
+              onClick={(data) => {
+                console.log(data);
+              }}
+            />
+          );
+        })}
         <Tooltip />
       </BarChart>
     </ResponsiveContainer>
