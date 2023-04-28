@@ -19,7 +19,7 @@ const SpendingByCategoryReport = () => {
   return (
     <Fragment>
       <CategorySelector />
-      <SpendingAnalysisPlot loading={loading} />
+      <SpendingAnalysisPlot />
     </Fragment>
   );
 };

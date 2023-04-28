@@ -117,7 +117,7 @@ const selectFilteredTotalsForAllCategoryDimension = createSelector(
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
-      (t) => sum(t, (t) => t.amount),
+      (t) => Math.abs(sum(t, (t) => t.amount)).toFixed(2),
       (t) => t.month_year,
       (t) => t.category_group_name,
     );
@@ -130,7 +130,7 @@ const selectFilteredTotalsForCategoryGroupDimension = createSelector(
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
-      (t) => sum(t, (t) => t.amount),
+      (t) => Math.abs(sum(t, (t) => t.amount)).toFixed(2),
       (t) => t.month_year,
       (t) => t.category_name,
     );
@@ -177,7 +177,7 @@ const selectFilteredTotalsForAllCategoryGroups = createSelector(
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
-      (t) => sum(t, (t) => t.amount),
+      (t) => Math.abs(sum(t, (t) => t.amount)).toFixed(2),
       (t) => t.month_year,
     );
     return spendingByMonthMap;
@@ -189,7 +189,7 @@ const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
   (transactions) => {
     const spendingByMonthMap = rollup(
       transactions,
-      (t) => sum(t, (t) => t.amount),
+      (t) => Math.abs(sum(t, (t) => t.amount)).toFixed(2),
       (t) => t.month_year,
     );
     return spendingByMonthMap;

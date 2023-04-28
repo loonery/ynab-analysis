@@ -13,6 +13,8 @@ import {
   YAxis,
 } from 'recharts';
 
+const customTooltip = {};
+
 export const ComposedSpendingChart = ({ data }) => {
   // remove the month key when generating keys
   const haveData = data.length > 0;
@@ -34,6 +36,7 @@ export const ComposedSpendingChart = ({ data }) => {
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey={'month'} />
         <YAxis />
+        <Tooltip />
         {keys.map((key, index) => {
           return (
             <Bar
@@ -47,7 +50,6 @@ export const ComposedSpendingChart = ({ data }) => {
             />
           );
         })}
-        <Tooltip />
       </BarChart>
     </ResponsiveContainer>
   );
