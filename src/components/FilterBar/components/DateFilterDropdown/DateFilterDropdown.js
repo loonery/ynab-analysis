@@ -10,12 +10,13 @@ import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
   cancelDropdownChanges,
   saveDropdownState,
   toggleDropdown,
-} from 'store/slices/filterBarSlice';
+  setFiltersFromState,
+} from 'store/slices/componentSlices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_KEYS,
@@ -70,6 +71,7 @@ const DateFilterDropdown = () => {
       onClick: () => {
         dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
         dispatch(saveDropdownState(DATE_DROPDOWN_KEYS));
+        dispatch(setFiltersFromState());
       },
       classString: 'btn btn-sm btn-outline-success',
     },

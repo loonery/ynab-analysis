@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { accountsReducer } from 'store/slices/accountsSlice';
-import { categoriesReducer } from 'store/slices/categoriesSlice';
-import { filterBarReducer } from 'store/slices/filterBarSlice';
-import { transactionsReducer } from 'store/slices/transactionsSlice';
+import { filterBarReducer } from 'store/slices/componentSlices/filterBarSlice';
+import { accountsReducer } from 'store/slices/dataSlices/accountsSlice';
+import { categoriesReducer } from 'store/slices/dataSlices/categoriesSlice';
+import { transactionsReducer } from 'store/slices/dataSlices/transactionsSlice';
+
+import { spendingAnalysisReducer } from './slices/componentSlices/SpendingAnalysisSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,7 @@ const store = configureStore({
     accounts: accountsReducer,
     categories: categoriesReducer,
     filterBar: filterBarReducer,
+    spendingAnalysis: spendingAnalysisReducer,
   },
 });
 

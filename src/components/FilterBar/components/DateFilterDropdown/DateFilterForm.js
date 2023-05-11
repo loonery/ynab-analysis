@@ -7,16 +7,16 @@ import SelectElement from 'libs/reuse/elements/Select';
 import {
   selectDatesAfterStartDate,
   selectTempDateRange,
-} from 'store/selectors/filterBarSelectors';
+} from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
   selectTransactionDateRange,
   selectTransactionDates,
-} from 'store/selectors/transactionSliceSelectors';
+} from 'store/selectors/dataSelectors/transactionSliceSelectors';
 import {
   initDateDropdown,
   updateStartDate,
   updateEndDate,
-} from 'store/slices/filterBarSlice';
+} from 'store/slices/componentSlices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_FROM_ID,

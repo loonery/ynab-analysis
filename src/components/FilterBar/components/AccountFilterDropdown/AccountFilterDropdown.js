@@ -10,7 +10,7 @@ import ButtonBar from 'libs/reuse/components/ButtonBar';
 import { CustomDropdown } from 'libs/reuse/components/CustomDropdown';
 import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
   selectAllCheckboxes,
   selectNoCheckboxes,
@@ -18,7 +18,7 @@ import {
   cancelDropdownChanges,
   setFiltersFromState,
   toggleDropdown,
-} from 'store/slices/filterBarSlice';
+} from 'store/slices/componentSlices/filterBarSlice';
 
 import { ACCOUNT_DROPDOWN_TOGGLE_LABEL } from '../../consts/filterBarConsts';
 import { ACCOUNT_DROPDOWN_KEYS, ACCOUNT_DROPDOWN_ID } from '../../consts/filterBarConsts';

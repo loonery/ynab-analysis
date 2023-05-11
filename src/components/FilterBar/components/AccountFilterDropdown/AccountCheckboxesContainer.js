@@ -5,13 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ACCOUNT_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
-import { selectAccounts } from 'store/selectors/accountSelectors';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
+import { selectAccounts } from 'store/selectors/dataSelectors/accountSelectors';
 import {
   initCheckboxes,
   toggleChildCheckbox,
   toggleParentCheckbox,
-} from 'store/slices/filterBarSlice';
+} from 'store/slices/componentSlices/filterBarSlice';
 
 import { assembleAccountCheckboxes } from '../../utils/filterBarUtils';
 
