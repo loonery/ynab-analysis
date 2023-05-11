@@ -32,27 +32,37 @@ const DateFilterDropdown = () => {
   const headerButtons = [
     {
       label: 'This month',
-      onClick: () => {},
+      onClick: () => {
+        return;
+      },
       classString: 'btn btn-sm btn-outline-dark',
     },
     {
       label: 'Last 3 months',
-      onClick: () => {},
+      onClick: () => {
+        return;
+      },
       classString: 'btn btn-sm btn-outline-dark',
     },
     {
       label: 'This year',
-      onClick: () => {},
+      onClick: () => {
+        return;
+      },
       classString: 'btn btn-sm btn-outline-dark',
     },
     {
       label: 'Last year',
-      onClick: () => {},
+      onClick: () => {
+        return;
+      },
       classString: 'btn btn-sm btn-outline-dark',
     },
     {
       label: 'All dates',
-      onClick: () => {},
+      onClick: () => {
+        return;
+      },
       classString: 'btn btn-sm btn-outline-dark',
     },
   ];
