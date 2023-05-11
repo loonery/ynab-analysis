@@ -17,7 +17,7 @@ import {
   selectCategorySelectorGroupOptions,
   selectSelectedCategoryGroup,
   selectSelectedCategory,
-} from 'store/selectors/spendingAnalysisSelectors';
+} from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   setCategoryDimension,
   setSelectedCategory,

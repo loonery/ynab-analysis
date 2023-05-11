@@ -13,6 +13,12 @@ const spendingAnalysisSlice = createSlice({
     selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
     selectedCategory: ALL_CATEGORIES_ITEM,
     parentOfSelected: NO_PARENT,
+    plotState: {
+      tooltipType: undefined,
+      tooltipData: undefined,
+      showTooltip: false,
+      highlightedBarData: undefined,
+    },
   },
   reducers: {
     setCategoryDimension(state, action) {
@@ -27,6 +33,18 @@ const spendingAnalysisSlice = createSlice({
     setParentOfSelected(state, action) {
       state.parentOfSelected = action.payload;
     },
+    setTooltipData(state, { payload }) {
+      state.plotState.tooltipData = payload;
+    },
+    setTooltipType(state, { payload }) {
+      state.plotState.tooltipType = payload;
+    },
+    setShowTooltip(state, { payload }) {
+      state.plotState.showTooltip = payload;
+    },
+    setHighlightedBarData(state, { payload }) {
+      state.plotState.highlightedBarData = payload;
+    },
   },
 });
 export const {
@@ -34,5 +52,9 @@ export const {
   setSelectedCategory,
   setSelectedCategoryGroup,
   setParentOfSelected,
+  setTooltipData,
+  setTooltipType,
+  setShowTooltip,
+  setHighlightedBarData,
 } = spendingAnalysisSlice.actions;
 export const spendingAnalysisReducer = spendingAnalysisSlice.reducer;

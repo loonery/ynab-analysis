@@ -9,3 +9,6 @@ export const SINGLE_CATEGORY_DIMENSION = 'single-category';
 export const ALL_CATEGORIES_ITEM = 'All Categories';
 export const ALL_CATEGORY_GROUPS_ITEM = 'All Category Groups';
 export const NO_PARENT = 'no parent';
+
+export const DOT_TOOLTIP_TYPE = 'dot-tooltip';
+export const BAR_TOOLTIP_TYPE = 'bar-tooltip';

@@ -7,7 +7,7 @@ import SelectElement from 'libs/reuse/elements/Select';
 import {
   selectDatesAfterStartDate,
   selectTempDateRange,
-} from 'store/selectors/filterBarSelectors';
+} from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
   selectTransactionDateRange,
   selectTransactionDates,

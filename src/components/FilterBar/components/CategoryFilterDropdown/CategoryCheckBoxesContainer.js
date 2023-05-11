@@ -5,8 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
-import { selectAllCategories } from 'store/selectors/categorySelectors';
-import { selectDropdown } from 'store/selectors/filterBarSelectors';
+import { selectAllCategories } from 'store/selectors/dataSelectors/categorySelectors';
+import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
   initCheckboxes,
   toggleChildCheckbox,

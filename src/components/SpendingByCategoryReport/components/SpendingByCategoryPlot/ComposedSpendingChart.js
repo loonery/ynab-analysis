@@ -1,74 +1,63 @@
-import React, { Fragment } from 'react';
-import { useState } from 'react';
+import React from 'react';
 
-import { SPENDING_CATEGORIES_COLORS } from 'components/SpendingByCategoryReport/consts/plotConsts';
-import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+
 import {
-  BarChart,
+  PLOT_HEIGHT,
+  SPENDING_CATEGORIES_COLORS,
+} from 'components/SpendingByCategoryReport/consts/plotConsts';
+import PropTypes, { string } from 'prop-types';
+import {
   Bar,
   CartesianGrid,
+  ComposedChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
-  Rectangle,
+  Line,
 } from 'recharts';
+import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
+import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
+import {
+  setTooltipData,
+  setHighlightedBarData,
+  setShowTooltip,
+  setTooltipType,
+} from 'store/slices/componentSlices/SpendingAnalysisSlice';
 
-import CustomTooltip from './CustomTooltip';
+import { CustomDot } from './CustomDot';
+import { CustomTooltip } from './CustomTooltip';
+import { HighlightedBarSection } from './HighlightedBarSection';
 
-const HighlightedStackSection = ({ x, y, height, width, fill }) => {
-  console.log('in highlighted section');
-  // shift x left by 10 pixels then widen the rectangle to show it's highlighted
-  const shiftedX = x - 10;
-  const widerWidth = width + 20;
-  return (
-    <g>
-      <Rectangle x={shiftedX} y={y} height={height} width={widerWidth} fill={fill} />
-    </g>
-  );
-};
-HighlightedStackSection.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  fill: PropTypes.string.isRequired,
-};
+export const ComposedSpendingChart = ({ data, dataKeys }) => {
+  const dispatch = useDispatch();
 
-export const ComposedSpendingChart = ({ data }) => {
-  // remove the month key when generating keys
-  const haveData = data.length > 0;
-  const keys = haveData ? Object.keys(data[0]).slice(2) : [];
+  const highlightedBarData = useSelector((state) => selectHighlightedBarData(state));
+  const { x, y, height, width, fill } = highlightedBarData || {};
 
-  // hold information for the custom tooltip in component state
-  const [tooltipPayload, setTooltipPayload] = useState({});
-  const [showTooltip, setShowTooltip] = useState(false);
-  const [highlightedData, setHighlightedData] = useState(undefined);
+  const handleMouseEnterBar = (data) => {
+    // mousing over any bar yields these variables
+    const { x, y, height, width } = data;
+    const barTooltipData = data.tooltipPayload[0];
+    const { color: fill } = barTooltipData;
 
-  const handleMouseOver = (data) => {
-    // todo - abstract away necessary props generation once I am done proving the concept
-    const { month, tooltipPayload, x, y, height, width } = data;
-    const { payload } = tooltipPayload[0];
-    const customPayload = {
-      month,
-      ...tooltipPayload[0],
-      customPayload: payload,
-    };
-    const { color: fill } = customPayload;
-
-    setHighlightedData({ x, y, height, width, fill });
-    setTooltipPayload(customPayload);
-    setShowTooltip(true);
+    dispatch(setHighlightedBarData({ x, y, height, width, fill }));
+    dispatch(setTooltipData(barTooltipData));
+    dispatch(setTooltipType(BAR_TOOLTIP_TYPE));
+    dispatch(setShowTooltip(true));
   };
 
-  const handleOnMouseLeave = () => {
-    setShowTooltip(false);
-    setHighlightedData(undefined);
+  const handleMouseLeaveBar = () => {
+    dispatch(setShowTooltip(false));
+    dispatch(setTooltipType(undefined));
+    dispatch(setHighlightedBarData(undefined));
   };
 
   return (
-    <ResponsiveContainer width={'100%'} height={500}>
-      <BarChart
+    <ResponsiveContainer width={'100%'} height={PLOT_HEIGHT}>
+      <ComposedChart
+        stackOffset='sign'
         width={500}
         height={300}
         data={data}
@@ -81,36 +70,37 @@ export const ComposedSpendingChart = ({ data }) => {
       >
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey={'month'} />
-        <YAxis />
-        <Tooltip
-          cursor={false}
-          content={<CustomTooltip showTooltip={showTooltip} {...tooltipPayload} />}
-        />
-        {keys.map((key, index) => {
+        <YAxis tickFormatter={(value) => `$${value}`} />
+        <Tooltip cursor={false} content={<CustomTooltip />} />
+        {dataKeys.map((key, index) => {
           return (
-            <Fragment key={index}>
-              <Bar
-                key={index}
-                stackId={'a'}
-                dataKey={key}
-                fill={SPENDING_CATEGORIES_COLORS[key]}
-                onMouseEnter={handleMouseOver}
-                onMouseLeave={handleOnMouseLeave}
-              />
-            </Fragment>
+            <Bar
+              key={index}
+              stackId={'a'}
+              dataKey={key}
+              fill={SPENDING_CATEGORIES_COLORS[key]}
+              onMouseEnter={handleMouseEnterBar}
+              onMouseLeave={handleMouseLeaveBar}
+            />
           );
         })}
-        {highlightedData && (
-          <g className='recharts-layer recharts-bar-rectangle' role='img'>
-            <Rectangle
-              x={highlightedData.x - 5}
-              y={highlightedData.y}
-              height={highlightedData.height}
-              width={highlightedData.width + 10}
+        <Line
+          dataKey={'total'}
+          dot={<CustomDot active={false} />}
+          activeDot={<CustomDot active={true} />}
+        />
+        {highlightedBarData && (
+          <g>
+            <HighlightedBarSection
+              x={x}
+              y={y}
+              width={width}
+              height={height}
+              fill={fill}
             />
           </g>
         )}
-      </BarChart>
+      </ComposedChart>
     </ResponsiveContainer>
   );
 };
@@ -121,4 +111,5 @@ ComposedSpendingChart.propTypes = {
       value: PropTypes.number.isRequired,
     }),
   ).isRequired,
+  dataKeys: PropTypes.arrayOf(string),
 };

@@ -1,12 +1,13 @@
 import React from 'react';
-import { Fragment } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import CategorySelector from './CategorySelector';
-import SpendingAnalysisPlot from './SpendingByCategoryPlot/SpendingAnalysisPlot';
+import { PageContainer } from 'libs/reuse/containers/PageContainer';
 
-const SpendingByCategoryReport = () => {
+import CategorySelector from './CategorySelector';
+import { SpendingByCategoryPlotContainer } from './SpendingByCategoryPlot/SpendingByCategoryPlotContainer';
+
+const SpendingByCategoryPage = () => {
   // dispatch to fetch the transactions
 
   // get the transactions and assess the state
@@ -17,10 +18,10 @@ const SpendingByCategoryReport = () => {
   if (error) return <div>error</div>;
 
   return (
-    <Fragment>
+    <PageContainer>
       <CategorySelector />
-      <SpendingAnalysisPlot />
-    </Fragment>
+      <SpendingByCategoryPlotContainer />
+    </PageContainer>
   );
 };
-export default SpendingByCategoryReport;
+export default SpendingByCategoryPage;

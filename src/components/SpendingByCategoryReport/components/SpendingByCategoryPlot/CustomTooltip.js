@@ -1,9 +1,19 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
+
+import { BAR_TOOLTIP_TYPE, DOT_TOOLTIP_TYPE } from 'store/consts/consts';
+import {
+  selectShowTooltip,
+  selectTooltipData,
+  selectTooltipType,
+} from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import styled from 'styled-components';
 
-const TooltipContainer = styled.div`
+import BarTooltip from './BarTooltip';
+import DotTooltip from './DotTooltip';
+
+const StyledTooltipContainer = styled.div`
   padding: 5px;
   border-radius: 5px;
   background-color: #fff;
@@ -12,31 +22,19 @@ const TooltipContainer = styled.div`
   font-size: 14px;
 `;
 
-const StyledCategoryName = styled.div`
-  font-size: 14px;
-  font-weight: 300;
-`;
+export const CustomTooltip = () => {
+  const showTooltip = useSelector((state) => selectShowTooltip(state));
+  const tooltipData = useSelector((state) => selectTooltipData(state));
+  const tooltipType = useSelector((state) => selectTooltipType(state));
 
-const StyledDollarValue = styled.div`
-  font-size: 18px;
-  font-weight: 500;
-`;
+  if (!showTooltip) return null;
 
-const CustomTooltip = (props) => {
-  const { active, dataKey, payload, customPayload, showTooltip } = props;
-  return active && payload && payload.length && customPayload && showTooltip ? (
-    <TooltipContainer>
-      <StyledCategoryName>{dataKey}</StyledCategoryName>
-      <StyledDollarValue>${customPayload[dataKey]}</StyledDollarValue>
-    </TooltipContainer>
-  ) : null;
+  const barTooltip = tooltipType === BAR_TOOLTIP_TYPE;
+  const dotTooltip = tooltipType === DOT_TOOLTIP_TYPE;
+  return (
+    <StyledTooltipContainer>
+      {barTooltip && <BarTooltip {...tooltipData} />}
+      {dotTooltip && <DotTooltip {...tooltipData} />}
+    </StyledTooltipContainer>
+  );
 };
-CustomTooltip.propTypes = {
-  active: PropTypes.bool.isRequired,
-  payload: PropTypes.arrayOf(PropTypes.object),
-  customPayload: PropTypes.arrayOf(PropTypes.object),
-  showTooltip: PropTypes.bool,
-  dataKey: PropTypes.string,
-};
-
-export default CustomTooltip;

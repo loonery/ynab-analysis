@@ -1,3 +1,4 @@
+// PLOT CONSTS
 export const SPENDING_CATEGORIES_COLORS = {
   // category groups
   'Bills & Utilities': '#ff6f69',
@@ -67,3 +68,8 @@ export const SPENDING_CATEGORIES_COLORS = {
   '[Dormant] Strava': '#FFC0CB',
   'Pearl Hill State Park Camping 2023': '#00FA9A',
 };
+export const PLOT_HEIGHT = 600;
+
+// CUSTOM DOT CONSTS
+export const OUTER_DOT_RADIUS = 8;
+export const INNER_DOT_RADIUS = 5;

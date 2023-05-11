@@ -6,12 +6,13 @@ import {
   selectCategorySpendingDataByDimension,
   selectDataKeysByCategoryDimension,
   selectTotalSpendingDataByDimension,
-} from 'store/selectors/spendingAnalysisSelectors';
+} from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
+
+import { assembleSpendingPlotData } from '../../utils/assemblePlotData';
 
 import { ComposedSpendingChart } from './ComposedSpendingChart';
-import { getSpendingPlotData } from './getSpendingPlotData';
 
-const SpendingAnalysisPlot = () => {
+export const SpendingByCategoryPlotContainer = () => {
   const { loading } = useSelector((state) => state.transactions);
 
   const categorySpendingData = useSelector((state) =>
@@ -25,8 +26,14 @@ const SpendingAnalysisPlot = () => {
   if (loading || totalSpendingData === undefined || categorySpendingData === undefined)
     return <div>loading...</div>;
 
-  const data = getSpendingPlotData(categorySpendingData, totalSpendingData, dataKeys);
+  const data = assembleSpendingPlotData(categorySpendingData, totalSpendingData);
 
-  return <ComposedSpendingChart className='border rounded my-2' data={data} />;
+  return (
+    <ComposedSpendingChart
+      className='border rounded my-2'
+      data={data}
+      dataKeys={dataKeys}
+    />
+  );
 };
-export default SpendingAnalysisPlot;
+export default SpendingByCategoryPlotContainer;
