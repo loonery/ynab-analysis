@@ -25,7 +25,7 @@ import {
   CATEGORY_DROPDOWN_KEYS,
 } from '../../consts/filterBarConsts';
 
-import CategoryCheckboxesContainer from './CategoryCheckboxesContainer';
+import CategoryCheckboxesContainer from './CategoryCheckBoxesContainer';
 
 const CategoryFilterDropdown = () => {
   const dispatch = useDispatch();
