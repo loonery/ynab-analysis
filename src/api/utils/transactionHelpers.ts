@@ -1,3 +1,5 @@
+import { YnabCategoryGroup, YnabCategory } from 'api/interfaces/ynabCategory';
+
 import { convertAmount } from './generalHelpers';
 
 // ##############################
@@ -28,13 +30,20 @@ const formatTransactionDate = (transaction) => {
  * @param {*} subCategoryId
  * @returns
  */
-const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
+
+// todo - process categories into a more cohesive map and just use that rather than constantly looking them up this way
+const getCategoryGroupBySubcategoryId = (
+  categoryGroups: YnabCategoryGroup[],
+  subCategoryId: string,
+) => {
   // for each category group
-  for (let categoryGroup of categoryGroups) {
+  for (const categoryGroup of categoryGroups) {
     // get an array of its subcategory ids
-    let subcategories = categoryGroup.categories.map((subcategory) => {
-      return subcategory.id;
-    });
+    const subcategories: string[] = categoryGroup.categories.map(
+      (subcategory: YnabCategory) => {
+        return subcategory.id;
+      },
+    );
 
     // if any of those ids match the queried id, return the name of the category group
     if (subcategories.includes(subCategoryId)) {
@@ -59,20 +68,20 @@ const getCategoryGroupBySubcategoryId = (categoryGroups, subCategoryId) => {
  */
 export const processTransactions = (transactions, categoryGroups) => {
   // copy the data to allow for direct mutation in the helper functions
-  let transactionsCopy = transactions.map((transaction) =>
+  const transactionsCopy = transactions.map((transaction) =>
     Object.assign({}, transaction),
   );
 
   let i = 0;
   while (i < transactionsCopy.length) {
     // get the transaction object
-    let transaction = transactionsCopy[i];
+    const transaction = transactionsCopy[i];
 
     // if the transaction object is a split transaction...
     const subtransactions = transaction.subtransactions;
     if (subtransactions && subtransactions.length > 0) {
       // then process the subtransactions
-      let newSubtransactions = subtransactions.map((subtransaction) => {
+      const newSubtransactions = subtransactions.map((subtransaction) => {
         // modify each subtransaction to have the same fields as its parent transaction
         const newTransaction = { ...transaction, ...subtransaction };
         const { categoryGroupName, categoryGroupId } = getCategoryGroupBySubcategoryId(
