@@ -16,7 +16,7 @@ import {
   saveDropdownState,
   toggleDropdown,
   setFiltersFromState,
-} from 'store/slices/componentSlices/filterBarSlice';
+} from 'store/slices/filterBarSlice';
 
 import {
   DATE_DROPDOWN_KEYS,

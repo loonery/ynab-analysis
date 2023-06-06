@@ -12,7 +12,7 @@ import {
   setTooltipData,
   setShowTooltip,
   setTooltipType,
-} from 'store/slices/componentSlices/SpendingAnalysisSlice';
+} from 'store/slices/SpendingAnalysisSlice';
 
 /** Custom dot is fed information from reChart's line component */
 export const CustomDot = ({ active, cx, cy, payload }) => {

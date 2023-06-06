@@ -24,7 +24,7 @@ import {
   setHighlightedBarData,
   setShowTooltip,
   setTooltipType,
-} from 'store/slices/componentSlices/SpendingAnalysisSlice';
+} from 'store/slices/SpendingAnalysisSlice';
 
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';

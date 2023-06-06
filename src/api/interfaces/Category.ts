@@ -1,20 +1,22 @@
-export interface YnabCategoryGroup {
+export interface CategoryData {
+  categories: CategoryGroup[];
+  subCategoryReverseMap: { [subCategoryId: string]: CategoryGroup };
+}
+
+export interface CategoryGroup {
   id: string;
-  // eslint-disable-next-line no-restricted-globals
   name: string;
   hidden: boolean;
   deleted: boolean;
-  categories: YnabCategory[];
+  subCategories: SubCategory[];
 }
 
-export interface YnabCategory {
+export interface SubCategory {
   id: string;
   category_group_id: string;
   category_group_name: string;
-  // eslint-disable-next-line no-restricted-globals
   name: string;
   hidden: boolean;
-  original_category_group_id: string;
   note: string;
   budgeted: number;
   activity: number;
@@ -32,13 +34,4 @@ export interface YnabCategory {
   goal_overall_funded: number;
   goal_overall_left: number;
   deleted: boolean;
-}
-
-export interface YnabCategoriesResponse {
-  data: {
-    data: {
-      category_groups: YnabCategoryGroup[];
-      server_knowledge: number;
-    };
-  };
 }

@@ -1,29 +1,29 @@
-interface Transaction {
+import { CategoryGroup, SubCategory } from './Category';
+
+export interface Transaction {
   account_id: string;
   account_name: string;
-  amount: number;
+  amount: string;
   approved: boolean;
-  category_group_id: string;
-  category_group_name: string;
-  category_id: string;
-  category_name: string;
-  cleared: string;
-  date: string;
-  day: string;
+  category_group: CategoryGroup | undefined;
+  subcategory: SubCategory | undefined;
+  cleared: ['cleared', 'uncleared', 'reconciled'];
   debt_transaction_type: string | null;
-  deleted: false;
-  flag_color: null;
+  deleted: boolean;
+  flag_color: string | null;
   id: string;
-  import_id: string;
-  import_payee_name: string;
-  import_payee_name_original: string;
-  matched_transaction_id: string;
-  memo: string;
-  month: string;
-  month_year: string;
-  payee_id: string;
-  payee_name: string;
+  import_id: string | null;
+  import_payee_name: string | null;
+  import_payee_name_original: string | null;
+  matched_transaction_id: string | null;
+  memo: string | null;
+  payee_id: string | null;
+  payee_name: string | null;
   transfer_account_id: string | null;
   transfer_transaction_id: string | null;
+  date: string;
+  day: string;
+  month: string;
   year: string;
+  month_year: string;
 }

@@ -11,7 +11,7 @@ import {
   initCheckboxes,
   toggleChildCheckbox,
   toggleParentCheckbox,
-} from 'store/slices/componentSlices/filterBarSlice';
+} from 'store/slices/filterBarSlice';
 
 import { assembleCategoryCheckboxObjects } from '../../utils/filterBarUtils';
 

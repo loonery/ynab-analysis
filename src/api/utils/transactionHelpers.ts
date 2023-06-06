@@ -1,113 +1,170 @@
-import { YnabCategoryGroup, YnabCategory } from 'api/interfaces/ynabCategory';
+import { CategoryData, CategoryGroup, SubCategory } from 'api/interfaces/Category';
+import {
+  YnabSubtransaction,
+  YnabTransaction,
+} from 'api/interfaces/externalDataInterfaces/ynabTransaction';
+import { Transaction } from 'api/interfaces/Transaction';
 
 import { convertAmount } from './generalHelpers';
 
-// ##############################
-// Helpers
-// ##############################
-const formatTransactionDate = (transaction) => {
-  const options = {
+const convertYnabTransactionToTransaction = (
+  transaction: YnabTransaction,
+  categoryData: CategoryData,
+  subCategoryId: string,
+): Transaction => {
+  const { day, month, year, month_year } = getTransactionDate(transaction);
+  return {
+    account_id: transaction.account_id,
+    account_name: transaction.account_name,
+    amount: convertAmount(transaction.amount),
+    approved: transaction.approved,
+    cleared: transaction.cleared,
+    date: transaction.date,
+    debt_transaction_type: transaction.debt_transaction_type,
+    deleted: transaction.deleted,
+    flag_color: transaction.flag_color,
+    id: transaction.id,
+    import_id: transaction.import_id,
+    import_payee_name: transaction.import_payee_name,
+    import_payee_name_original: transaction.import_payee_name_original,
+    matched_transaction_id: transaction.matched_transaction_id,
+    memo: transaction.memo,
+    payee_id: transaction.payee_id,
+    payee_name: transaction.payee_name,
+    transfer_account_id: transaction.transfer_account_id,
+    transfer_transaction_id: transaction.transfer_transaction_id,
+    // initialize the keys that do not exist on YnabTransaction interface
+    category_group: getCategoryGroupBySubcategoryId(categoryData, subCategoryId),
+    subcategory: getSubcategoryBySubcategoryId(categoryData, subCategoryId),
+    month,
+    month_year,
+    day,
+    year,
+  };
+};
+
+const convertYnabSubtransactionToTransaction = (
+  categoryData: CategoryData,
+  subtransaction: YnabSubtransaction,
+  parentTransaction: YnabTransaction,
+): Transaction => {
+  const { day, month, year, month_year } = getTransactionDate(parentTransaction);
+  const subCategoryId = subtransaction.category_id;
+  return {
+    account_id: parentTransaction.account_id,
+    account_name: parentTransaction.account_name,
+    approved: parentTransaction.approved,
+    cleared: parentTransaction.cleared,
+    date: parentTransaction.date,
+    debt_transaction_type: parentTransaction.debt_transaction_type,
+    flag_color: parentTransaction.flag_color,
+    import_id: parentTransaction.import_id,
+    import_payee_name: parentTransaction.import_payee_name,
+    import_payee_name_original: parentTransaction.import_payee_name_original,
+    matched_transaction_id: parentTransaction.matched_transaction_id,
+    id: subtransaction.id,
+    amount: convertAmount(subtransaction.amount),
+    memo: subtransaction.memo,
+    payee_id: subtransaction.payee_id,
+    payee_name: subtransaction.payee_name,
+    transfer_account_id: subtransaction.transfer_account_id,
+    transfer_transaction_id: subtransaction.transfer_transaction_id,
+    deleted: subtransaction.deleted,
+    // initialize the keys that do not exist on YnabTransaction interface
+    category_group: getCategoryGroupBySubcategoryId(categoryData, subCategoryId),
+    subcategory: getSubcategoryBySubcategoryId(categoryData, subCategoryId),
+    month,
+    month_year,
+    day,
+    year,
+  };
+};
+
+/**
+ *
+ * @param transaction
+ */
+const getTransactionDate = (
+  transaction: YnabTransaction,
+): { day: string; month: string; year: string; month_year: string } => {
+  const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
     timeZone: 'UTC',
   };
 
-  const transactionDate = new Date(transaction.date);
-  let stringDate = transactionDate.toLocaleString('default', options);
+  // parse the date as a string array
+  const transactionDate: Date = new Date(transaction.date);
+  let stringDate: string | string[] = transactionDate.toLocaleString('default', options);
   stringDate = stringDate.replace(',', '');
   stringDate = stringDate.split(' ');
 
-  transaction.day = stringDate[1];
-  transaction.month = stringDate[0];
-  transaction.year = stringDate[2];
-  transaction.month_year = stringDate[0] + ' ' + stringDate[2];
+  // assign the different portions of the date to keys on the transaction
+  const day = stringDate[1];
+  const month = stringDate[0];
+  const year = stringDate[2];
+  const month_year = stringDate[0] + ' ' + stringDate[2];
+  return { day, month, year, month_year };
 };
 
 /**
  *
- * @param {*} categoryGroups
- * @param {*} subCategoryId
+ * @param categoryData
+ * @param subCategoryId
  * @returns
  */
-
-// todo - process categories into a more cohesive map and just use that rather than constantly looking them up this way
 const getCategoryGroupBySubcategoryId = (
-  categoryGroups: YnabCategoryGroup[],
+  categoryData: CategoryData,
   subCategoryId: string,
-) => {
-  // for each category group
-  for (const categoryGroup of categoryGroups) {
-    // get an array of its subcategory ids
-    const subcategories: string[] = categoryGroup.categories.map(
-      (subcategory: YnabCategory) => {
-        return subcategory.id;
-      },
-    );
-
-    // if any of those ids match the queried id, return the name of the category group
-    if (subcategories.includes(subCategoryId)) {
-      return {
-        categoryGroupName: categoryGroup.name,
-        categoryGroupId: categoryGroup.id,
-      };
-    }
-  }
-  return {
-    categoryGroupName: undefined,
-    categoryGroupId: undefined,
-  };
+): CategoryGroup => {
+  return categoryData.subCategoryReverseMap[subCategoryId];
 };
 
-// ##############################
-// Main Flattener
-// ##############################
+const getSubcategoryBySubcategoryId = (
+  categoryData: CategoryData,
+  subCategoryId: string,
+): SubCategory | undefined => {
+  const categoryGroup = categoryData.subCategoryReverseMap[subCategoryId];
+  return categoryGroup.subCategories.find(
+    (subcategory) => subcategory.id === subCategoryId,
+  );
+};
+
 /**
  *
+ * @param transactions
+ * @param categoryGroups
  * @returns
  */
-export const processTransactions = (transactions, categoryGroups) => {
-  // copy the data to allow for direct mutation in the helper functions
-  const transactionsCopy = transactions.map((transaction) =>
-    Object.assign({}, transaction),
-  );
+export const processTransactions = (
+  transactions: YnabTransaction[],
+  categoryData: CategoryData,
+): Transaction[] => {
+  const newTransactionsArray: Transaction[] = [];
 
   let i = 0;
-  while (i < transactionsCopy.length) {
-    // get the transaction object
-    const transaction = transactionsCopy[i];
+  while (i < transactions.length) {
+    // get each old transaction
+    const transaction: YnabTransaction = transactions[i];
 
     // if the transaction object is a split transaction...
-    const subtransactions = transaction.subtransactions;
+    const subtransactions: YnabSubtransaction[] | undefined = transaction.subtransactions;
     if (subtransactions && subtransactions.length > 0) {
-      // then process the subtransactions
-      const newSubtransactions = subtransactions.map((subtransaction) => {
-        // modify each subtransaction to have the same fields as its parent transaction
-        const newTransaction = { ...transaction, ...subtransaction };
-        const { categoryGroupName, categoryGroupId } = getCategoryGroupBySubcategoryId(
-          categoryGroups,
-          newTransaction.category_id,
-        );
-        newTransaction.category_group_name = categoryGroupName;
-        newTransaction.category_group_id = categoryGroupId;
-
-        if (newTransaction.category_id === null) {
-          newTransaction.category_id = undefined;
-        }
-
-        newTransaction.amount = newTransaction.amount / 1000;
-
-        delete newTransaction.transaction_id; // deletes the parent transaction id
-        delete newTransaction.subtransactions; // delete the attatched subtransactions
-
-        formatTransactionDate(newTransaction);
-
-        // return the subtransaction mutated to hold the same JSON format as the parent transaction
-        return newTransaction;
-      });
+      // modify each subtransaction to implement the Transaction interface
+      const newSubtransactions = subtransactions.map(
+        (subtransaction: YnabSubtransaction) => {
+          const newTransaction: Transaction = convertYnabSubtransactionToTransaction(
+            categoryData,
+            subtransaction,
+            transaction,
+          );
+          return newTransaction;
+        },
+      );
 
       // in the parent transaction's place, place its child transactions
-      const parentTransactionIndex = transactionsCopy.indexOf(transaction);
+      const parentTransactionIndex: number = transactions.indexOf(transaction);
       transactionsCopy.splice(parentTransactionIndex, 1, ...newSubtransactions);
       i += newSubtransactions.length;
     } else {
@@ -126,12 +183,12 @@ export const processTransactions = (transactions, categoryGroups) => {
 
       delete transaction.subtransactions;
 
-      formatTransactionDate(transaction);
+      getTransactionDate(transaction);
 
       // move to the next transaction
       i += 1;
     }
   }
 
-  return transactionsCopy;
+  return newTransactionsArray;
 };

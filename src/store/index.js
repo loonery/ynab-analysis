@@ -1,22 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { filterBarReducer } from 'store/slices/componentSlices/filterBarSlice';
-import { accountsReducer } from 'store/slices/dataSlices/accountsSlice';
-import { categoriesReducer } from 'store/slices/dataSlices/categoriesSlice';
-import { transactionsReducer } from 'store/slices/dataSlices/transactionsSlice';
+import { ynabApi } from 'api/ynabApi';
+import { filterBarReducer } from 'store/slices/filterBarSlice';
 
-import { spendingAnalysisReducer } from './slices/componentSlices/SpendingAnalysisSlice';
+import { spendingAnalysisReducer } from './slices/SpendingAnalysisSlice';
 
 const store = configureStore({
   reducer: {
-    transactions: transactionsReducer,
-    accounts: accountsReducer,
-    categories: categoriesReducer,
+    [ynabApi.reducerPath]: ynabApi.reducer,
     filterBar: filterBarReducer,
     spendingAnalysis: spendingAnalysisReducer,
   },
+  middleware: (gDM) => gDM().concat(ynabApi.middleware),
 });
 
-export * from 'api/thunks/fetchTransactionsThunk';
-export * from 'api/thunks/fetchAccountsThunk';
-export * from 'api/thunks/fetchCategoriesThunk';
 export { store };
