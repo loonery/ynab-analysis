@@ -1,13 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { AUTHORIZATION_STRING } from './consts/apiConsts';
+import { AUTHORIZATION_STRING, GET_ACCOUNTS_PATH } from './consts/apiConsts';
 import { API_BASE, GET_CATEGORIES_PATH, GET_TRANSACTIONS_PATH } from './consts/apiConsts';
+import { Account } from './interfaces/Account';
 import { CategoryData } from './interfaces/Category';
+import { YnabAccountResponse } from './interfaces/externalDataInterfaces/ynabAccount';
 import { YnabCategoriesResponse } from './interfaces/externalDataInterfaces/ynabCategory';
 import {
   YnabTransaction,
   YnabTransactionsResponse,
 } from './interfaces/externalDataInterfaces/ynabTransaction';
+import { processAccounts } from './utils/accountHelpers';
 import { processCategories } from './utils/categoriesHelpers';
 
 export const ynabApi = createApi({
@@ -29,7 +32,14 @@ export const ynabApi = createApi({
         return processCategories(response.data.category_groups);
       },
     }),
+    getAccounts: build.query<Account[], void>({
+      query: () => GET_ACCOUNTS_PATH,
+      transformResponse: (response: YnabAccountResponse) => {
+        return processAccounts(response.data.accounts);
+      },
+    }),
   }),
 });
 
-export const { useGetTransactionsQuery, useGetCategoriesQuery } = ynabApi;
+export const { useGetTransactionsQuery, useGetCategoriesQuery, useGetAccountsQuery } =
+  ynabApi;

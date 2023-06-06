@@ -10,9 +10,9 @@ import { convertAmount } from './generalHelpers';
 const convertYnabTransactionToTransaction = (
   transaction: YnabTransaction,
   categoryData: CategoryData,
-  subCategoryId: string,
 ): Transaction => {
   const { day, month, year, month_year } = getTransactionDate(transaction);
+  const subCategoryId: string = transaction.category_id;
   return {
     account_id: transaction.account_id,
     account_name: transaction.account_name,
@@ -117,7 +117,7 @@ const getTransactionDate = (
 const getCategoryGroupBySubcategoryId = (
   categoryData: CategoryData,
   subCategoryId: string,
-): CategoryGroup => {
+): CategoryGroup | undefined => {
   return categoryData.subCategoryReverseMap[subCategoryId];
 };
 
@@ -143,11 +143,7 @@ export const processTransactions = (
 ): Transaction[] => {
   const newTransactionsArray: Transaction[] = [];
 
-  let i = 0;
-  while (i < transactions.length) {
-    // get each old transaction
-    const transaction: YnabTransaction = transactions[i];
-
+  transactions.forEach((transaction: YnabTransaction) => {
     // if the transaction object is a split transaction...
     const subtransactions: YnabSubtransaction[] | undefined = transaction.subtransactions;
     if (subtransactions && subtransactions.length > 0) {
@@ -162,33 +158,14 @@ export const processTransactions = (
           return newTransaction;
         },
       );
-
-      // in the parent transaction's place, place its child transactions
-      const parentTransactionIndex: number = transactions.indexOf(transaction);
-      transactionsCopy.splice(parentTransactionIndex, 1, ...newSubtransactions);
-      i += newSubtransactions.length;
+      newTransactionsArray.push(...newSubtransactions);
     } else {
-      // if there are no subtransactions, just mutate the transaction's data
-      const { categoryGroupName, categoryGroupId } = getCategoryGroupBySubcategoryId(
-        categoryGroups,
-        transaction.category_id,
+      const newTransaction: Transaction = convertYnabTransactionToTransaction(
+        transaction,
+        categoryData,
       );
-      transaction.category_group_name = categoryGroupName;
-      transaction.category_group_id = categoryGroupId;
-      if (transaction.category_id === null) {
-        transaction.category_id = undefined;
-      }
-
-      transaction.amount = convertAmount(transaction.amount);
-
-      delete transaction.subtransactions;
-
-      getTransactionDate(transaction);
-
-      // move to the next transaction
-      i += 1;
+      newTransactionsArray.push(newTransaction);
     }
-  }
-
+  });
   return newTransactionsArray;
 };

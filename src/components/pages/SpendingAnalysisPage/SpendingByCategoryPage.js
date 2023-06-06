@@ -5,10 +5,11 @@ import { useSelector } from 'react-redux';
 import { useTransactionsWithCategories } from 'api/hooks/useTransactions';
 import { PageContainer } from 'libs/reuse/containers/PageContainer';
 
-import CategorySelector from './CategorySelector';
-import { SpendingByCategoryPlotContainer } from './SpendingByCategoryPlot/SpendingByCategoryPlotContainer';
+import CategorySelector from '../../reports/SpendingByCategoryReport/components/CategorySelector';
 
-const SpendingByCategoryPage = () => {
+import { SpendingByCategoryPlotContainer } from './components/SpendingByCategoryPlot/SpendingByCategoryPlotContainer';
+
+const SpendingAnalysisPage = () => {
   // dispatch to fetch the transactions
 
   // get the transactions and assess the state
@@ -18,7 +19,7 @@ const SpendingByCategoryPage = () => {
   // if (loading) return <div>loading...</div>;
   // if (error) return <div>error</div>;
 
-  const { transactions, isLoading } = useTransactionsWithCategories();
+  const { data, isLoading } = useTransactionsWithCategories();
 
   if (isLoading) return <div>loading...</div>;
 
@@ -30,4 +31,4 @@ const SpendingByCategoryPage = () => {
     // </PageContainer>
   );
 };
-export default SpendingByCategoryPage;
+export default SpendingAnalysisPage;

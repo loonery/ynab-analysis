@@ -8,7 +8,7 @@ import {
   selectTotalSpendingDataByDimension,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 
-import { assembleSpendingPlotData } from '../../utils/assemblePlotData';
+import { assembleSpendingPlotData } from '../../../SpendingByCategoryReport/utils/assemblePlotData';
 
 import { ComposedSpendingChart } from './ComposedSpendingChart';
 

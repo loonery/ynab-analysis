@@ -1,8 +1,11 @@
-import { YnabTransaction } from 'api/interfaces/externalDataInterfaces/ynabTransaction';
+import { useMemo } from 'react';
+
+import { Transaction } from 'api/interfaces/Transaction';
+import { processTransactions } from 'api/utils/transactionHelpers';
 import { useGetCategoriesQuery, useGetTransactionsQuery } from 'api/ynabApi';
 
 export const useTransactionsWithCategories = (): {
-  transactions: YnabTransaction[] | undefined;
+  data: Transaction[] | undefined;
   isLoading: boolean;
 } => {
   // query both categories and transactions
@@ -10,17 +13,21 @@ export const useTransactionsWithCategories = (): {
   const { data: transactions, isLoading: transactionsLoading } =
     useGetTransactionsQuery();
 
+  const isDataReady =
+    !transactionsLoading && !categoriesLoading && transactions && categoryData;
+
   // processing of transactions is 'cached' via memoization. We can't
   // transform it using RTK query because we need the result of the
-  // useGetCategories query to properly transform the transaciotns
+  // useGetCategories query to properly transform the transactions
   const memoizedTransactionTransformation = useMemo(() => {
-    return processTransactions(transactions, categoryData);
-  }, [transactions, categoryData]);
+    if (isDataReady) {
+      return processTransactions(transactions, categoryData);
+    }
+    return [];
+  }, [transactions, categoryData, isDataReady]);
 
-  // both categories and transactions must be fulfilled to have category groups associated with
-  // transactions
-  if (!transactionsLoading && !categoriesLoading && transactions && categories) {
-    return { transactions, isLoading: false };
+  if (isDataReady) {
+    return { data: memoizedTransactionTransformation, isLoading: false };
   }
-  return { transactions: undefined, isLoading: true };
+  return { data: undefined, isLoading: true };
 };

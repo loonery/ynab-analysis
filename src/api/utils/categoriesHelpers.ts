@@ -115,7 +115,6 @@ const convertYnabCategoryData = (categories: YnabCategoryGroup[]): CategoryGroup
 export const processCategories = (categories: YnabCategoryGroup[]): CategoryData => {
   // declare the CategoryData implementing object
   const categoryData: CategoryData = { categories: [], subCategoryReverseMap: {} };
-
   // filter the incoming data
   const filteredCategories: YnabCategoryGroup[] = filterCategories(categories);
   // transform category data from YNAB into internal CategoryGroup type
