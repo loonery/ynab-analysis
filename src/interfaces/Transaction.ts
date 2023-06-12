@@ -1,5 +1,6 @@
-import { CategoryGroup, SubCategory } from './Category';
+import { MonthYear } from 'types/MonthYear';
 
+import { CategoryGroup, SubCategory } from './Category';
 export interface Transaction {
   account_id: string;
   account_name: string;
@@ -25,5 +26,5 @@ export interface Transaction {
   day: string;
   month: string;
   year: string;
-  month_year: string;
+  month_year: MonthYear;
 }

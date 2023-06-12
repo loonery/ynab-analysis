@@ -1,9 +1,14 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { RootState } from 'store';
+import { AppliedFilters } from 'store/interfaces/FilterBarState.js';
 
-import { selectTransactionDates } from '../dataSelectors/transactionSliceSelectors';
+import { selectTransactionDates } from '../dataSelectors/transactionSliceSelectors.js';
 
 export const selectDropdown = (state, { dropdownKey }) => state.filterBar[dropdownKey];
 export const selectTempDateRange = (state) => state.filterBar.dateDropdown.tempDateRange;
+
+export const selectFilters = (state: RootState): AppliedFilters =>
+  state.filterBar.appliedFilters;
 
 export const selectDatesAfterStartDate = createSelector(
   [selectTempDateRange, selectTransactionDates],

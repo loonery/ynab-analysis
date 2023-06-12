@@ -23,7 +23,7 @@ import {
   setSelectedCategory,
   setParentOfSelected,
   setSelectedCategoryGroup,
-} from 'store/slices/SpendingAnalysisSlice';
+} from 'store/slices/spendingAnalysisSlice';
 
 const CategorySelector = () => {
   const dispatch = useDispatch();

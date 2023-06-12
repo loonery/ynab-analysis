@@ -8,7 +8,7 @@ import {
   SINGLE_CATEGORY_DIMENSION,
 } from 'store/consts/consts';
 
-import { selectAllCategories } from './categorySelectors';
+import { selectCategoryData } from './categorySelectors';
 import {
   selectFilteredTransactions,
   selectFilteredTransactionCategories,
@@ -88,7 +88,7 @@ export const selectCategorySelectorGroupOptions = createSelector(
 
 export const selectCategorySelectorCategoryOptions = createSelector(
   [
-    selectAllCategories,
+    selectCategoryData,
     selectSelectedCategoryGroup,
     selectCategoryDimension,
     selectFilteredTransactionCategories,
@@ -166,8 +166,9 @@ export const selectCategorySpendingDataByDimension = createSelector(
         return group;
       case SINGLE_CATEGORY_DIMENSION:
         return single;
+      default:
+        return undefined;
     }
-    return undefined;
   },
 );
 

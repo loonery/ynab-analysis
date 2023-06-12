@@ -11,7 +11,7 @@ import {
 import {
   selectTransactionDateRange,
   selectTransactionDates,
-} from 'store/selectors/dataSelectors/transactionSliceSelectors';
+} from 'store/selectors/dataSelectors/transactionSliceSelectors.j's';
 import {
   initDateDropdown,
   updateStartDate,

@@ -6,7 +6,7 @@ import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarCon
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
-import { selectAllCategories } from 'store/selectors/dataSelectors/categorySelectors';
+import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelectors';
 import {
   initCheckboxes,
   toggleChildCheckbox,
@@ -20,7 +20,7 @@ const CategoryCheckboxesContainer = () => {
   const keys = CATEGORY_DROPDOWN_KEYS;
 
   // get all transaction categories and store the parent categories in an array
-  const categories = useSelector((state) => selectAllCategories(state));
+  const categories = useSelector((state) => selectCategoryData(state));
 
   // the checkboxes we render are the ones that the user is manipulating,
   // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.

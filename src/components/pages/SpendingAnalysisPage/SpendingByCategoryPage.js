@@ -2,12 +2,10 @@ import React from 'react';
 
 import { useSelector } from 'react-redux';
 
-import { useTransactionsWithCategories } from 'api/hooks/useTransactions';
+import CategorySelector from 'components/reports/SpendingByCategoryReport/components/CategorySelector/CategorySelector';
+import SpendingByCategoryPlotContainer from 'components/reports/SpendingByCategoryReport/components/SpendingByCategoryPlot/SpendingByCategoryPlotContainer';
 import { PageContainer } from 'libs/reuse/containers/PageContainer';
-
-import CategorySelector from '../../reports/SpendingByCategoryReport/components/CategorySelector';
-
-import { SpendingByCategoryPlotContainer } from './components/SpendingByCategoryPlot/SpendingByCategoryPlotContainer';
+import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors.j's';
 
 const SpendingAnalysisPage = () => {
   // dispatch to fetch the transactions
@@ -18,10 +16,11 @@ const SpendingAnalysisPage = () => {
   // return when we don't have transactions
   // if (loading) return <div>loading...</div>;
   // if (error) return <div>error</div>;
+  const transactions = useSelector((state) => selectTransactions(state));
 
-  const { data, isLoading } = useTransactionsWithCategories();
-
-  if (isLoading) return <div>loading...</div>;
+  if (transactions.length === 0) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>not loading</div>

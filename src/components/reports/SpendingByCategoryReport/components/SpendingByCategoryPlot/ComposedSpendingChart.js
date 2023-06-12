@@ -2,10 +2,6 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  PLOT_HEIGHT,
-  SPENDING_CATEGORIES_COLORS,
-} from 'components/SpendingByCategoryReport/consts/plotConsts';
 import PropTypes, { string } from 'prop-types';
 import {
   Bar,
@@ -24,7 +20,9 @@ import {
   setHighlightedBarData,
   setShowTooltip,
   setTooltipType,
-} from 'store/slices/SpendingAnalysisSlice';
+} from 'store/slices/spendingAnalysisSlice';
+
+import { PLOT_HEIGHT, SPENDING_CATEGORIES_COLORS } from '../../consts/plotConsts';
 
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';

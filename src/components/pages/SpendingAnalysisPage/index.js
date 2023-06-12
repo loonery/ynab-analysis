@@ -1,1 +1,1 @@
-export { default } from './SpendingAnalysisPage';
+export { default } from './SpendingByCategoryPage';

@@ -1,5 +1,6 @@
 export interface CategoryData {
   categories: CategoryGroup[];
+  subcategories: SubCategory[];
   subCategoryReverseMap: { [subCategoryId: string]: CategoryGroup };
 }
 

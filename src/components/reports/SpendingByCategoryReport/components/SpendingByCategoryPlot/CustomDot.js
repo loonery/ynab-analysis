@@ -2,17 +2,15 @@ import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
-import {
-  INNER_DOT_RADIUS,
-  OUTER_DOT_RADIUS,
-} from 'components/SpendingByCategoryReport/consts/plotConsts';
 import PropTypes from 'prop-types';
 import { DOT_TOOLTIP_TYPE } from 'store/consts/consts';
 import {
   setTooltipData,
   setShowTooltip,
   setTooltipType,
-} from 'store/slices/SpendingAnalysisSlice';
+} from 'store/slices/spendingAnalysisSlice';
+
+import { INNER_DOT_RADIUS, OUTER_DOT_RADIUS } from '../../consts/plotConsts';
 
 /** Custom dot is fed information from reChart's line component */
 export const CustomDot = ({ active, cx, cy, payload }) => {

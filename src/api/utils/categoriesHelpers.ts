@@ -1,8 +1,8 @@
-import { CategoryData, CategoryGroup, SubCategory } from 'api/interfaces/Category';
+import { CategoryData, CategoryGroup, SubCategory } from 'interfaces/Category';
 import {
   YnabCategoryGroup,
   YnabCategory,
-} from 'api/interfaces/externalDataInterfaces/ynabCategory';
+} from 'interfaces/externalDataInterfaces/ynabCategory';
 
 /**
  * Conversion helper to convert a YnabCategoryGroup implementing object to a
@@ -89,6 +89,14 @@ const createReverseMap = (
   return reverseMap;
 };
 
+const getSubcategories = (categoryGroups: CategoryGroup[]): SubCategory[] => {
+  const returned: SubCategory[] = [];
+  categoryGroups.forEach((categoryGroup: CategoryGroup) => {
+    returned.push(...categoryGroup.subCategories);
+  });
+  return returned;
+};
+
 /**
  * Map the array of old YnabCategoryGroup implementing objects to a new array
  * of internal CategoryGroup implementing objects.
@@ -114,12 +122,16 @@ const convertYnabCategoryData = (categories: YnabCategoryGroup[]): CategoryGroup
  */
 export const processCategories = (categories: YnabCategoryGroup[]): CategoryData => {
   // declare the CategoryData implementing object
-  const categoryData: CategoryData = { categories: [], subCategoryReverseMap: {} };
+  const categoryData: CategoryData = {
+    categories: [],
+    subCategoryReverseMap: {},
+    subcategories: [],
+  };
   // filter the incoming data
   const filteredCategories: YnabCategoryGroup[] = filterCategories(categories);
   // transform category data from YNAB into internal CategoryGroup type
   categoryData.categories = convertYnabCategoryData(filteredCategories);
-  // map each subcategoryId to its parent category group for quick access
   categoryData.subCategoryReverseMap = createReverseMap(categoryData.categories);
+  categoryData.subcategories = getSubcategories(categoryData.categories);
   return categoryData;
 };

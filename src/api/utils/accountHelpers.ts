@@ -1,9 +1,6 @@
-import { Account } from 'api/interfaces/Account';
-import { FormattedAccountType } from 'api/interfaces/Account';
-import {
-  YnabAccount,
-  AccountType,
-} from 'api/interfaces/externalDataInterfaces/ynabAccount';
+import { Account } from 'interfaces/Account';
+import { FormattedAccountType } from 'interfaces/Account';
+import { YnabAccount, AccountType } from 'interfaces/externalDataInterfaces/ynabAccount';
 
 import { convertAmount } from './generalHelpers';
 

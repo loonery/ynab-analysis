@@ -9,12 +9,12 @@ import {
 } from 'store/consts/consts';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
-import { selectAllCategories } from '../dataSelectors/categorySelectors';
+import { selectCategoryData } from '../dataSelectors/categorySelectors';
 import {
   selectFilteredTransactions,
   selectFilteredTransactionCategories,
   selectFilteredTransactionCategoryGroups,
-} from '../dataSelectors/transactionSliceSelectors';
+} from '../dataSelectors/transactionSliceSelectors.j's';
 
 // atomic selectors
 export const selectSelectedCategory = (state) => {
@@ -89,7 +89,7 @@ export const selectCategorySelectorGroupOptions = createSelector(
 
 export const selectCategorySelectorCategoryOptions = createSelector(
   [
-    selectAllCategories,
+    selectCategoryData,
     selectSelectedCategoryGroup,
     selectCategoryDimension,
     selectFilteredTransactionCategories,

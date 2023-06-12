@@ -1,9 +1,9 @@
-import { CategoryData, CategoryGroup, SubCategory } from 'api/interfaces/Category';
+import { CategoryData, CategoryGroup, SubCategory } from 'interfaces/Category';
 import {
   YnabSubtransaction,
   YnabTransaction,
-} from 'api/interfaces/externalDataInterfaces/ynabTransaction';
-import { Transaction } from 'api/interfaces/Transaction';
+} from 'interfaces/externalDataInterfaces/ynabTransaction';
+import { Transaction } from 'interfaces/Transaction';
 
 import { convertAmount } from './generalHelpers';
 
