@@ -5,21 +5,24 @@ import {
   ALL_CATEGORIES_ITEM,
   NO_PARENT,
 } from 'store/consts/consts';
+import { SpendingAnalysisState } from 'store/interfaces/SpendingAnalysisState';
+
+const initialState: SpendingAnalysisState = {
+  categoryDimension: ALL_CATEGORIES_DIMENSION,
+  selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
+  selectedCategory: ALL_CATEGORIES_ITEM,
+  parentOfSelected: NO_PARENT,
+  plotState: {
+    // tooltipType: undefined,
+    // tooltipData: undefined,
+    showTooltip: false,
+    highlightedBarData: undefined,
+  },
+};
 
 const spendingAnalysisSlice = createSlice({
   name: 'spendingAnalysis',
-  initialState: {
-    categoryDimension: ALL_CATEGORIES_DIMENSION,
-    selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
-    selectedCategory: ALL_CATEGORIES_ITEM,
-    parentOfSelected: NO_PARENT,
-    plotState: {
-      tooltipType: undefined,
-      tooltipData: undefined,
-      showTooltip: false,
-      highlightedBarData: undefined,
-    },
-  },
+  initialState,
   reducers: {
     setCategoryDimension(state, action) {
       state.categoryDimension = action.payload;

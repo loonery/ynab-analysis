@@ -1,5 +1,7 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { rollup, sum } from 'd3';
+import { CategoryGroup, SubCategory } from 'interfaces/Category';
+import { RootState } from 'store';
 import {
   ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORIES_ITEM,
@@ -7,6 +9,7 @@ import {
   CATEGORY_GROUP_DIMENSION,
   SINGLE_CATEGORY_DIMENSION,
 } from 'store/consts/consts';
+import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
 import { selectCategoryData } from '../dataSelectors/categorySelectors';
@@ -14,22 +17,20 @@ import {
   selectFilteredTransactions,
   selectFilteredTransactionCategories,
   selectFilteredTransactionCategoryGroups,
-} from '../dataSelectors/transactionSliceSelectors.j's';
+} from '../dataSelectors/transactionSliceSelectors';
 
 // atomic selectors
-export const selectSelectedCategory = (state) => {
+export const selectSelectedCategory = (state: RootState): SubCategory | string => {
   return state.spendingAnalysis.selectedCategory;
 };
 
-export const selectSelectedCategoryGroup = (state) => {
-  return state.spendingAnalysis.selectedCategoryGroup;
-};
-
-export const selectCategoryDimension = (state) => {
+export const selectCategoryDimension = (state: RootState): categoryDimensions => {
   return state.spendingAnalysis.categoryDimension;
 };
 
-export const selectParentOfSelectedCategory = (state) => {
+export const selectParentOfSelectedCategory = (
+  state: RootState,
+): CategoryGroup | string => {
   return state.spendingAnalysis.parentOfSelected;
 };
 

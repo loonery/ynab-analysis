@@ -1,4 +1,4 @@
-import { MonthYear } from 'types/MonthYear';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { CategoryGroup, SubCategory } from './Category';
 export interface Transaction {

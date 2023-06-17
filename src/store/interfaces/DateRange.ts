@@ -1,4 +1,4 @@
 export interface DateRange {
-  earliest: string | undefined;
-  latest: string | undefined;
+  startDate: string | undefined;
+  endDate: string | undefined;
 }

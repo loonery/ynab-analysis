@@ -1,14 +1,25 @@
-// todo - add generics here for the checkbox objects
+import { DateRange } from './DateRange';
+
+enum DropdownKeys {
+  categoryDropdown = 'categoryDropdown',
+  dateDropdown = 'dateDropdown',
+  accountDropdown = 'accountDropdown',
+}
+export type DropdownKey = DropdownKeys;
+
+/**
+ * Defines the state for the FilterBar
+ */
 export interface FilterBarState {
-  categoryDropdown: CategoryDropdown;
-  dateDropdown: DateDropdown;
-  accountDropdown: AccountDropdown;
+  [DropdownKeys.categoryDropdown]: CategoryDropdown;
+  [DropdownKeys.dateDropdown]: DateDropdown;
+  [DropdownKeys.accountDropdown]: AccountDropdown;
   appliedFilters: AppliedFilters;
 }
 
 export interface CategoryDropdown {
   savedCategoryCheckBoxes: string[];
-  tempCategoryCheckBoxes: [];
+  tempCategoryCheckBoxes: string[];
   show: boolean;
 }
 
@@ -19,8 +30,8 @@ export interface AccountDropdown {
 }
 
 export interface DateDropdown {
-  savedDateRange: { startDate: string | undefined; endDate: string | undefined };
-  tempDateRange: { startDate: string | undefined; endDate: string | undefined };
+  savedDateRange: DateRange;
+  tempDateRange: DateRange;
   show: boolean;
 }
 
@@ -30,3 +41,5 @@ export interface AppliedFilters {
   filteredCategories: string[];
   filteredAccounts: string[];
 }
+
+export type FilterBarDropdown = DateDropdown | CategoryDropdown | AccountDropdown;

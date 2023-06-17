@@ -6,7 +6,10 @@ export const selectAccountsResult = ynabApi.endpoints.getAccounts.select();
 
 export const selectCategoryData = createSelector(
   [selectAccountsResult],
-  (accounts): FetchedData<Account[]> => {
-    return categories?.data ? categories?.data : undefined;
+  (accountsResult): FetchedData<Account[]> => {
+    const accounts = accountsResult.data;
+    return accounts
+      ? { data: accounts, isLoading: false }
+      : { data: undefined, isLoading: true };
   },
 );

@@ -7,6 +7,7 @@ import { RootState } from 'store';
 import { READY_TO_ASSIGN_CATEGORY_ID } from 'store/consts/consts';
 import { DateRange } from 'store/interfaces/DateRange';
 import { FetchedData } from 'store/interfaces/FetchedData';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { selectFilters } from '../componentSelectors/filterBarSelectors';
 
@@ -98,9 +99,23 @@ export const selectTransactionDateRange = createSelector(
     if (transactions) {
       return {
         data: {
-          earliest: transactions.length ? transactions.at(0)?.month_year : undefined,
-          latest: transactions.length ? transactions.at(-1)?.month_year : undefined,
+          startDate: transactions.length ? transactions.at(0)?.month_year : undefined,
+          endDate: transactions.length ? transactions.at(-1)?.month_year : undefined,
         },
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
+  },
+);
+
+export const selectTransactionDates = createSelector(
+  [selectTransactions],
+  (transactionsData): FetchedData<MonthYear[]> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      return {
+        data: _.uniq(transactions.map((transaction) => transaction?.month_year)),
         isLoading: false,
       };
     }

@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { FilterBarState } from 'store/interfaces/FilterBarState';
 import {
   findChildCheckboxByParent,
   findParentCheckbox,
@@ -8,31 +9,33 @@ import {
   toggleCheckboxValue,
 } from 'store/utils/filterBarReducerHelpers';
 
+const initialState: FilterBarState = {
+  categoryDropdown: {
+    savedCategoryCheckBoxes: [],
+    tempCategoryCheckBoxes: [],
+    show: false,
+  },
+  dateDropdown: {
+    savedDateRange: { startDate: undefined, endDate: undefined },
+    tempDateRange: { startDate: undefined, endDate: undefined },
+    show: false,
+  },
+  accountDropdown: {
+    savedAccountCheckBoxes: [],
+    tempAccountCheckBoxes: [],
+    show: false,
+  },
+  appliedFilters: {
+    startDate: undefined,
+    endDate: undefined,
+    filteredCategories: [],
+    filteredAccounts: [],
+  },
+};
+
 const filterBarSlice = createSlice({
   name: 'filterBar',
-  initialState: {
-    categoryDropdown: {
-      savedCategoryCheckBoxes: [],
-      tempCategoryCheckBoxes: [],
-      show: false,
-    },
-    dateDropdown: {
-      savedDateRange: { startDate: undefined, endDate: undefined },
-      tempDateRange: { startDate: undefined, endDate: undefined },
-      show: false,
-    },
-    accountDropdown: {
-      savedAccountCheckBoxes: [],
-      tempAccountCheckBoxes: [],
-      show: false,
-    },
-    appliedFilters: {
-      startDate: undefined,
-      endDate: undefined,
-      filteredCategories: [],
-      filteredAccounts: [],
-    },
-  },
+  initialState,
   reducers: {
     // used to populate the state with checkboxes for the categories that are found in transactions
     initCheckboxes(state, action) {
