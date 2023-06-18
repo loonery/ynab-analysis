@@ -264,8 +264,8 @@ const selectFilteredTotalsForAllCategoryGroups = createSelector(
     if (transactions) {
       const spendingByMonthMap = rollup(
         transactions,
-        (t) => totalSpendingHelper(t),
-        (t) => t.month_year,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
       );
       return { data: spendingByMonthMap, isLoading: false };
     }
@@ -284,8 +284,8 @@ const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
     if (transactions) {
       const spendingByMonthMap = rollup(
         transactions,
-        (t) => totalSpendingHelper(t),
-        (t) => t.month_year,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
       );
       return { data: spendingByMonthMap, isLoading: false };
     }
@@ -317,17 +317,27 @@ export const selectDataKeysByCategoryDimension = createSelector(
     selectFilteredTransactionCategories,
     selectFilteredTransactionCategoryGroups,
   ],
-  (categoryDimension, categories, categoryGroups) => {
-    if (categoryDimension === ALL_CATEGORIES_DIMENSION) return categoryGroups.slice(1);
-    return categories;
+  (categoryDimension, categoriesData, categoryGroupsData): FetchedData<string[]> => {
+    const { data: categoryGroups } = categoryGroupsData;
+    const { data: categories } = categoriesData;
+    if (categoryGroups && categories) {
+      if (categoryDimension === categoryDimensions.allCategoriesDimension) {
+        return { data: categoryGroups.slice(1), isLoading: false };
+      }
+      return { data: categories, isLoading: true };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
 /**
  * Selectors for Plot Component's data
  */
-export const selectTooltipType = (state) => state.spendingAnalysis.plotState.tooltipType;
-export const selectTooltipData = (state) => state.spendingAnalysis.plotState.tooltipData;
-export const selectHighlightedBarData = (state) =>
+export const selectTooltipType = (state: any): any =>
+  state.spendingAnalysis.plotState.tooltipType;
+export const selectTooltipData = (state: any): any =>
+  state.spendingAnalysis.plotState.tooltipData;
+export const selectHighlightedBarData = (state: any): any =>
   state.spendingAnalysis.plotState.highlightedBarData;
-export const selectShowTooltip = (state) => state.spendingAnalysis.plotState.showTooltip;
+export const selectShowTooltip = (state: any): any =>
+  state.spendingAnalysis.plotState.showTooltip;

@@ -125,11 +125,15 @@ export const selectTransactionDates = createSelector(
 
 export const selectFilteredTransactionCategories = createSelector(
   [selectFilteredTransactions],
-  (transactionsData): FetchedData<(string | undefined)[]> => {
+  (transactionsData): FetchedData<string[]> => {
     const { data: transactions } = transactionsData;
     if (transactions) {
+      // get unique values and filter all undefined values
+      const data: string[] = _.uniq(
+        transactions.map((transaction) => transaction.subcategory?.id),
+      ).filter((item: string | undefined): item is string => item !== undefined);
       return {
-        data: _.uniq(transactions.map((transaction) => transaction.subcategory?.id)),
+        data,
         isLoading: false,
       };
     }
