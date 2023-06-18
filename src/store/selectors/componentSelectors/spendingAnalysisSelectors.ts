@@ -6,7 +6,7 @@ import { RootState } from 'store';
 import { ALL_CATEGORIES_ITEM } from 'store/consts/consts';
 import { ALL_CATEGORY_GROUPS_ITEM } from 'store/consts/consts';
 import { FetchedData } from 'store/interfaces/FetchedData';
-import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
+import { categoryDimensions, tooltipType } from 'store/interfaces/SpendingAnalysisState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
@@ -333,11 +333,11 @@ export const selectDataKeysByCategoryDimension = createSelector(
 /**
  * Selectors for Plot Component's data
  */
-export const selectTooltipType = (state: any): any =>
+export const selectTooltipType = (state: RootState): tooltipType =>
   state.spendingAnalysis.plotState.tooltipType;
 export const selectTooltipData = (state: any): any =>
   state.spendingAnalysis.plotState.tooltipData;
 export const selectHighlightedBarData = (state: any): any =>
   state.spendingAnalysis.plotState.highlightedBarData;
-export const selectShowTooltip = (state: any): any =>
+export const selectShowTooltip = (state: RootState): boolean =>
   state.spendingAnalysis.plotState.showTooltip;

@@ -28,7 +28,7 @@ const getDotTooltipValues = (month, total, categoryDimension, categoryGroup) => 
   return { monthString, totalString };
 };
 
-const DotTooltip = ({ month, total }) => {
+export const DotTooltip = ({ month, total }) => {
   const categoryDimension = useSelector((state) => selectCategoryDimension(state));
   const categoryGroup = useSelector((state) => selectSelectedCategoryGroup(state));
 

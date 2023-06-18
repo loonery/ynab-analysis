@@ -3,7 +3,9 @@ import React, { Fragment } from 'react';
 import { useSelector } from 'react-redux';
 
 import PropTypes from 'prop-types';
+import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroup,
@@ -42,10 +44,18 @@ const getBarTooltipValues = (payload, dataKey, categoryDimension, categoryGroup)
   return { categoryName, dollarValue, percentString };
 };
 
-const BarTooltip = ({ payload, dataKey }) => {
+interface BarTooltipProps {
+  payload: { month: MonthYear };
+}
+
+export const BarTooltip = ({ payload, dataKey }) => {
   // need dimension and category group to get proper tooltip text
-  const categoryDimension = useSelector((state) => selectCategoryDimension(state));
-  const categoryGroup = useSelector((state) => selectSelectedCategoryGroup(state));
+  const categoryDimension = useSelector((state: RootState) =>
+    selectCategoryDimension(state),
+  );
+  const categoryGroup = useSelector((state: RootState) =>
+    selectSelectedCategoryGroup(state),
+  );
 
   // get text values for tooltip and apply to component
   const { categoryName, dollarValue, percentString } = getBarTooltipValues(
