@@ -1,15 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { rollup, sum } from 'd3';
+import { InternMap, rollup } from 'd3';
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
+import { Transaction } from 'interfaces/Transaction';
 import { RootState } from 'store';
-import {
-  ALL_CATEGORIES_DIMENSION,
-  ALL_CATEGORIES_ITEM,
-  ALL_CATEGORY_GROUPS_ITEM,
-  CATEGORY_GROUP_DIMENSION,
-  SINGLE_CATEGORY_DIMENSION,
-} from 'store/consts/consts';
+import { ALL_CATEGORIES_ITEM } from 'store/consts/consts';
+import { ALL_CATEGORY_GROUPS_ITEM } from 'store/consts/consts';
+import { FetchedData } from 'store/interfaces/FetchedData';
 import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
 import { selectCategoryData } from '../dataSelectors/categorySelectors';
@@ -19,9 +17,15 @@ import {
   selectFilteredTransactionCategoryGroups,
 } from '../dataSelectors/transactionSliceSelectors';
 
-// atomic selectors
+/**
+ * atomic selectors
+ */
 export const selectSelectedCategory = (state: RootState): SubCategory | string => {
   return state.spendingAnalysis.selectedCategory;
+};
+
+export const selectSelectedCategoryGroup = (state: RootState): CategoryGroup | string => {
+  return state.spendingAnalysis.selectedCategoryGroup;
 };
 
 export const selectCategoryDimension = (state: RootState): categoryDimensions => {
@@ -35,28 +39,48 @@ export const selectParentOfSelectedCategory = (
 };
 
 // selectors for selectFilteredTransactionsByCategoryDimension
+// todo - debug id matching
 const selectTransactionsForCategoryGroupDimension = createSelector(
   [selectFilteredTransactions, selectSelectedCategoryGroup],
-  (filteredTransactions, selectedCategoryGroup) => {
-    return filteredTransactions.filter(
-      (transaction) => transaction.category_group_name === selectedCategoryGroup,
-    );
+  (filteredTransactionsData, selectedCategoryGroup): FetchedData<Transaction[]> => {
+    const { data: filteredTransactions } = filteredTransactionsData;
+    if (filteredTransactions) {
+      return {
+        data: filteredTransactions.filter(
+          (transaction) => transaction.category_group?.id === selectedCategoryGroup,
+        ),
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
+// todo - debug id matching
 const selectTransactionsForSingleCategoryDimension = createSelector(
   [selectFilteredTransactions, selectSelectedCategory],
-  (filteredTransactions, selectedCategory) => {
-    return filteredTransactions.filter(
-      (transaction) => transaction.category_name === selectedCategory,
-    );
+  (filteredTransactionsData, selectedCategory): FetchedData<Transaction[]> => {
+    const { data: filteredTransactions } = filteredTransactionsData;
+    if (filteredTransactions) {
+      return {
+        data: filteredTransactions.filter(
+          (transaction) => transaction.subcategory?.id === selectedCategory,
+        ),
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
 const selectTransactionsForAllCategoryDimension = createSelector(
   [selectFilteredTransactions],
-  (filteredTransactions) => {
-    return filteredTransactions;
+  (filteredTransactionsData): FetchedData<Transaction[]> => {
+    const { data: filteredTransactions } = filteredTransactionsData;
+    if (filteredTransactions) {
+      return { data: filteredTransactions, isLoading: false };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -67,14 +91,27 @@ export const selectFilteredTransactionsByCategoryDimension = createSelector(
     selectTransactionsForCategoryGroupDimension,
     selectTransactionsForSingleCategoryDimension,
   ],
-  (categoryDimension, transactionsAll, transactionsGroup, transactionsSingle) => {
-    if (categoryDimension === ALL_CATEGORIES_DIMENSION) {
-      return transactionsAll;
-    } else if (categoryDimension === CATEGORY_GROUP_DIMENSION) {
-      return transactionsGroup;
-    } else if (categoryDimension === SINGLE_CATEGORY_DIMENSION) {
-      return transactionsSingle;
+  (
+    categoryDimension,
+    transactionsAllData,
+    transactionsGroupData,
+    transactionsSingleData,
+  ): FetchedData<Transaction[]> => {
+    const { data: transactionsAll } = transactionsAllData;
+    const { data: transactionsGroup } = transactionsGroupData;
+    const { data: transactionsSingle } = transactionsSingleData;
+    if (transactionsAll && transactionsGroup && transactionsSingle) {
+      let returnedData;
+      if (categoryDimension === categoryDimensions.allCategoriesDimension) {
+        returnedData = transactionsAll;
+      } else if (categoryDimension === categoryDimensions.categoryGroupDimension) {
+        returnedData = transactionsGroup;
+      } else if (categoryDimension === categoryDimensions.singleCategoryDimension) {
+        returnedData = transactionsSingle;
+      }
+      return { data: returnedData, isLoading: false };
     }
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -95,63 +132,97 @@ export const selectCategorySelectorCategoryOptions = createSelector(
     selectCategoryDimension,
     selectFilteredTransactionCategories,
   ],
-  (categoryHirearchy, selectedCategoryGroup, categoryDimension, filteredCategories) => {
-    // if there is no parent, we don't want any drilldown options
-    if (categoryDimension === ALL_CATEGORIES_DIMENSION) return [];
+  (
+    fetchedCategoryData,
+    selectedCategoryGroup,
+    categoryDimension,
+    filteredCategoriesData,
+  ): FetchedData<string[]> => {
+    // if there is no selected category group, we don't want any drilldown options
+    if (
+      categoryDimension === categoryDimensions.allCategoriesDimension &&
+      typeof selectedCategoryGroup === 'string'
+    ) {
+      return { data: [] as string[], isLoading: false };
+    }
 
-    // drilldown options are the selected categories children
-    const options = categoryHirearchy.find((el) => el.name === selectedCategoryGroup);
+    // drilldown options are the selected categories' children
+    const { data: categoryData } = fetchedCategoryData;
+    const { data: filteredCategories } = filteredCategoriesData;
+    const categoryHirearchy = categoryData?.categories;
 
-    // get names of all child categories and filter them based upon which are
-    // included in the analysis
-    const returnedOptions = options
-      ? options.categories
-          .map(({ name }) => name)
-          .filter((name) => filteredCategories.includes(name))
-      : [];
+    if (categoryHirearchy && filteredCategories) {
+      const options = categoryHirearchy.find(
+        (el): el is CategoryGroup => el.id === selectedCategoryGroup.id,
+      );
 
-    returnedOptions.splice(0, 0, ALL_CATEGORIES_ITEM);
-    return returnedOptions;
+      // get names of all child categories and filter them based upon which are
+      // included in the analysis
+      const returnedOptions = options?.subCategories
+        .map(({ name }) => name)
+        .filter((name) => filteredCategories.includes(name))
+        .splice(0, 0, ALL_CATEGORIES_ITEM);
+      return { data: returnedOptions, isLoading: false };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
 // selectors for getting spending along the lines of category and category group
 const selectFilteredTotalsForAllCategoryDimension = createSelector(
   [selectTransactionsForAllCategoryDimension],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => totalSpendingHelper(t),
-      (t) => t.month_year,
-      (t) => t.category_group_name,
-    );
-    return spendingByMonthMap;
+  (
+    transactionsData,
+  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
+        (t: Transaction) => t.category_group?.name,
+      );
+      return { data: spendingByMonthMap, isLoading: true };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
 const selectFilteredTotalsForCategoryGroupDimension = createSelector(
   [selectTransactionsForCategoryGroupDimension],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => totalSpendingHelper(t),
-      (t) => t.month_year,
-      (t) => t.category_name,
-    );
-    return spendingByMonthMap;
+  (
+    transactionsData,
+  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
+        (t: Transaction) => t.subcategory?.name,
+      );
+      return { data: spendingByMonthMap, isLoading: true };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
 const selectFilteredTotalsForSingleCategoryDimension = createSelector(
   [selectTransactionsForSingleCategoryDimension],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => sum(t, (t) => t.amount),
-      (t) => t.month_year,
-      (t) => t.category_name,
-    );
-    return spendingByMonthMap;
+  (
+    transactionsData,
+  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
+        (t: Transaction) => t.subcategory?.name,
+      );
+      return { data: spendingByMonthMap, isLoading: true };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -162,41 +233,63 @@ export const selectCategorySpendingDataByDimension = createSelector(
     selectFilteredTotalsForCategoryGroupDimension,
     selectFilteredTotalsForSingleCategoryDimension,
   ],
-  (categoryDimension, all, group, single) => {
+  (
+    categoryDimension,
+    TotalsForAllCategoryDimension,
+    TotalsForCategoryGroupDimension,
+    TotalsForSingleCategoryDimension,
+  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
+    const { data: all } = TotalsForAllCategoryDimension;
+    const { data: group } = TotalsForCategoryGroupDimension;
+    const { data: single } = TotalsForSingleCategoryDimension;
+
     switch (categoryDimension) {
-      case ALL_CATEGORIES_DIMENSION:
-        return all;
-      case CATEGORY_GROUP_DIMENSION:
-        return group;
-      case SINGLE_CATEGORY_DIMENSION:
-        return single;
+      case categoryDimensions.allCategoriesDimension:
+        return { data: all, isLoading: false };
+      case categoryDimensions.categoryGroupDimension:
+        return { data: group, isLoading: false };
+      case categoryDimensions.singleCategoryDimension:
+        return { data: single, isLoading: false };
+      default:
+        return { data: undefined, isLoading: true };
     }
-    return undefined;
   },
 );
 
 // selectors for getting total spending
 const selectFilteredTotalsForAllCategoryGroups = createSelector(
   [selectFilteredTransactions],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => totalSpendingHelper(t),
-      (t) => t.month_year,
-    );
-    return spendingByMonthMap;
+  (transactionsData): FetchedData<InternMap<MonthYear, string>> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t) => totalSpendingHelper(t),
+        (t) => t.month_year,
+      );
+      return { data: spendingByMonthMap, isLoading: false };
+    }
+    return { data: undefined, isLoading: false };
   },
 );
 
+/**
+ * todo Should factor some stuff out - other than the data that this selector is being fed, it is
+ * exactly the same as the one above
+ */
 const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
   [selectTransactionsForCategoryGroupDimension],
-  (transactions) => {
-    const spendingByMonthMap = rollup(
-      transactions,
-      (t) => totalSpendingHelper(t),
-      (t) => t.month_year,
-    );
-    return spendingByMonthMap;
+  (transactionsData): FetchedData<InternMap<MonthYear, string>> => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t) => totalSpendingHelper(t),
+        (t) => t.month_year,
+      );
+      return { data: spendingByMonthMap, isLoading: false };
+    }
+    return { data: undefined, isLoading: false };
   },
 );
 
@@ -206,16 +299,14 @@ export const selectTotalSpendingDataByDimension = createSelector(
     selectFilteredTotalsForAllCategoryGroups,
     selectFilteredTotalsForSelectedCategoryGroup,
   ],
-  (categoryDimension, all, group) => {
+  (categoryDimension, all, group): FetchedData<InternMap<MonthYear, string>> => {
     switch (categoryDimension) {
-      case ALL_CATEGORIES_DIMENSION:
+      case categoryDimensions.allCategoriesDimension:
         return all;
-      case CATEGORY_GROUP_DIMENSION:
-        return group;
-      case SINGLE_CATEGORY_DIMENSION:
+      case categoryDimensions.categoryGroupDimension:
+      case categoryDimensions.singleCategoryDimension:
         return group;
     }
-    return undefined;
   },
 );
 

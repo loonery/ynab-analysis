@@ -1,6 +1,8 @@
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import {
   ALL_CATEGORIES_DIMENSION,
+  CATEGORY_GROUP_DIMENSION,
+  SINGLE_CATEGORY_DIMENSION,
   ALL_CATEGORY_GROUPS_ITEM,
   ALL_CATEGORIES_ITEM,
   NO_PARENT,
@@ -8,9 +10,8 @@ import {
 
 export enum categoryDimensions {
   allCategoriesDimension = ALL_CATEGORIES_DIMENSION,
-  dateDropdown = ALL_CATEGORY_GROUPS_ITEM,
-  accountDropdown = ALL_CATEGORIES_ITEM,
-  parentOfSelected = NO_PARENT,
+  categoryGroupDimension = CATEGORY_GROUP_DIMENSION,
+  singleCategoryDimension = SINGLE_CATEGORY_DIMENSION,
 }
 
 export interface SpendingAnalysisState {
