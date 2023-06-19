@@ -1,14 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORY_GROUPS_ITEM,
   ALL_CATEGORIES_ITEM,
   NO_PARENT,
 } from 'store/consts/consts';
-import { SpendingAnalysisState } from 'store/interfaces/SpendingAnalysisState';
+import {
+  SpendingAnalysisState,
+  categoryDimensions,
+} from 'store/interfaces/SpendingAnalysisState';
 
 const initialState: SpendingAnalysisState = {
-  categoryDimension: ALL_CATEGORIES_DIMENSION,
+  categoryDimension: categoryDimensions.allCategoriesDimension,
   selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
   selectedCategory: ALL_CATEGORIES_ITEM,
   parentOfSelected: NO_PARENT,
@@ -16,7 +18,7 @@ const initialState: SpendingAnalysisState = {
     // tooltipType: undefined,
     // tooltipData: undefined,
     showTooltip: false,
-    highlightedBarData: undefined,
+    highlightedBarData,
   },
 };
 

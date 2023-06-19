@@ -2,9 +2,10 @@ import React, { Fragment } from 'react';
 
 import { useSelector } from 'react-redux';
 
-import PropTypes from 'prop-types';
+import { CategoryGroup } from 'interfaces/Category';
 import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
+import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
   selectCategoryDimension,
@@ -27,28 +28,47 @@ const StyledPercentage = styled.div`
   font-weight: 300;
 `;
 
-const getBarTooltipValues = (payload, dataKey, categoryDimension, categoryGroup) => {
+interface BarTooltipValues {
+  categoryName: string;
+  dollarValue: number;
+  percentString: string;
+}
+
+interface Payload {
+  month: MonthYear;
+  total: number;
+  [dataKey: string]: number | MonthYear;
+}
+
+interface BarTooltipProps {
+  payload: Payload;
+  dataKey: string;
+}
+
+const getBarTooltipValues = (
+  payload: Payload,
+  dataKey: string,
+  categoryDimension: categoryDimensions,
+  categoryGroup: CategoryGroup | string,
+): BarTooltipValues => {
   // construct the values to be shown in the tooltip
   const { month } = payload;
 
-  const dollarValue = payload[dataKey];
+  const dollarValue: number = (payload[dataKey] as number) || 0;
+
   const percentOfTotal = payload
-    ? ((payload[dataKey] / payload.total) * 100).toFixed(2)
+    ? ((dollarValue / payload.total) * 100).toFixed(2)
     : undefined;
   const percentString =
     categoryDimension === ALL_CATEGORIES_DIMENSION
       ? `${percentOfTotal}% of ${month} spending`
       : `${percentOfTotal}% of ${month} ${categoryGroup} spending`;
 
-  const categoryName = dataKey;
-  return { categoryName, dollarValue, percentString };
+  return { categoryName: dataKey, dollarValue, percentString };
 };
 
-interface BarTooltipProps {
-  payload: { month: MonthYear };
-}
-
-export const BarTooltip = ({ payload, dataKey }) => {
+// eslint-disable-next-line
+export const BarTooltip = ({ payload, dataKey }: BarTooltipProps) => {
   // need dimension and category group to get proper tooltip text
   const categoryDimension = useSelector((state: RootState) =>
     selectCategoryDimension(state),
@@ -71,10 +91,6 @@ export const BarTooltip = ({ payload, dataKey }) => {
       <StyledPercentage>{percentString}</StyledPercentage>
     </Fragment>
   );
-};
-BarTooltip.propTypes = {
-  payload: PropTypes.object.isRequired,
-  dataKey: PropTypes.string.isRequired,
 };
 
 export default BarTooltip;
