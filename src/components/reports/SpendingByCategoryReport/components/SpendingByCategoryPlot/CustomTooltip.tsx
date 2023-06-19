@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 
 import { useSelector } from 'react-redux';
 
@@ -12,8 +12,9 @@ import {
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import styled from 'styled-components';
 
-import { BarTooltip } from './BarTooltip';
+import { BarTooltip, BarTooltipProps } from './BarTooltip';
 import { DotTooltip } from './DotTooltip';
+import { DotTooltipProps } from './DotTooltip';
 
 const StyledTooltipContainer = styled.div`
   padding: 5px;
@@ -36,14 +37,14 @@ export const CustomTooltip = () => {
     selectTooltipType(state),
   );
 
-  if (!showTooltip) return null;
+  if (!showTooltip || !tooltipData) return null;
 
   const barTooltip = activeTooltipType === tooltipType.barTooltipType;
   const dotTooltip = activeTooltipType === tooltipType.dotTooltipType;
   return (
     <StyledTooltipContainer>
-      {barTooltip && <BarTooltip {...tooltipData} />}
-      {dotTooltip && <DotTooltip {...tooltipData} />}
+      {barTooltip && <BarTooltip {...(tooltipData as BarTooltipProps)} />}
+      {dotTooltip && <DotTooltip {...(tooltipData as DotTooltipProps)} />}
     </StyledTooltipContainer>
   );
 };

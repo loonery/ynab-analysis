@@ -28,13 +28,14 @@ import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';
 import { HighlightedBarSection } from './HighlightedBarSection';
 
+// eslint-disable-next-line
 export const ComposedSpendingChart = ({ data, dataKeys }) => {
   const dispatch = useDispatch();
 
   const highlightedBarData = useSelector((state) => selectHighlightedBarData(state));
   const { x, y, height, width, fill } = highlightedBarData || {};
 
-  const handleMouseEnterBar = (data) => {
+  const handleMouseEnterBar = (data): void => {
     // mousing over any bar yields these variables
     const { x, y, height, width } = data;
     const barTooltipData = data.tooltipPayload[0];
@@ -46,7 +47,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }) => {
     dispatch(setShowTooltip(true));
   };
 
-  const handleMouseLeaveBar = () => {
+  const handleMouseLeaveBar = (): void => {
     dispatch(setShowTooltip(false));
     dispatch(setTooltipType(undefined));
     dispatch(setHighlightedBarData(undefined));

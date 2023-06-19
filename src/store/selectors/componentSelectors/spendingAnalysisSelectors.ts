@@ -6,7 +6,12 @@ import { RootState } from 'store';
 import { ALL_CATEGORIES_ITEM } from 'store/consts/consts';
 import { ALL_CATEGORY_GROUPS_ITEM } from 'store/consts/consts';
 import { FetchedData } from 'store/interfaces/FetchedData';
-import { categoryDimensions, tooltipType } from 'store/interfaces/SpendingAnalysisState';
+import {
+  HighlightedBarData,
+  TooltipData,
+  categoryDimensions,
+  tooltipType,
+} from 'store/interfaces/SpendingAnalysisState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
@@ -101,7 +106,7 @@ export const selectFilteredTransactionsByCategoryDimension = createSelector(
     const { data: transactionsGroup } = transactionsGroupData;
     const { data: transactionsSingle } = transactionsSingleData;
     if (transactionsAll && transactionsGroup && transactionsSingle) {
-      let returnedData;
+      let returnedData: Transaction[] = [];
       if (categoryDimension === categoryDimensions.allCategoriesDimension) {
         returnedData = transactionsAll;
       } else if (categoryDimension === categoryDimensions.categoryGroupDimension) {
@@ -118,10 +123,14 @@ export const selectFilteredTransactionsByCategoryDimension = createSelector(
 // selectors for category selector component
 export const selectCategorySelectorGroupOptions = createSelector(
   [selectFilteredTransactionCategoryGroups],
-  (categoryGroupNames) => {
-    const options = categoryGroupNames.sort();
-    options.splice(0, 0, ALL_CATEGORY_GROUPS_ITEM);
-    return options;
+  (categoryGroupNamesData): FetchedData<string[]> => {
+    const { data: categoryGroupNames } = categoryGroupNamesData;
+    if (categoryGroupNames) {
+      const options = categoryGroupNames.sort();
+      options.splice(0, 0, ALL_CATEGORY_GROUPS_ITEM);
+      return { data: options, isLoading: false };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -153,7 +162,8 @@ export const selectCategorySelectorCategoryOptions = createSelector(
 
     if (categoryHirearchy && filteredCategories) {
       const options = categoryHirearchy.find(
-        (el): el is CategoryGroup => el.id === selectedCategoryGroup.id,
+        (el): el is CategoryGroup =>
+          el.id === (selectedCategoryGroup as CategoryGroup)?.id,
       );
 
       // get names of all child categories and filter them based upon which are
@@ -322,6 +332,7 @@ export const selectDataKeysByCategoryDimension = createSelector(
     const { data: categories } = categoriesData;
     if (categoryGroups && categories) {
       if (categoryDimension === categoryDimensions.allCategoriesDimension) {
+        // todo - maybe use some constant here to take out the 'all categories' name
         return { data: categoryGroups.slice(1), isLoading: false };
       }
       return { data: categories, isLoading: true };
@@ -333,11 +344,15 @@ export const selectDataKeysByCategoryDimension = createSelector(
 /**
  * Selectors for Plot Component's data
  */
-export const selectTooltipType = (state: RootState): tooltipType =>
+export const selectTooltipType = (state: RootState): tooltipType | undefined =>
   state.spendingAnalysis.plotState.tooltipType;
-export const selectTooltipData = (state: any): any =>
+
+export const selectTooltipData = (state: RootState): TooltipData =>
   state.spendingAnalysis.plotState.tooltipData;
-export const selectHighlightedBarData = (state: any): any =>
-  state.spendingAnalysis.plotState.highlightedBarData;
+
+export const selectHighlightedBarData = (
+  state: RootState,
+): HighlightedBarData | undefined => state.spendingAnalysis.plotState.highlightedBarData;
+
 export const selectShowTooltip = (state: RootState): boolean =>
   state.spendingAnalysis.plotState.showTooltip;
