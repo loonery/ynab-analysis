@@ -15,10 +15,10 @@ const initialState: SpendingAnalysisState = {
   selectedCategory: ALL_CATEGORIES_ITEM,
   parentOfSelected: NO_PARENT,
   plotState: {
-    // tooltipType: undefined,
-    // tooltipData: undefined,
+    tooltipType: undefined,
+    tooltipData: undefined,
     showTooltip: false,
-    highlightedBarData,
+    highlightedBarData: undefined,
   },
 };
 

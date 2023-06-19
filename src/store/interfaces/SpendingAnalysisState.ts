@@ -1,3 +1,5 @@
+import { BarTooltipProps } from 'components/reports/SpendingByCategoryReport/components/SpendingByCategoryPlot/BarTooltip';
+import { DotTooltipProps } from 'components/reports/SpendingByCategoryReport/components/SpendingByCategoryPlot/DotTooltip';
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import {
   ALL_CATEGORIES_DIMENSION,
@@ -29,17 +31,18 @@ export interface SpendingAnalysisState {
 }
 
 interface PlotState {
-  tooltipType: tooltipType;
+  tooltipType: tooltipType | undefined;
   tooltipData: TooltipData;
   showTooltip: boolean;
-  highlightedBarData: HighlightedBarData;
+  highlightedBarData: HighlightedBarData | undefined;
 }
 
-export interface TooltipData {
-  prop1: boolean;
-}
+export type TooltipData = DotTooltipProps | BarTooltipProps | undefined;
 
 export interface HighlightedBarData {
   x: number;
   y: number;
+  height: number;
+  width: number;
+  fill: string;
 }

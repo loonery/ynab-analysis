@@ -40,7 +40,7 @@ interface Payload {
   [dataKey: string]: number | MonthYear;
 }
 
-interface BarTooltipProps {
+export interface BarTooltipProps {
   payload: Payload;
   dataKey: string;
 }
