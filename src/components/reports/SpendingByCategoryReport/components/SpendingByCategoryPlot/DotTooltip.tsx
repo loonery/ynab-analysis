@@ -5,31 +5,13 @@ import { useSelector } from 'react-redux';
 import { CategoryGroup } from 'interfaces/Category';
 import { RootState } from 'store';
 import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroup,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
-import styled from 'styled-components';
 
-export interface DotTooltipProps {
-  month: MonthYear;
-  total: number;
-}
-
-interface DotTooltipValues {
-  monthString: string;
-  totalString: string;
-}
-
-const StyledDollarValue = styled.div`
-  font-size: 18px;
-  font-weight: 500;
-`;
-const StyledMonth = styled.div`
-  font-size: 14px;
-  font-weight: 300;
-`;
+import { DotTooltipProps, DotTooltipValues } from './interfaces/interfaces';
+import { StyledMonth, StyledDollarValue } from './styles/styles';
 
 const getDotTooltipValues = (
   month: string,

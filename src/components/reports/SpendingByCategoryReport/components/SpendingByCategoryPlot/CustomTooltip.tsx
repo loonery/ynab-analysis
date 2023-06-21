@@ -10,20 +10,11 @@ import {
   selectTooltipData,
   selectTooltipType,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
-import styled from 'styled-components';
 
-import { BarTooltip, BarTooltipProps } from './BarTooltip';
+import { BarTooltip } from './BarTooltip';
 import { DotTooltip } from './DotTooltip';
-import { DotTooltipProps } from './DotTooltip';
-
-const StyledTooltipContainer = styled.div`
-  padding: 5px;
-  border-radius: 5px;
-  background-color: #fff;
-  border: 0.75px solid #ccc;
-  box-shadow: 0 0 5px #ccc;
-  font-size: 14px;
-`;
+import { DotTooltipProps, BarTooltipProps } from './interfaces/interfaces';
+import { StyledTooltipContainer } from './styles/styles';
 
 // eslint-disable-next-line
 export const CustomTooltip = () => {
@@ -33,7 +24,7 @@ export const CustomTooltip = () => {
   const tooltipData: TooltipData = useSelector((state: RootState) =>
     selectTooltipData(state),
   );
-  const activeTooltipType: tooltipType = useSelector((state: RootState) =>
+  const activeTooltipType: tooltipType | undefined = useSelector((state: RootState) =>
     selectTooltipType(state),
   );
 

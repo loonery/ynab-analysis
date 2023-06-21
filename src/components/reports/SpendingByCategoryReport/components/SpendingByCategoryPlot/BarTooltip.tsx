@@ -2,51 +2,21 @@ import React, { Fragment } from 'react';
 
 import { useSelector } from 'react-redux';
 
+import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { CategoryGroup } from 'interfaces/Category';
 import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroup,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
-import styled from 'styled-components';
 
-const StyledCategoryName = styled.div`
-  font-size: 14px;
-  font-weight: 300;
-`;
-
-const StyledDollarValue = styled.div`
-  font-size: 18px;
-  font-weight: 500;
-`;
-
-const StyledPercentage = styled.div`
-  font-size: 14px;
-  font-weight: 300;
-`;
-
-interface BarTooltipValues {
-  categoryName: string;
-  dollarValue: number;
-  percentString: string;
-}
-
-interface Payload {
-  month: MonthYear;
-  total: number;
-  [dataKey: string]: number | MonthYear;
-}
-
-export interface BarTooltipProps {
-  payload: Payload;
-  dataKey: string;
-}
+import { BarTooltipValues, BarTooltipProps } from './interfaces/interfaces';
+import { StyledCategoryName, StyledDollarValue, StyledPercentage } from './styles/styles';
 
 const getBarTooltipValues = (
-  payload: Payload,
+  payload: SpendingChartData,
   dataKey: string,
   categoryDimension: categoryDimensions,
   categoryGroup: CategoryGroup | string,

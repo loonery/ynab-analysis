@@ -73,3 +73,7 @@ export const PLOT_HEIGHT = 600;
 // CUSTOM DOT CONSTS
 export const OUTER_DOT_RADIUS = 8;
 export const INNER_DOT_RADIUS = 5;
+
+// PLOT DATA ASSEMBLY CONSTS
+export const UNDEFINED_CATEGORY_KEY = 'undefined category';
+export const UNDEFINED_AMOUNT_VALUE = 0;

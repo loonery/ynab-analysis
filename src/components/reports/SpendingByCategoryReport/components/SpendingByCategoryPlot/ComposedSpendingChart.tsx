@@ -103,12 +103,3 @@ export const ComposedSpendingChart = ({ data, dataKeys }) => {
     </ResponsiveContainer>
   );
 };
-ComposedSpendingChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      value: PropTypes.number.isRequired,
-    }),
-  ).isRequired,
-  dataKeys: PropTypes.arrayOf(string),
-};
