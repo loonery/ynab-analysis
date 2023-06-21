@@ -78,4 +78,6 @@ export const INNER_DOT_RADIUS = 5;
 export const UNDEFINED_CATEGORY_KEY = 'undefined category';
 export const UNDEFINED_AMOUNT_VALUE = 0;
 
-// PLOT ASSEMB
+// PLOT PROPS CONSTS
+export const MONTH_DATA_KEY_NAME = 'month';
+export const STACK_ID = 'a';

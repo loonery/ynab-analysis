@@ -2,8 +2,6 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
-import PropTypes, { string } from 'prop-types';
 import {
   Bar,
   CartesianGrid,
@@ -14,7 +12,7 @@ import {
   YAxis,
   Line,
 } from 'recharts';
-import { ComposedChartProps } from 'recharts';
+import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalChart';
 import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
@@ -26,7 +24,12 @@ import {
   setTooltipType,
 } from 'store/slices/spendingAnalysisSlice';
 
-import { PLOT_HEIGHT, SPENDING_CATEGORIES_COLORS } from '../../consts/consts';
+import {
+  MONTH_DATA_KEY_NAME,
+  STACK_ID,
+  PLOT_HEIGHT,
+  SPENDING_CATEGORIES_COLORS,
+} from '../../consts/consts';
 
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';
@@ -60,7 +63,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
     dispatch(setHighlightedBarData(undefined));
   };
 
-  const composedSpendingChartProps: ComposedChartProps = {
+  const composedSpendingChartProps: CategoricalChartProps = {
     stackOffset: 'sign',
     width: 500,
     height: 300,
@@ -77,14 +80,14 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
     <ResponsiveContainer width={'100%'} height={PLOT_HEIGHT}>
       <ComposedChart {...composedSpendingChartProps}>
         <CartesianGrid strokeDasharray='3 3' />
-        <XAxis dataKey={'month'} />
+        <XAxis dataKey={MONTH_DATA_KEY_NAME} />
         <YAxis tickFormatter={(value: number): string => `$${value}`} />
         <Tooltip cursor={false} content={<CustomTooltip />} />
         {dataKeys.map((key: string, index: number) => {
           return (
             <Bar
               key={index}
-              stackId={'a'}
+              stackId={STACK_ID}
               dataKey={key}
               fill={SPENDING_CATEGORIES_COLORS[key]}
               onMouseEnter={handleMouseEnterBar}
