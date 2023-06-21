@@ -2,7 +2,7 @@ import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingCh
 import { InternMap } from 'd3';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
-import { UNDEFINED_CATEGORY_KEY, UNDEFINED_AMOUNT_VALUE } from '../consts/plotConsts';
+import { UNDEFINED_CATEGORY_KEY, UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
 
 export const assembleSpendingPlotData = (
   categorySpendingData: InternMap<MonthYear, InternMap<string | undefined, string>>,

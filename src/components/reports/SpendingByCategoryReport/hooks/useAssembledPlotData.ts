@@ -9,6 +9,7 @@ import {
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors';
 
+import { DataKeys } from '../components/SpendingByCategoryPlot/interfaces/types/types';
 import { assembleSpendingPlotData } from '../utils/assemblePlotData';
 
 /**
@@ -17,7 +18,7 @@ import { assembleSpendingPlotData } from '../utils/assemblePlotData';
  */
 export const useAssembledPlotData = (): {
   data: SpendingChartData[] | undefined;
-  dataKeys: string[] | undefined;
+  dataKeys: DataKeys | undefined;
   isLoading: boolean;
 } => {
   // Parse the fetched data from our selectors

@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import PropTypes, { string } from 'prop-types';
 import {
   Bar,
@@ -13,7 +14,10 @@ import {
   YAxis,
   Line,
 } from 'recharts';
+import { ComposedChartProps } from 'recharts';
+import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
+import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
 import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   setTooltipData,
@@ -22,18 +26,21 @@ import {
   setTooltipType,
 } from 'store/slices/spendingAnalysisSlice';
 
-import { PLOT_HEIGHT, SPENDING_CATEGORIES_COLORS } from '../../consts/plotConsts';
+import { PLOT_HEIGHT, SPENDING_CATEGORIES_COLORS } from '../../consts/consts';
 
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';
 import { HighlightedBarSection } from './HighlightedBarSection';
+import { ComposedSpendingChartProps } from './interfaces/interfaces';
 
 // eslint-disable-next-line
-export const ComposedSpendingChart = ({ data, dataKeys }) => {
+export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartProps) => {
   const dispatch = useDispatch();
 
-  const highlightedBarData = useSelector((state) => selectHighlightedBarData(state));
-  const { x, y, height, width, fill } = highlightedBarData || {};
+  const highlightedBarData: HighlightedBarData | undefined = useSelector(
+    (state: RootState) => selectHighlightedBarData(state),
+  );
+  const { x, y, height, width, fill } = highlightedBarData ?? {};
 
   const handleMouseEnterBar = (data): void => {
     // mousing over any bar yields these variables
@@ -53,25 +60,27 @@ export const ComposedSpendingChart = ({ data, dataKeys }) => {
     dispatch(setHighlightedBarData(undefined));
   };
 
+  const composedSpendingChartProps: ComposedChartProps = {
+    stackOffset: 'sign',
+    width: 500,
+    height: 300,
+    data,
+    margin: {
+      top: 20,
+      right: 30,
+      left: 20,
+      bottom: 5,
+    },
+  };
+
   return (
     <ResponsiveContainer width={'100%'} height={PLOT_HEIGHT}>
-      <ComposedChart
-        stackOffset='sign'
-        width={500}
-        height={300}
-        data={data}
-        margin={{
-          top: 20,
-          right: 30,
-          left: 20,
-          bottom: 5,
-        }}
-      >
+      <ComposedChart {...composedSpendingChartProps}>
         <CartesianGrid strokeDasharray='3 3' />
         <XAxis dataKey={'month'} />
-        <YAxis tickFormatter={(value) => `$${value}`} />
+        <YAxis tickFormatter={(value: number): string => `$${value}`} />
         <Tooltip cursor={false} content={<CustomTooltip />} />
-        {dataKeys.map((key, index) => {
+        {dataKeys.map((key: string, index: number) => {
           return (
             <Bar
               key={index}

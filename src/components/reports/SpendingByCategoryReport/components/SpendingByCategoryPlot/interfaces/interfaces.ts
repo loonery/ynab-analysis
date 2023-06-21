@@ -1,6 +1,7 @@
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
+import { DataKeys } from './types/types';
 /**
  * Interfaces the Spending by Category Plot
  */
@@ -23,4 +24,9 @@ export interface BarTooltipValues {
   categoryName: string;
   dollarValue: number;
   percentString: string;
+}
+
+export interface ComposedSpendingChartProps {
+  data: SpendingChartData[];
+  dataKeys: DataKeys;
 }

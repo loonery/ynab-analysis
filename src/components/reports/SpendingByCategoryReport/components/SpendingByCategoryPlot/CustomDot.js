@@ -10,7 +10,7 @@ import {
   setTooltipType,
 } from 'store/slices/spendingAnalysisSlice';
 
-import { INNER_DOT_RADIUS, OUTER_DOT_RADIUS } from '../../consts/plotConsts';
+import { INNER_DOT_RADIUS, OUTER_DOT_RADIUS } from '../../consts/consts';
 
 /** Custom dot is fed information from reChart's line component */
 export const CustomDot = ({ active, cx, cy, payload }) => {
