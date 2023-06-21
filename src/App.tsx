@@ -6,7 +6,7 @@ import { AppContainer } from 'libs/reuse/containers/AppContainer';
 import { Route, Routes } from 'react-router';
 
 import FilterBar from './components/FilterBar/components/FilterBar';
-import SpendingByCategoryPage from './components/pages/SpendingAnalysisPage/';
+import SpendingByCategoryPage from './components/pages/SpendingAnalysisPage';
 
 const App = () => {
   // populate the store on app render

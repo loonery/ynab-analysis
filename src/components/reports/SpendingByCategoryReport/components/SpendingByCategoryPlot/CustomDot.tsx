@@ -39,9 +39,3 @@ export const CustomDot = ({ active, cx, cy, payload }) => {
     </g>
   );
 };
-CustomDot.propTypes = {
-  active: PropTypes.bool.isRequired,
-  cx: PropTypes.number.isRequired,
-  cy: PropTypes.number.isRequired,
-  payload: PropTypes.object.isRequired,
-};

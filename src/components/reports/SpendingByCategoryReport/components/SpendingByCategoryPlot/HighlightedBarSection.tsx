@@ -30,10 +30,3 @@ export const HighlightedBarSection = ({ x, y, height, width, fill }) => {
     </g>
   );
 };
-HighlightedBarSection.propTypes = {
-  x: PropTypes.number.isRequired,
-  y: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  fill: PropTypes.string.isRequired,
-};

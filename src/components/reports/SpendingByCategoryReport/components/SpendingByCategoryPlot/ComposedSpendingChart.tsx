@@ -16,6 +16,7 @@ import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalC
 import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
+import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
 import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   setTooltipData,
@@ -45,7 +46,8 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
   );
   const { x, y, height, width, fill } = highlightedBarData ?? {};
 
-  const handleMouseEnterBar = (data): void => {
+  // todo - add parameter typing
+  const handleMouseEnterBar = (data: any): void => {
     // mousing over any bar yields these variables
     const { x, y, height, width } = data;
     const barTooltipData = data.tooltipPayload[0];

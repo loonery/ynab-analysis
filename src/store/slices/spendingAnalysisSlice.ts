@@ -8,6 +8,7 @@ import {
   SpendingAnalysisState,
   categoryDimensions,
 } from 'store/interfaces/SpendingAnalysisState';
+import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
 
 const initialState: SpendingAnalysisState = {
   categoryDimension: categoryDimensions.allCategoriesDimension,

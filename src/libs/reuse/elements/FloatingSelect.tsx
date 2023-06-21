@@ -46,10 +46,3 @@ const FloatingSelect = ({ label, id, options, onChange, value }) => {
   );
 };
 export default FloatingSelect;
-FloatingSelect.propTypes = {
-  label: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-};

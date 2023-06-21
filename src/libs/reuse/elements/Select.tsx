@@ -44,10 +44,3 @@ const Select = ({ label, id, options, onChange, value }) => {
   );
 };
 export default Select;
-Select.propTypes = {
-  label: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  options: PropTypes.arrayOf(PropTypes.string).isRequired,
-  onChange: PropTypes.func.isRequired,
-  value: PropTypes.string.isRequired,
-};

@@ -18,10 +18,3 @@ export const Checkbox = ({ labelText, checked = false, onChange, id }) => {
     </div>
   );
 };
-
-Checkbox.propTypes = {
-  labelText: PropTypes.string.isRequired,
-  checked: PropTypes.bool,
-  onChange: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-};
