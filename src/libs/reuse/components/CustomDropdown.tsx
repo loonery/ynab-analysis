@@ -35,11 +35,6 @@ const CustomToggle = React.forwardRef(({ children, onClick, show }, ref) => {
   );
 });
 CustomToggle.displayName = 'Custom Dropdown Toggle';
-CustomToggle.propTypes = {
-  children: PropTypes.node.isRequired,
-  onClick: PropTypes.func.isRequired,
-  show: PropTypes.bool.isRequired,
-};
 
 // custom menu that acts as a dropdown menu
 const CustomMenu = React.forwardRef(({ children, style, className }, ref) => {
@@ -52,11 +47,6 @@ const CustomMenu = React.forwardRef(({ children, style, className }, ref) => {
   );
 });
 CustomMenu.displayName = 'Custom Dropdown Menu';
-CustomMenu.propTypes = {
-  children: PropTypes.node.isRequired,
-  style: PropTypes.object,
-  className: PropTypes.string,
-};
 
 export const CustomDropdown = ({ dropdownLinkText, id, onToggle, show, children }) => {
   return (

@@ -11,8 +11,8 @@ import {
 
 const initialState: FilterBarState = {
   categoryDropdown: {
-    savedCategoryCheckBoxes: [],
-    tempCategoryCheckBoxes: [],
+    savedCheckBoxes: [],
+    tempCheckBoxes: [],
     show: false,
   },
   dateDropdown: {
@@ -21,8 +21,8 @@ const initialState: FilterBarState = {
     show: false,
   },
   accountDropdown: {
-    savedAccountCheckBoxes: [],
-    tempAccountCheckBoxes: [],
+    savedCheckBoxes: [],
+    tempCheckBoxes: [],
     show: false,
   },
   appliedFilters: {

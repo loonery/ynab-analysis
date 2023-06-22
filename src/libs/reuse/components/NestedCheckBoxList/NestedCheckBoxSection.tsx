@@ -1,22 +1,16 @@
 import React, { Fragment } from 'react';
 
 import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
-const ParentCheckboxContainer = styled.div`
-  font-weight: 600;
-`;
+import { NestedCheckBoxSectionProps } from './interfaces/NestedCheckboxSection';
+import { ParentCheckboxContainer, ChildCheckboxContainer } from './styles/styles';
 
-const ChildCheckboxContainer = styled.div`
-  margin-left: 15px;
-`;
-
+// eslint-disable-next-line
 export const NestedCheckBoxSection = ({
   checkBoxSection,
   parentOnClick,
   childOnClick,
-}) => {
+}: NestedCheckBoxSectionProps) => {
   const { parentName, checked, childObjects } = checkBoxSection;
 
   return (
@@ -26,7 +20,7 @@ export const NestedCheckBoxSection = ({
           labelText={parentName}
           id={'parent-checkbox-' + parentName}
           checked={checked}
-          onChange={() => parentOnClick(parentName)}
+          onChange={(): void => parentOnClick(parentName)}
         />
       </ParentCheckboxContainer>
 
@@ -37,24 +31,10 @@ export const NestedCheckBoxSection = ({
             labelText={childName}
             id={'child-checkbox-' + childName}
             checked={checked}
-            onChange={() => childOnClick(parentName, childName)}
+            onChange={(): void => childOnClick(parentName, childName)}
           />
         </ChildCheckboxContainer>
       ))}
     </Fragment>
   );
-};
-NestedCheckBoxSection.propTypes = {
-  checkBoxSection: PropTypes.shape({
-    parentName: PropTypes.string.isRequired,
-    checked: PropTypes.bool.isRequired,
-    childObjects: PropTypes.arrayOf(
-      PropTypes.shape({
-        childName: PropTypes.string.isRequired,
-        checked: PropTypes.bool.isRequired,
-      }),
-    ).isRequired,
-  }).isRequired,
-  parentOnClick: PropTypes.func.isRequired,
-  childOnClick: PropTypes.func.isRequired,
 };

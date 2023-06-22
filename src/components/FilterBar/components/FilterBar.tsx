@@ -7,6 +7,7 @@ import AccountFilterDropdown from './AccountFilterDropdown/AccountFilterDropdown
 import CategoryFilterDropdown from './CategoryFilterDropdown/CategoryFilterDropdown';
 import DateFilterDropdown from './DateFilterDropdown/DateFilterDropdown';
 
+// eslint-disable-next-line
 const FilterBar = () => {
   return (
     <PageContainer>

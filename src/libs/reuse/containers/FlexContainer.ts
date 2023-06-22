@@ -1,21 +1,29 @@
-import styled from 'styled-components';
+import { CSSProperties } from 'react';
 
-export const FlexContainer = styled.div`
+import styled from 'styled-components';
+interface FlexContainerProps {
+  justify?: CSSProperties['justifyContent'];
+  align?: CSSProperties['alignItems'];
+  wrap?: CSSProperties['flexWrap'];
+  gap?: CSSProperties['gap'];
+  className?: string;
+}
+export const FlexContainer = styled.div<FlexContainerProps>`
   display: flex;
   flex-direction: row;
-  justify-content: ${({ justify }) => justify || 'initial'};
-  align-items: ${({ align }) => align || 'initial'};
-  flex-wrap: ${({ wrap }) => wrap || 'initial'};
-  gap: ${({ gap }) => gap || '0'};
+  justify-content: ${({ justify }): string => justify || 'initial'};
+  align-items: ${({ align }): string => align || 'initial'};
+  flex-wrap: ${({ wrap }): string => wrap || 'initial'};
+  gap: ${({ gap }): string => String(gap) || '0'};
 
   & > * {
-    margin-right: ${({ gap }) => gap || '0'};
-    margin-bottom: ${({ gap }) => gap || '0'};
+    margin-right: ${({ gap }): string => String(gap) || '0'};
+    margin-bottom: ${({ gap }): string => String(gap) || '0'};
   }
 
   & > *:last-child {
     margin-right: 0;
   }
 
-  ${({ className }) => (className ? `& ${className}` : '')}
+  ${({ className }): string => (className ? `& ${className}` : '')}
 `;

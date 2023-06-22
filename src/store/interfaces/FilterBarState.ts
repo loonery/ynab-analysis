@@ -1,6 +1,6 @@
 import { DateRange } from './DateRange';
 
-enum DropdownKeys {
+export enum DropdownKeys {
   categoryDropdown = 'categoryDropdown',
   dateDropdown = 'dateDropdown',
   accountDropdown = 'accountDropdown',
@@ -11,30 +11,22 @@ export type DropdownKey = DropdownKeys;
  * Defines the state for the FilterBar
  */
 export interface FilterBarState {
-  [DropdownKeys.categoryDropdown]: CategoryDropdown;
-  [DropdownKeys.dateDropdown]: DateDropdown;
-  [DropdownKeys.accountDropdown]: AccountDropdown;
+  [DropdownKeys.categoryDropdown]: CheckboxDropdownState;
+  [DropdownKeys.dateDropdown]: DateDropdownState;
+  [DropdownKeys.accountDropdown]: CheckboxDropdownState;
   appliedFilters: AppliedFilters;
 }
 
-export interface CategoryDropdown {
-  savedCategoryCheckBoxes: string[];
-  tempCategoryCheckBoxes: string[];
+export interface CheckboxDropdownState {
+  savedCheckBoxes: string[];
+  tempCheckBoxes: string[];
   show: boolean;
 }
-
-export interface AccountDropdown {
-  savedAccountCheckBoxes: string[];
-  tempAccountCheckBoxes: string[];
-  show: boolean;
-}
-
-export interface DateDropdown {
+export interface DateDropdownState {
   savedDateRange: DateRange;
   tempDateRange: DateRange;
   show: boolean;
 }
-
 export interface AppliedFilters {
   startDate: string | undefined;
   endDate: string | undefined;
@@ -42,4 +34,4 @@ export interface AppliedFilters {
   filteredAccounts: string[];
 }
 
-export type FilterBarDropdown = DateDropdown | CategoryDropdown | AccountDropdown;
+export type FilterBarDropdown = DateDropdownState | CheckboxDropdownState;

@@ -15,6 +15,7 @@ import {
 
 import { assembleAccountCheckboxes } from '../../utils/filterBarUtils';
 
+// eslint-disable-next-line
 const AccountCheckboxesContainer = () => {
   const dispatch = useDispatch();
   const keys = ACCOUNT_DROPDOWN_KEYS;
@@ -32,6 +33,7 @@ const AccountCheckboxesContainer = () => {
     dispatch(initCheckboxes({ checkboxes, keys }));
   }, [accounts]);
 
+  // todo - factor this out
   const parentOnClick = (parentName) =>
     dispatch(
       toggleParentCheckbox({
@@ -40,6 +42,7 @@ const AccountCheckboxesContainer = () => {
       }),
     );
 
+  // todo - factor this out
   const childOnClick = (parentName, childName) =>
     dispatch(
       toggleChildCheckbox({

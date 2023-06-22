@@ -2,9 +2,15 @@ import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
-import { CATEGORY_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
+import { RootState } from 'store';
+import {
+  CheckboxDropdownState,
+  DropdownKey,
+  DropdownKeys,
+  FilterBarDropdown,
+} from 'store/interfaces/FilterBarState';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelectors';
 import {
@@ -15,23 +21,30 @@ import {
 
 import { assembleCategoryCheckboxObjects } from '../../utils/filterBarUtils';
 
+// eslint-disable-next-line
 const CategoryCheckboxesContainer = () => {
   const dispatch = useDispatch();
-  const keys = CATEGORY_DROPDOWN_KEYS;
+  const categoryDropdownKey: DropdownKey = DropdownKeys.categoryDropdown;
 
   // get all transaction categories and store the parent categories in an array
-  const categories = useSelector((state) => selectCategoryData(state));
+  const { data: categoryData, isLoading } = useSelector((state: RootState) =>
+    selectCategoryData(state),
+  );
 
   // the checkboxes we render are the ones that the user is manipulating,
   // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.
-  const { tempCategoryCheckBoxes } = useSelector((state) => selectDropdown(state, keys));
+  const { tempCheckBoxes } = useSelector(
+    (state: RootState): CheckboxDropdownState =>
+      selectDropdown(state, categoryDropdownKey) as CheckboxDropdownState,
+  );
 
   // assemble and initialize the category checkboxes on start
   useEffect(() => {
-    const checkboxes = assembleCategoryCheckboxObjects(categories);
+    const checkboxes = assembleCategoryCheckboxObjects();
     dispatch(initCheckboxes({ checkboxes, keys }));
   }, [categories]);
 
+  // todo - factor this out -accounts share it
   const parentOnClick = (parentName) =>
     dispatch(
       toggleParentCheckbox({
@@ -40,6 +53,7 @@ const CategoryCheckboxesContainer = () => {
       }),
     );
 
+  // todo - factor this out -accounts share it
   const childOnClick = (parentName, childName) =>
     dispatch(
       toggleChildCheckbox({
@@ -52,7 +66,7 @@ const CategoryCheckboxesContainer = () => {
   return (
     <ScrollableContentContainer>
       <NestedCheckBoxList
-        checkboxSections={tempCategoryCheckBoxes}
+        checkboxSections={tempCheckBoxes}
         parentOnClick={parentOnClick}
         childOnClick={childOnClick}
       />
