@@ -28,8 +28,8 @@ export type DateRangeDropdownKey = typeof DATE_DROPDOWN_REDUCER_KEY;
  */
 export interface FilterBarState {
   [CATEGORY_DROPDOWN_REDUCER_KEY]: CheckboxDropdownState;
-  [ACCOUNT_DROPDOWN_REDUCER_KEY]: DateDropdownState;
-  [DATE_DROPDOWN_REDUCER_KEY]: CheckboxDropdownState;
+  [DATE_DROPDOWN_REDUCER_KEY]: DateDropdownState;
+  [ACCOUNT_DROPDOWN_REDUCER_KEY]: CheckboxDropdownState;
   appliedFilters: AppliedFilters;
 }
 

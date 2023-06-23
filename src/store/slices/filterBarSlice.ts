@@ -2,6 +2,15 @@ import { createSlice } from '@reduxjs/toolkit';
 import { Draft } from '@reduxjs/toolkit';
 import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
+  DROPDOWN_SHOW_KEY,
+  INITIAL_CHECKBOX_DROPDOWN_STATE,
+  INITIAL_DATE_DROPDOWN_STATE,
+  DATE_DROPDOWN_REDUCER_KEY,
+  ACCOUNT_DROPDOWN_REDUCER_KEY,
+  SAVED_CHECKBOX_KEY,
+  TEMP_CHECKBOX_KEY,
+} from 'store/consts/consts';
+import {
   CheckBoxDropdownKey,
   CheckboxDropdownState,
   FilterBarState,
@@ -20,21 +29,9 @@ import { DateRange } from '../interfaces/DateRange';
 import { DropdownKey } from '../interfaces/FilterBarState';
 
 const initialState: FilterBarState = {
-  categoryDropdown: {
-    savedCheckBoxes: [],
-    tempCheckBoxes: [],
-    show: false,
-  },
-  dateDropdown: {
-    savedDateRange: { startDate: undefined, endDate: undefined },
-    tempDateRange: { startDate: undefined, endDate: undefined },
-    show: false,
-  },
-  accountDropdown: {
-    savedCheckBoxes: [],
-    tempCheckBoxes: [],
-    show: false,
-  },
+  categoryDropdown: { ...INITIAL_CHECKBOX_DROPDOWN_STATE },
+  [ACCOUNT_DROPDOWN_REDUCER_KEY]: { ...INITIAL_CHECKBOX_DROPDOWN_STATE },
+  [DATE_DROPDOWN_REDUCER_KEY]: { ...INITIAL_DATE_DROPDOWN_STATE },
   appliedFilters: {
     startDate: undefined,
     endDate: undefined,
@@ -52,17 +49,19 @@ const filterBarSlice = createSlice({
       const {
         dropdownKey,
         checkboxes,
-      }: { dropdownKey: DropdownKey; checkboxes: NestedCheckBoxSection[] } =
+      }: { dropdownKey: CheckBoxDropdownKey; checkboxes: NestedCheckBoxSection[] } =
         action.payload;
 
       // revisit this - potentially breaks the immer library functionality!!!!
-      const checkboxState = state[dropdownKey] as Draft<CheckboxDropdownState>;
-      checkboxState.savedCheckBoxes = checkboxes;
-      checkboxState.tempCheckBoxes = checkboxes;
+      const checkboxState = state[dropdownKey];
+      checkboxState[SAVED_CHECKBOX_KEY] = checkboxes;
+      checkboxState[TEMP_CHECKBOX_KEY] = checkboxes;
     },
     toggleParentCheckbox(state, action) {
-      const { parentId, dropdownKey }: { parentId: string; dropdownKey: DropdownKey } =
-        action.payload;
+      const {
+        parentId,
+        dropdownKey,
+      }: { parentId: string; dropdownKey: CheckBoxDropdownKey } = action.payload;
       // get current state
       const checkboxState = getCurrentCheckboxState(state, dropdownKey);
       const parent = findParentCheckbox(checkboxState, parentId);

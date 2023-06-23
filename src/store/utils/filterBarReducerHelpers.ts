@@ -1,9 +1,8 @@
-import { Draft } from '@reduxjs/toolkit';
 import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
 } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
-import { EMPTY_NESTED_CHECKBOX_SECTION } from 'store/consts/consts';
+import { EMPTY_NESTED_CHECKBOX_SECTION, TEMP_CHECKBOX_KEY } from 'store/consts/consts';
 import {
   AppliedFilters,
   CheckboxDropdownState,
@@ -30,8 +29,8 @@ const getFilteredItemsFromNestedCheckboxes = (
 export const getCurrentCheckboxState = (
   state: Draft<FilterBarState>,
   dropdownKey: CheckBoxDropdownKey,
-): Draft<CheckboxDropdownState> => {
-  return state[dropdownKey] as Draft<CheckboxDropdownState>;
+): CheckboxDropdownState => {
+  return state[dropdownKey];
 };
 
 export const getFiltersFromState = (savedState: {
@@ -99,10 +98,10 @@ export const setAllChildren = (
  * @returns
  */
 export const findParentCheckbox = (
-  dropdownState: Draft<CheckboxDropdownState>,
+  dropdownState: CheckboxDropdownState,
   parentId: string,
 ): NestedCheckBoxSection => {
-  const currrentSections = dropdownState.tempCheckBoxes;
+  const currrentSections = dropdownState[TEMP_CHECKBOX_KEY];
   return (
     currrentSections.find((section) => section.parentId === parentId) ??
     EMPTY_NESTED_CHECKBOX_SECTION
