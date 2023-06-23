@@ -1,15 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { Draft } from '@reduxjs/toolkit';
 import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
-import { CheckboxDropdownState, FilterBarState } from 'store/interfaces/FilterBarState';
+import {
+  CheckBoxDropdownKey,
+  CheckboxDropdownState,
+  FilterBarState,
+} from 'store/interfaces/FilterBarState';
 import {
   findChildCheckboxByParent,
   findParentCheckbox,
   getFiltersFromState,
-  setAllCheckboxes,
   setAllChildren,
   toggleCheckboxValue,
   getCurrentCheckboxState,
+  setAllCheckboxesHelper,
 } from 'store/utils/filterBarReducerHelpers';
 
 import { DateRange } from '../interfaces/DateRange';
@@ -67,8 +71,14 @@ const filterBarSlice = createSlice({
       parent.childObjects = setAllChildren(parent.childObjects, parent.checked);
     },
     toggleChildCheckbox(state, action) {
-      const { childId, parentId, keys } = action.payload;
-      const parent = findParentCheckbox(state, parentId);
+      const {
+        childId,
+        parentId,
+        dropdownKey,
+      }: { childId: string; parentId: string; dropdownKey: CheckBoxDropdownKey } =
+        action.payload;
+      const checkboxState = getCurrentCheckboxState(state, dropdownKey);
+      const parent = findParentCheckbox(checkboxState, parentId);
 
       // toggle the one child in the parent's object
       const child = findChildCheckboxByParent(parent, childId);
@@ -79,22 +89,19 @@ const filterBarSlice = createSlice({
       const noChildrenChecked = parent.childObjects.every((e) => !e.checked);
 
       // check or uncheck the parent depending on the value of its children
-      if (allChildrenChecked) {
-        parent.checked = true;
-      } else if (noChildrenChecked) {
-        parent.checked = false;
-      }
+      if (allChildrenChecked) parent.checked = true;
+      else if (noChildrenChecked) parent.checked = false;
     },
     setAllCheckboxes(state, { payload }) {
       const { dropdownKey, value }: { dropdownKey: DropdownKey; value: boolean } =
         payload;
       const checkboxState = state[dropdownKey] as Draft<CheckboxDropdownState>;
-      const currentBoxes = checkboxState.tempCheckBoxes;
-      const newBoxes = setAllCheckboxes(currentBoxes, value);
-      checkboxState.tempCheckBoxes = newBoxes;
+      const currentBoxes = checkboxState.tempCheckboxes;
+      const newBoxes = setAllCheckboxesHelper(currentBoxes, value);
+      checkboxState.tempCheckboxes = newBoxes;
     },
     saveDropdownState(state, action) {
-      const { dropdownKey, tempCheckboxKey, savedCheckboxKey } = action.payload;
+      const { dropdownKey, tempKey, savedKey } = action.payload;
       // temp checkbox state now becomes saved checkbox state
       const newState = state[dropdownKey][tempCheckboxKey];
       state[dropdownKey][savedCheckboxKey] = newState;
@@ -150,14 +157,13 @@ export const {
   initCheckboxes,
   toggleParentCheckbox,
   toggleChildCheckbox,
-  setAllCheckboxes: selectAllCheckboxes,
-  selectNoCheckboxes,
-  saveDropdownState,
-  cancelDropdownChanges,
+  setAllCheckboxes,
   initDateDropdown,
-  setFiltersFromState,
-  toggleShowDropdown: toggleDropdown,
   updateStartDate,
   updateEndDate,
+  toggleShowDropdown,
+  saveDropdownState,
+  cancelDropdownChanges,
+  setFiltersFromState,
 } = filterBarSlice.actions;
 export const filterBarReducer = filterBarSlice.reducer;

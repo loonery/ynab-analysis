@@ -1,34 +1,47 @@
 import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import {
+  CATEGORY_DROPDOWN_REDUCER_KEY,
+  ACCOUNT_DROPDOWN_REDUCER_KEY,
+  DATE_DROPDOWN_REDUCER_KEY,
+  SAVED_CHECKBOX_KEY,
+  TEMP_CHECKBOX_KEY,
+  DROPDOWN_SHOW_KEY,
+  SAVED_DATE_RANGE_KEY,
+  TEMP_DATE_RANGE_KEY,
+} from 'store/consts/consts';
 
 import { DateRange } from './DateRange';
 
-export enum DropdownKeys {
-  categoryDropdown = 'categoryDropdown',
-  dateDropdown = 'dateDropdown',
-  accountDropdown = 'accountDropdown',
-}
+export type DropdownKey =
+  | typeof CATEGORY_DROPDOWN_REDUCER_KEY
+  | typeof ACCOUNT_DROPDOWN_REDUCER_KEY
+  | typeof DATE_DROPDOWN_REDUCER_KEY;
 
-export type DropdownKey = DropdownKeys;
+export type CheckBoxDropdownKey =
+  | typeof CATEGORY_DROPDOWN_REDUCER_KEY
+  | typeof ACCOUNT_DROPDOWN_REDUCER_KEY;
+
+export type DateRangeDropdownKey = typeof DATE_DROPDOWN_REDUCER_KEY;
 
 /**
  * Defines the state for the FilterBar
  */
 export interface FilterBarState {
-  [DropdownKeys.categoryDropdown]: CheckboxDropdownState;
-  [DropdownKeys.dateDropdown]: DateDropdownState;
-  [DropdownKeys.accountDropdown]: CheckboxDropdownState;
+  [CATEGORY_DROPDOWN_REDUCER_KEY]: CheckboxDropdownState;
+  [ACCOUNT_DROPDOWN_REDUCER_KEY]: DateDropdownState;
+  [DATE_DROPDOWN_REDUCER_KEY]: CheckboxDropdownState;
   appliedFilters: AppliedFilters;
 }
 
 export interface CheckboxDropdownState {
-  savedCheckBoxes: NestedCheckBoxSection[];
-  tempCheckBoxes: NestedCheckBoxSection[];
-  show: boolean;
+  [SAVED_CHECKBOX_KEY]: NestedCheckBoxSection[];
+  [TEMP_CHECKBOX_KEY]: NestedCheckBoxSection[];
+  [DROPDOWN_SHOW_KEY]: boolean;
 }
 export interface DateDropdownState {
-  savedDateRange: DateRange;
-  tempDateRange: DateRange;
-  show: boolean;
+  [SAVED_DATE_RANGE_KEY]: DateRange;
+  [TEMP_DATE_RANGE_KEY]: DateRange;
+  [DROPDOWN_SHOW_KEY]: boolean;
 }
 export interface AppliedFilters {
   startDate: string | undefined;
