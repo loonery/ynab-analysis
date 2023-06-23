@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 
+import { useFilterBarDispatch as useFilterBarActions } from 'components/FilterBar/hooks/useFilterbarDispatch';
 import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
 import { RootState } from 'store';
@@ -13,11 +14,7 @@ import {
 } from 'store/interfaces/FilterBarState';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelectors';
-import {
-  initCheckboxes,
-  toggleChildCheckbox,
-  toggleParentCheckbox,
-} from 'store/slices/filterBarSlice';
+import { initCheckboxes } from 'store/slices/filterBarSlice';
 
 import { assembleCategoryCheckboxObjects } from '../../utils/filterBarUtils';
 
@@ -27,8 +24,8 @@ const CategoryCheckboxesContainer = () => {
   const categoryDropdownKey: DropdownKey = DropdownKeys.categoryDropdown;
 
   // get all transaction categories and store the parent categories in an array
-  const { data: categoryData, isLoading } = useSelector((state: RootState) =>
-    selectCategoryData(state),
+  const { data: categoryData, isLoading: isCategoryDataLoading } = useSelector(
+    (state: RootState) => selectCategoryData(state),
   );
 
   // the checkboxes we render are the ones that the user is manipulating,
@@ -40,28 +37,14 @@ const CategoryCheckboxesContainer = () => {
 
   // assemble and initialize the category checkboxes on start
   useEffect(() => {
-    const checkboxes = assembleCategoryCheckboxObjects();
-    dispatch(initCheckboxes({ checkboxes, keys }));
-  }, [categories]);
+    if (categoryData) {
+      const { categories } = categoryData;
+      const checkboxes = assembleCategoryCheckboxObjects(categories);
+      dispatch(initCheckboxes({ checkboxes, keys }));
+    }
+  }, [categoryData, isCategoryDataLoading]);
 
-  // todo - factor this out -accounts share it
-  const parentOnClick = (parentName) =>
-    dispatch(
-      toggleParentCheckbox({
-        parentName,
-        keys,
-      }),
-    );
-
-  // todo - factor this out -accounts share it
-  const childOnClick = (parentName, childName) =>
-    dispatch(
-      toggleChildCheckbox({
-        parentName,
-        childName,
-        keys,
-      }),
-    );
+  const { parentOnClick, childOnClick } = useFilterBarActions();
 
   return (
     <ScrollableContentContainer>

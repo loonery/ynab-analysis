@@ -1,3 +1,5 @@
+import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+
 import { DateRange } from './DateRange';
 
 export enum DropdownKeys {
@@ -5,6 +7,7 @@ export enum DropdownKeys {
   dateDropdown = 'dateDropdown',
   accountDropdown = 'accountDropdown',
 }
+
 export type DropdownKey = DropdownKeys;
 
 /**
@@ -18,8 +21,8 @@ export interface FilterBarState {
 }
 
 export interface CheckboxDropdownState {
-  savedCheckBoxes: string[];
-  tempCheckBoxes: string[];
+  savedCheckBoxes: NestedCheckBoxSection[];
+  tempCheckBoxes: NestedCheckBoxSection[];
   show: boolean;
 }
 export interface DateDropdownState {

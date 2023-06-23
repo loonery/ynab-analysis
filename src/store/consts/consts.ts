@@ -1,3 +1,5 @@
+import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+
 // TRANSACTION SLICE CONSTS
 export const READY_TO_ASSIGN_CATEGORY_ID = '4d13ae18-b4c2-4ac8-b69b-cfe59ca7065b';
 
@@ -12,3 +14,11 @@ export const NO_PARENT = 'no parent';
 
 export const DOT_TOOLTIP_TYPE = 'dot-tooltip';
 export const BAR_TOOLTIP_TYPE = 'bar-tooltip';
+
+// FILTER BAR SLICE CONSTS
+export const EMPTY_NESTED_CHECKBOX_SECTION: NestedCheckBoxSection = {
+  parentId: 'blank',
+  parentName: 'blank',
+  checked: false,
+  childObjects: [],
+};

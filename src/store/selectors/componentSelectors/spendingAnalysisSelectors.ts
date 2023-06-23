@@ -9,7 +9,7 @@ import { FetchedData } from 'store/interfaces/FetchedData';
 import {
   HighlightedBarData,
   TooltipData,
-  categoryDimensions,
+  CategoryDimensions,
   tooltipType,
 } from 'store/interfaces/SpendingAnalysisState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
@@ -33,7 +33,7 @@ export const selectSelectedCategoryGroup = (state: RootState): CategoryGroup | s
   return state.spendingAnalysis.selectedCategoryGroup;
 };
 
-export const selectCategoryDimension = (state: RootState): categoryDimensions => {
+export const selectCategoryDimension = (state: RootState): CategoryDimensions => {
   return state.spendingAnalysis.categoryDimension;
 };
 
@@ -107,11 +107,11 @@ export const selectFilteredTransactionsByCategoryDimension = createSelector(
     const { data: transactionsSingle } = transactionsSingleData;
     if (transactionsAll && transactionsGroup && transactionsSingle) {
       let returnedData: Transaction[] = [];
-      if (categoryDimension === categoryDimensions.allCategoriesDimension) {
+      if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
         returnedData = transactionsAll;
-      } else if (categoryDimension === categoryDimensions.categoryGroupDimension) {
+      } else if (categoryDimension === CategoryDimensions.categoryGroupDimension) {
         returnedData = transactionsGroup;
-      } else if (categoryDimension === categoryDimensions.singleCategoryDimension) {
+      } else if (categoryDimension === CategoryDimensions.singleCategoryDimension) {
         returnedData = transactionsSingle;
       }
       return { data: returnedData, isLoading: false };
@@ -149,7 +149,7 @@ export const selectCategorySelectorCategoryOptions = createSelector(
   ): FetchedData<string[]> => {
     // if there is no selected category group, we don't want any drilldown options
     if (
-      categoryDimension === categoryDimensions.allCategoriesDimension &&
+      categoryDimension === CategoryDimensions.allCategoriesDimension &&
       typeof selectedCategoryGroup === 'string'
     ) {
       return { data: [] as string[], isLoading: false };
@@ -254,11 +254,11 @@ export const selectCategorySpendingDataByDimension = createSelector(
     const { data: single } = TotalsForSingleCategoryDimension;
 
     switch (categoryDimension) {
-      case categoryDimensions.allCategoriesDimension:
+      case CategoryDimensions.allCategoriesDimension:
         return { data: all, isLoading: false };
-      case categoryDimensions.categoryGroupDimension:
+      case CategoryDimensions.categoryGroupDimension:
         return { data: group, isLoading: false };
-      case categoryDimensions.singleCategoryDimension:
+      case CategoryDimensions.singleCategoryDimension:
         return { data: single, isLoading: false };
       default:
         return { data: undefined, isLoading: true };
@@ -311,10 +311,10 @@ export const selectTotalSpendingDataByDimension = createSelector(
   ],
   (categoryDimension, all, group): FetchedData<InternMap<MonthYear, string>> => {
     switch (categoryDimension) {
-      case categoryDimensions.allCategoriesDimension:
+      case CategoryDimensions.allCategoriesDimension:
         return all;
-      case categoryDimensions.categoryGroupDimension:
-      case categoryDimensions.singleCategoryDimension:
+      case CategoryDimensions.categoryGroupDimension:
+      case CategoryDimensions.singleCategoryDimension:
         return group;
     }
   },
@@ -331,7 +331,7 @@ export const selectDataKeysByCategoryDimension = createSelector(
     const { data: categoryGroups } = categoryGroupsData;
     const { data: categories } = categoriesData;
     if (categoryGroups && categories) {
-      if (categoryDimension === categoryDimensions.allCategoriesDimension) {
+      if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
         // todo - maybe use some constant here to take out the 'all categories' name
         return { data: categoryGroups.slice(1), isLoading: false };
       }

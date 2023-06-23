@@ -14,7 +14,7 @@ import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSele
 import {
   cancelDropdownChanges,
   saveDropdownState,
-  toggleDropdown,
+  toggleShowDropdown,
   setFiltersFromState,
 } from 'store/slices/filterBarSlice';
 
@@ -25,6 +25,7 @@ import {
 
 import DateFilterFormContainer from './DateFilterFormContainer';
 
+// eslint-disable-next-line
 const DateFilterDropdown = () => {
   const dispatch = useDispatch();
 
@@ -79,7 +80,7 @@ const DateFilterDropdown = () => {
     {
       label: <FontAwesomeIcon icon={faFloppyDisk} />,
       onClick: () => {
-        dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
+        dispatch(toggleShowDropdown(DATE_DROPDOWN_KEYS));
         dispatch(saveDropdownState(DATE_DROPDOWN_KEYS));
         dispatch(setFiltersFromState());
       },
@@ -90,7 +91,7 @@ const DateFilterDropdown = () => {
   const { show } = useSelector((state) => selectDropdown(state, DATE_DROPDOWN_KEYS));
   const onToggle = () => {
     // toggle the dropdown in state
-    dispatch(toggleDropdown(DATE_DROPDOWN_KEYS));
+    dispatch(toggleShowDropdown(DATE_DROPDOWN_KEYS));
     dispatch(cancelDropdownChanges(DATE_DROPDOWN_KEYS));
   };
 

@@ -11,7 +11,7 @@ import {
 } from 'store/consts/consts';
 import { DOT_TOOLTIP_TYPE, BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 
-export enum categoryDimensions {
+export enum CategoryDimensions {
   allCategoriesDimension = ALL_CATEGORIES_DIMENSION,
   categoryGroupDimension = CATEGORY_GROUP_DIMENSION,
   singleCategoryDimension = SINGLE_CATEGORY_DIMENSION,
@@ -23,21 +23,19 @@ export enum tooltipType {
 }
 
 export interface SpendingAnalysisState {
-  categoryDimension: categoryDimensions;
+  categoryDimension: CategoryDimensions;
   selectedCategoryGroup: CategoryGroup | string;
   selectedCategory: SubCategory | string;
   parentOfSelected: CategoryGroup | string;
   plotState: PlotState;
 }
 
-interface PlotState {
+export interface PlotState {
   tooltipType: tooltipType | undefined;
   tooltipData: TooltipData;
   showTooltip: boolean;
   highlightedBarData: HighlightedBarData | undefined;
 }
-
-export type TooltipData = DotTooltipProps | BarTooltipProps | undefined;
 
 export interface HighlightedBarData {
   x: number;
@@ -46,3 +44,5 @@ export interface HighlightedBarData {
   width: number;
   fill: string;
 }
+
+export type TooltipData = DotTooltipProps | BarTooltipProps | undefined;

@@ -12,12 +12,12 @@ import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import {
-  selectAllCheckboxes,
+  setAllCheckboxes,
   selectNoCheckboxes,
   saveDropdownState,
   cancelDropdownChanges,
   setFiltersFromState,
-  toggleDropdown,
+  toggleShowDropdown,
 } from 'store/slices/filterBarSlice';
 
 import { ACCOUNT_DROPDOWN_TOGGLE_LABEL } from '../../consts/filterBarConsts';
@@ -42,7 +42,7 @@ const AccountFilterDropdown = () => {
     {
       label: 'Select All',
       onClick: () => {
-        dispatch(selectAllCheckboxes(keys));
+        dispatch(setAllCheckboxes(keys));
       },
       classString: 'btn btn-sm btn-outline-dark',
     },
@@ -53,7 +53,7 @@ const AccountFilterDropdown = () => {
     {
       label: <FontAwesomeIcon icon={faXmark} />,
       onClick: () => {
-        dispatch(toggleDropdown(keys));
+        dispatch(toggleShowDropdown(keys));
         dispatch(cancelDropdownChanges(keys));
       },
       classString: 'btn btn-sm btn-outline-danger',
@@ -61,7 +61,7 @@ const AccountFilterDropdown = () => {
     {
       label: <FontAwesomeIcon icon={faFloppyDisk} />,
       onClick: () => {
-        dispatch(toggleDropdown(keys));
+        dispatch(toggleShowDropdown(keys));
         dispatch(saveDropdownState(keys));
         dispatch(setFiltersFromState());
       },
@@ -71,7 +71,7 @@ const AccountFilterDropdown = () => {
   const { show } = useSelector((state) => selectDropdown(state, keys));
   const onToggle = () => {
     // toggle the dropdown in state
-    dispatch(toggleDropdown(keys));
+    dispatch(toggleShowDropdown(keys));
     // revert temp state back to saved state if clicked away
     dispatch(cancelDropdownChanges(keys));
   };

@@ -1,24 +1,38 @@
-// all checkboxes start checked
-// Create an object that looks like this for each parent category and return them
-// as an array
-// {
-//     parentName: String,
-//     checked: Boolean
-//     childObjects: [{checkboxObject}, {...}, {...}],
-// }
+import { Account, FormattedAccountType } from 'interfaces/Account';
+import { SubCategory } from 'interfaces/Category';
+import { CategoryGroup } from 'interfaces/Category';
+import {
+  NestedCheckBoxSection,
+  ChildCheckboxObject,
+} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 
-export const assembleCategoryCheckboxObjects = (categoryObjectArray) => {
-  const checkboxObjects = categoryObjectArray.map((parent) => {
+// todo - factor out common functionality here - these functions are too similar
+
+/**
+ *
+ * @param dataArray
+ * @returns
+ */
+export const assembleCategoryCheckboxObjects = (
+  dataArray: CategoryGroup[],
+): NestedCheckBoxSection[] => {
+  return dataArray.map((categoryGroup: CategoryGroup) => {
+    // processing parent
     const checked = true;
-    const parentId = parent.id;
-    const parentName = parent.name;
-    const childObjects = parent.categories.map((childName) => {
-      return {
-        childName: childName.name,
-        childId: childName.id,
-        checked,
-      };
-    });
+    const parentId = categoryGroup.id;
+    const parentName = categoryGroup.name;
+
+    // processing children
+    const childObjects: ChildCheckboxObject[] = categoryGroup.subCategories.map(
+      (subCategory: SubCategory) => {
+        return {
+          childName: subCategory.name,
+          childId: subCategory.id,
+          checked,
+        };
+      },
+    );
+
     return {
       parentId,
       parentName,
@@ -26,30 +40,32 @@ export const assembleCategoryCheckboxObjects = (categoryObjectArray) => {
       childObjects,
     };
   });
-
-  return checkboxObjects;
 };
 
-export const assembleAccountCheckboxes = (accountObjectArray) => {
-  let accountTypes = new Set();
-  for (let account of accountObjectArray) {
-    accountTypes.add(account.type);
-  }
-  accountTypes = Array.from(accountTypes);
+/**
+ *
+ * @param dataArray
+ * @returns
+ */
+export const assembleAccountCheckboxes = (
+  dataArray: Account[],
+): NestedCheckBoxSection[] => {
+  const accountTypes = Object.values(FormattedAccountType) as string[];
 
-  const parents = accountTypes.map((type) => {
-    const parentName = type;
+  const parents = accountTypes.map((accountType: string) => {
+    const parentName = accountType;
+    const parentId = accountType;
     const checked = true;
-    const childObjects = accountObjectArray
-      .filter((account) => account.type === type)
-      .map((account) => {
-        return {
-          childName: account.name,
-          childId: account.id,
-          checked,
-        };
-      });
+
+    const childObjects: ChildCheckboxObject[] = dataArray.map((account: Account) => {
+      return {
+        childName: account.name,
+        childId: account.id,
+        checked,
+      };
+    });
     return {
+      parentId,
       parentName,
       checked,
       childObjects,

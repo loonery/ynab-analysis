@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 
 import { CategoryGroup } from 'interfaces/Category';
 import { RootState } from 'store';
-import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
+import { CategoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroup,
@@ -16,11 +16,11 @@ import { StyledMonth, StyledDollarValue } from './styles/styles';
 const getDotTooltipValues = (
   month: string,
   total: number,
-  categoryDimension: categoryDimensions,
+  categoryDimension: CategoryDimensions,
   categoryGroup: CategoryGroup | string,
 ): DotTooltipValues => {
   const monthString =
-    categoryDimension === categoryDimensions.allCategoriesDimension
+    categoryDimension === CategoryDimensions.allCategoriesDimension
       ? `${month} total spending`
       : `${month} spending for ${categoryGroup}`;
   const totalString = `$${total}`;

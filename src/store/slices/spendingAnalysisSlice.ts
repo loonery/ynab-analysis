@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { CategoryGroup } from 'interfaces/Category';
 import {
   ALL_CATEGORY_GROUPS_ITEM,
   ALL_CATEGORIES_ITEM,
@@ -6,50 +7,64 @@ import {
 } from 'store/consts/consts';
 import {
   SpendingAnalysisState,
-  categoryDimensions,
+  CategoryDimensions,
+  TooltipData,
 } from 'store/interfaces/SpendingAnalysisState';
-import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
+import { HighlightedBarData, PlotState } from 'store/interfaces/SpendingAnalysisState';
+import { tooltipType } from 'store/interfaces/SpendingAnalysisState';
+
+const initialPlotState: PlotState = {
+  tooltipType: undefined,
+  tooltipData: undefined,
+  showTooltip: false,
+  highlightedBarData: undefined,
+};
 
 const initialState: SpendingAnalysisState = {
-  categoryDimension: categoryDimensions.allCategoriesDimension,
+  categoryDimension: CategoryDimensions.allCategoriesDimension,
   selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
   selectedCategory: ALL_CATEGORIES_ITEM,
   parentOfSelected: NO_PARENT,
-  plotState: {
-    tooltipType: undefined,
-    tooltipData: undefined,
-    showTooltip: false,
-    highlightedBarData: undefined,
-  },
+  plotState: initialPlotState,
 };
 
+const sliceName = 'spendingAnalysis';
+
 const spendingAnalysisSlice = createSlice({
-  name: 'spendingAnalysis',
+  name: sliceName,
   initialState,
   reducers: {
-    setCategoryDimension(state, action) {
-      state.categoryDimension = action.payload;
+    setCategoryDimension(state, { payload }) {
+      const categoryDimension: CategoryDimensions = payload;
+      state.categoryDimension = categoryDimension;
     },
-    setSelectedCategory(state, action) {
-      state.selectedCategory = action.payload;
+    setSelectedCategory(state, { payload }) {
+      const selectedCategory: string = payload;
+      state.selectedCategory = selectedCategory;
     },
-    setSelectedCategoryGroup(state, action) {
-      state.selectedCategoryGroup = action.payload;
+    setSelectedCategoryGroup(state, { payload }) {
+      const selectedCategoryGroup: CategoryGroup | string = payload;
+      state.selectedCategoryGroup = selectedCategoryGroup;
     },
-    setParentOfSelected(state, action) {
-      state.parentOfSelected = action.payload;
+    setParentOfSelected(state, { payload }) {
+      const parentOfSelected: CategoryGroup | string = payload;
+      state.parentOfSelected = parentOfSelected;
     },
     setTooltipData(state, { payload }) {
-      state.plotState.tooltipData = payload;
+      const tooltipData: TooltipData = payload;
+      state.plotState.tooltipData = tooltipData;
     },
     setTooltipType(state, { payload }) {
-      state.plotState.tooltipType = payload;
+      const tooltipType: tooltipType = payload;
+      state.plotState.tooltipType = tooltipType;
     },
     setShowTooltip(state, { payload }) {
-      state.plotState.showTooltip = payload;
+      const showTooltip: boolean = payload;
+      state.plotState.showTooltip = showTooltip;
     },
     setHighlightedBarData(state, { payload }) {
-      state.plotState.highlightedBarData = payload;
+      const highlightedBarData: HighlightedBarData = payload;
+      state.plotState.highlightedBarData = highlightedBarData;
     },
   },
 });

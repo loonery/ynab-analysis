@@ -6,7 +6,7 @@ import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingCh
 import { CategoryGroup } from 'interfaces/Category';
 import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
-import { categoryDimensions } from 'store/interfaces/SpendingAnalysisState';
+import { CategoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroup,
@@ -18,7 +18,7 @@ import { StyledCategoryName, StyledDollarValue, StyledPercentage } from './style
 const getBarTooltipValues = (
   payload: SpendingChartData,
   dataKey: string,
-  categoryDimension: categoryDimensions,
+  categoryDimension: CategoryDimensions,
   categoryGroup: CategoryGroup | string,
 ): BarTooltipValues => {
   // construct the values to be shown in the tooltip
