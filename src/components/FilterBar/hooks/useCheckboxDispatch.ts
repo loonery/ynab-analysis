@@ -1,25 +1,27 @@
 import { useDispatch } from 'react-redux';
 
+import { CheckBoxDropdownKey } from 'store/interfaces/FilterBarState';
 import { toggleParentCheckbox, toggleChildCheckbox } from 'store/slices/filterBarSlice';
 
-export const useFilterBarDispatch = () => {
+export const useFilterBarDispatch = (dropdownKey: CheckBoxDropdownKey): void => {
   const dispatch = useDispatch();
-  const parentOnClick = (parentName) =>
+  const parentOnClick = (parentId: string) =>
     dispatch(
       toggleParentCheckbox({
-        parentName,
-        keys,
+        parentId,
+        dropdownKey,
       }),
     );
 
-  const childOnClick = (parentName, childName): void =>
+  const childOnClick = (parentId: string, childId: string): void => {
     dispatch(
       toggleChildCheckbox({
-        parentName,
-        childName,
-        keys,
+        parentId,
+        childId,
+        dropdownKey,
       }),
     );
+  };
 
   const initializeCheckboxes = () => {};
 

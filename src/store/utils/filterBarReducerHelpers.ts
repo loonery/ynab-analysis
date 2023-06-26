@@ -2,17 +2,8 @@ import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
 } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
-import {
-  EMPTY_CHILD_CHECKBOX_SECTION,
-  EMPTY_NESTED_CHECKBOX_SECTION,
-  TEMP_CHECKBOX_KEY,
-} from 'store/consts/consts';
-import {
-  AppliedFilters,
-  CheckboxDropdownState,
-  CheckBoxDropdownKey,
-  FilterBarState,
-} from 'store/interfaces/FilterBarState';
+import { TEMP_CHECKBOX_KEY } from 'store/consts/consts';
+import { AppliedFilters, CheckboxDropdownState } from 'store/interfaces/FilterBarState';
 
 const getFilteredItemsFromNestedCheckboxes = (
   checkboxes: NestedCheckBoxSection[],
@@ -110,22 +101,37 @@ export const findParentCheckbox = (
   parentId: string,
 ): NestedCheckBoxSection => {
   const currrentSections = dropdownState[TEMP_CHECKBOX_KEY];
-  return (
-    currrentSections.find((section) => section.parentId === parentId) ??
-    EMPTY_NESTED_CHECKBOX_SECTION
-  );
+  const parentObject = currrentSections.find((section) => section.parentId === parentId);
+  if (!parentObject) {
+    throw new Error(`Parent checkbox with id ${parentId} not found`);
+  }
+  return parentObject;
 };
 
+/**
+ *
+ * @param parent
+ * @param childId
+ * @returns
+ */
 export const findChildCheckboxByChildId = (
   parent: NestedCheckBoxSection,
   childId: string,
 ): ChildCheckboxObject => {
-  return (
-    parent.childObjects.find((e: ChildCheckboxObject) => e.childId === childId) ??
-    EMPTY_CHILD_CHECKBOX_SECTION
+  const childObject = parent.childObjects.find(
+    (e: ChildCheckboxObject) => e.childId === childId,
   );
+  if (!childObject) {
+    throw new Error(`Child checkbox with id ${childId} not found`);
+  }
+  return childObject;
 };
 
+/**
+ *
+ * @param checkbox
+ * @returns
+ */
 export const toggleCheckboxValue = (
   checkbox: NestedCheckBoxSection | ChildCheckboxObject,
 ): boolean => {
