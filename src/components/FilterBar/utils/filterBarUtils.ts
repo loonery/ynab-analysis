@@ -7,7 +7,6 @@ import {
 } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 
 // todo - factor out common functionality here - these functions are too similar
-
 /**
  *
  * @param dataArray

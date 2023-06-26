@@ -1,61 +1,22 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
-
-import { ACCOUNT_DROPDOWN_KEYS } from 'components/FilterBar/consts/filterBarConsts';
-import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
+import { useCheckboxState } from 'components/FilterBar/hooks/useCheckboxDispatch';
+import NestedCheckBoxList from 'libs/reuse/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
-import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
-import { selectAccounts } from 'store/selectors/dataSelectors/accountSelectors';
-import {
-  initCheckboxes,
-  toggleChildCheckbox,
-  toggleParentCheckbox,
-} from 'store/slices/filterBarSlice';
-
-import { assembleAccountCheckboxes } from '../../utils/filterBarUtils';
+import { ACCOUNT_DROPDOWN_REDUCER_KEY } from 'store/consts/consts';
+import { CheckBoxDropdownKey } from 'store/interfaces/FilterBarState';
 
 // eslint-disable-next-line
 const AccountCheckboxesContainer = () => {
-  const dispatch = useDispatch();
-  const keys = ACCOUNT_DROPDOWN_KEYS;
+  const accountDropdownKey: CheckBoxDropdownKey = ACCOUNT_DROPDOWN_REDUCER_KEY;
 
-  // get all transaction categories and store the parent categories in an array
-  const accounts = useSelector((state) => selectAccounts(state));
-
-  // the checkboxes we render are the ones that the user is manipulating,
-  // the 'temp' checkboxes. Temp is a copy of saved checkboxes on open.
-  const { tempAccountCheckBoxes } = useSelector((state) => selectDropdown(state, keys));
-
-  // assemble and initialize the category checkboxes on start
-  useEffect(() => {
-    const checkboxes = assembleAccountCheckboxes(accounts);
-    dispatch(initCheckboxes({ checkboxes, keys }));
-  }, [accounts]);
-
-  // todo - factor this out
-  const parentOnClick = (parentName) =>
-    dispatch(
-      toggleParentCheckbox({
-        parentName,
-        keys,
-      }),
-    );
-
-  // todo - factor this out
-  const childOnClick = (parentName, childName) =>
-    dispatch(
-      toggleChildCheckbox({
-        parentName,
-        childName,
-        keys,
-      }),
-    );
+  const { tempCheckboxes, parentOnClick, childOnClick } =
+    useCheckboxState(accountDropdownKey);
 
   return (
     <ScrollableContentContainer>
       <NestedCheckBoxList
-        checkboxSections={tempAccountCheckBoxes}
+        checkboxSections={tempCheckboxes}
         parentOnClick={parentOnClick}
         childOnClick={childOnClick}
       />

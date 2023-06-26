@@ -1,17 +1,17 @@
 import React from 'react';
 
 import { useCheckboxState } from 'components/FilterBar/hooks/useCheckboxDispatch';
-import NestedCheckBoxList from 'libs/reuse/components/NestedCheckBoxList/NestedCheckboxList';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
-import { CATEGORY_DROPDOWN_REDUCER_KEY } from 'store/consts/consts';
 import { CheckBoxDropdownKey } from 'store/interfaces/FilterBarState';
 
+import NestedCheckBoxList from './NestedCheckBoxList/NestedCheckboxList';
 // eslint-disable-next-line
-const CategoryCheckboxesContainer = () => {
-  const categoryDropdownKey: CheckBoxDropdownKey = CATEGORY_DROPDOWN_REDUCER_KEY;
-
-  const { tempCheckboxes, parentOnClick, childOnClick } =
-    useCheckboxState(categoryDropdownKey);
+const NestedCheckboxDropdownContainer = ({
+  dropdownKey,
+}: {
+  dropdownKey: CheckBoxDropdownKey;
+}) => {
+  const { tempCheckboxes, parentOnClick, childOnClick } = useCheckboxState(dropdownKey);
 
   return (
     <ScrollableContentContainer>
@@ -23,4 +23,4 @@ const CategoryCheckboxesContainer = () => {
     </ScrollableContentContainer>
   );
 };
-export default CategoryCheckboxesContainer;
+export default NestedCheckboxDropdownContainer;
