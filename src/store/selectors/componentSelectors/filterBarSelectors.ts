@@ -4,7 +4,7 @@ import { DateRange } from 'store/interfaces/DateRange.js';
 import {
   AppliedFilters,
   DropdownKey,
-  FilterBarDropdown,
+  FilterBarDropdownState,
 } from 'store/interfaces/FilterBarState.js';
 
 import { selectTransactionDates } from '../dataSelectors/transactionSliceSelectors.js';
@@ -12,7 +12,7 @@ import { selectTransactionDates } from '../dataSelectors/transactionSliceSelecto
 export const selectDropdown = (
   state: RootState,
   dropdownKey: DropdownKey,
-): FilterBarDropdown => state.filterBar[dropdownKey];
+): FilterBarDropdownState => state.filterBar[dropdownKey];
 
 export const selectTempDateRange = (state: RootState): DateRange =>
   state.filterBar.dateDropdown.tempDateRange;

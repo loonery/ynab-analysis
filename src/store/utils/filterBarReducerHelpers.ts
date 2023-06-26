@@ -2,7 +2,11 @@ import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
 } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
-import { EMPTY_NESTED_CHECKBOX_SECTION, TEMP_CHECKBOX_KEY } from 'store/consts/consts';
+import {
+  EMPTY_CHILD_CHECKBOX_SECTION,
+  EMPTY_NESTED_CHECKBOX_SECTION,
+  TEMP_CHECKBOX_KEY,
+} from 'store/consts/consts';
 import {
   AppliedFilters,
   CheckboxDropdownState,
@@ -26,18 +30,16 @@ const getFilteredItemsFromNestedCheckboxes = (
   );
 };
 
-export const getCurrentCheckboxState = (
-  state: Draft<FilterBarState>,
-  dropdownKey: CheckBoxDropdownKey,
-): CheckboxDropdownState => {
-  return state[dropdownKey];
-};
-
+/**
+ *
+ * @param savedState
+ * @returns
+ */
 export const getFiltersFromState = (savedState: {
   startDate: string | undefined;
   endDate: string | undefined;
-  categories: Draft<NestedCheckBoxSection>[];
-  accounts: Draft<NestedCheckBoxSection>[];
+  categories: NestedCheckBoxSection[];
+  accounts: NestedCheckBoxSection[];
 }): AppliedFilters => {
   const { startDate, endDate, categories, accounts } = savedState;
 
@@ -53,6 +55,12 @@ export const getFiltersFromState = (savedState: {
   };
 };
 
+/**
+ *
+ * @param currentBoxes
+ * @param value
+ * @returns
+ */
 export const setAllCheckboxesHelper = (
   currentBoxes: NestedCheckBoxSection[],
   value: boolean,
@@ -78,7 +86,7 @@ export const setAllCheckboxesHelper = (
  * @param newParentValue
  * @returns
  */
-export const setAllChildren = (
+export const setAllChildrenToValue = (
   childObjects: ChildCheckboxObject[],
   value: boolean,
 ): ChildCheckboxObject[] => {
@@ -108,13 +116,14 @@ export const findParentCheckbox = (
   );
 };
 
-export const findChildCheckboxByParent = (
+export const findChildCheckboxByChildId = (
   parent: NestedCheckBoxSection,
   childId: string,
 ): ChildCheckboxObject => {
-  return parent.childObjects.find(
-    (e: ChildCheckboxObject) => e.childId === childId,
-  ) as ChildCheckboxObject;
+  return (
+    parent.childObjects.find((e: ChildCheckboxObject) => e.childId === childId) ??
+    EMPTY_CHILD_CHECKBOX_SECTION
+  );
 };
 
 export const toggleCheckboxValue = (

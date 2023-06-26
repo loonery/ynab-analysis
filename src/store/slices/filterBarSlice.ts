@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { Draft } from '@reduxjs/toolkit';
-import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import {
+  ChildCheckboxObject,
+  NestedCheckBoxSection,
+} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
   DROPDOWN_SHOW_KEY,
   INITIAL_CHECKBOX_DROPDOWN_STATE,
@@ -9,27 +11,33 @@ import {
   ACCOUNT_DROPDOWN_REDUCER_KEY,
   SAVED_CHECKBOX_KEY,
   TEMP_CHECKBOX_KEY,
+  CATEGORY_DROPDOWN_REDUCER_KEY,
+  TEMP_DATE_RANGE_KEY,
+  SAVED_DATE_RANGE_KEY,
 } from 'store/consts/consts';
 import {
   CheckBoxDropdownKey,
   CheckboxDropdownState,
+  SavedStateDropdownKey,
+  TempStateDropdownKey,
+  FilterBarDropdownState,
   FilterBarState,
+  DropdownKey,
 } from 'store/interfaces/FilterBarState';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
-  findChildCheckboxByParent,
+  findChildCheckboxByChildId,
   findParentCheckbox,
   getFiltersFromState,
-  setAllChildren,
+  setAllChildrenToValue,
   toggleCheckboxValue,
-  getCurrentCheckboxState,
   setAllCheckboxesHelper,
 } from 'store/utils/filterBarReducerHelpers';
 
 import { DateRange } from '../interfaces/DateRange';
-import { DropdownKey } from '../interfaces/FilterBarState';
 
 const initialState: FilterBarState = {
-  categoryDropdown: { ...INITIAL_CHECKBOX_DROPDOWN_STATE },
+  [CATEGORY_DROPDOWN_REDUCER_KEY]: { ...INITIAL_CHECKBOX_DROPDOWN_STATE },
   [ACCOUNT_DROPDOWN_REDUCER_KEY]: { ...INITIAL_CHECKBOX_DROPDOWN_STATE },
   [DATE_DROPDOWN_REDUCER_KEY]: { ...INITIAL_DATE_DROPDOWN_STATE },
   appliedFilters: {
@@ -44,7 +52,7 @@ const filterBarSlice = createSlice({
   name: 'filterBar',
   initialState,
   reducers: {
-    // used to populate the state with checkboxes for the categories that are found in transactions
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     initCheckboxes(state, action) {
       const {
         dropdownKey,
@@ -52,23 +60,24 @@ const filterBarSlice = createSlice({
       }: { dropdownKey: CheckBoxDropdownKey; checkboxes: NestedCheckBoxSection[] } =
         action.payload;
 
-      // revisit this - potentially breaks the immer library functionality!!!!
-      const checkboxState = state[dropdownKey];
+      const checkboxState: CheckboxDropdownState = state[dropdownKey];
       checkboxState[SAVED_CHECKBOX_KEY] = checkboxes;
       checkboxState[TEMP_CHECKBOX_KEY] = checkboxes;
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     toggleParentCheckbox(state, action) {
       const {
         parentId,
         dropdownKey,
       }: { parentId: string; dropdownKey: CheckBoxDropdownKey } = action.payload;
       // get current state
-      const checkboxState = getCurrentCheckboxState(state, dropdownKey);
+      const checkboxState: CheckboxDropdownState = state[dropdownKey];
       const parent = findParentCheckbox(checkboxState, parentId);
       // reassign state
       parent.checked = toggleCheckboxValue(parent);
-      parent.childObjects = setAllChildren(parent.childObjects, parent.checked);
+      parent.childObjects = setAllChildrenToValue(parent.childObjects, parent.checked);
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     toggleChildCheckbox(state, action) {
       const {
         childId,
@@ -76,11 +85,11 @@ const filterBarSlice = createSlice({
         dropdownKey,
       }: { childId: string; parentId: string; dropdownKey: CheckBoxDropdownKey } =
         action.payload;
-      const checkboxState = getCurrentCheckboxState(state, dropdownKey);
+      const checkboxState: CheckboxDropdownState = state[dropdownKey];
       const parent = findParentCheckbox(checkboxState, parentId);
 
       // toggle the one child in the parent's object
-      const child = findChildCheckboxByParent(parent, childId);
+      const child: ChildCheckboxObject = findChildCheckboxByChildId(parent, childId);
       child.checked = toggleCheckboxValue(child);
 
       // determine whether all children are checked, whether none are checked
@@ -91,63 +100,92 @@ const filterBarSlice = createSlice({
       if (allChildrenChecked) parent.checked = true;
       else if (noChildrenChecked) parent.checked = false;
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     setAllCheckboxes(state, { payload }) {
-      const { dropdownKey, value }: { dropdownKey: DropdownKey; value: boolean } =
+      const { dropdownKey, value }: { dropdownKey: CheckBoxDropdownKey; value: boolean } =
         payload;
-      const checkboxState = state[dropdownKey] as Draft<CheckboxDropdownState>;
-      const currentBoxes = checkboxState.tempCheckboxes;
-      const newBoxes = setAllCheckboxesHelper(currentBoxes, value);
-      checkboxState.tempCheckboxes = newBoxes;
+      const checkboxState: CheckboxDropdownState = state[dropdownKey];
+      const currentBoxes = checkboxState[TEMP_CHECKBOX_KEY];
+      checkboxState[TEMP_CHECKBOX_KEY] = setAllCheckboxesHelper(currentBoxes, value);
     },
-    saveDropdownState(state, action) {
-      const { dropdownKey, tempKey, savedKey } = action.payload;
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    saveDropdownState(state, { payload }) {
+      const {
+        dropdownKey,
+        tempKey,
+        savedKey,
+      }: {
+        dropdownKey: DropdownKey;
+        tempKey: TempStateDropdownKey;
+        savedKey: SavedStateDropdownKey;
+      } = payload;
       // temp checkbox state now becomes saved checkbox state
-      const newState = state[dropdownKey][tempCheckboxKey];
-      state[dropdownKey][savedCheckboxKey] = newState;
+      const currentTempState: FilterBarDropdownState = state[dropdownKey][tempKey];
+      state[dropdownKey][savedKey] = currentTempState;
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     cancelDropdownChanges(state, action) {
-      const { dropdownKey, tempCheckboxKey, savedCheckboxKey } = action.payload;
+      const {
+        dropdownKey,
+        tempKey,
+        savedKey,
+      }: {
+        dropdownKey: DropdownKey;
+        tempKey: TempStateDropdownKey;
+        savedKey: SavedStateDropdownKey;
+      } = action.payload;
       // the temporary state reverts to the saved state
-      const newState = state[dropdownKey][savedCheckboxKey];
-      state[dropdownKey][tempCheckboxKey] = newState;
+      const latestSavedState = state[dropdownKey][savedKey];
+      state[dropdownKey][tempKey] = latestSavedState;
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     setFiltersFromState(state) {
       // filters are gleaned from saved state
       const savedState = {
-        startDate: state.dateDropdown.savedDateRange.startDate,
-        endDate: state.dateDropdown.savedDateRange.endDate,
-        categories: state.categoryDropdown.savedCheckBoxes,
-        accounts: state.accountDropdown.savedCheckBoxes,
+        startDate: state[DATE_DROPDOWN_REDUCER_KEY][SAVED_DATE_RANGE_KEY].startDate,
+        endDate: state[DATE_DROPDOWN_REDUCER_KEY][SAVED_DATE_RANGE_KEY].endDate,
+        categories: state[CATEGORY_DROPDOWN_REDUCER_KEY][SAVED_CHECKBOX_KEY],
+        accounts: state[ACCOUNT_DROPDOWN_REDUCER_KEY][SAVED_CHECKBOX_KEY],
       };
       state.appliedFilters = getFiltersFromState(savedState);
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     toggleShowDropdown(state, { payload }) {
       const { dropdownKey }: { dropdownKey: DropdownKey } = payload;
-      state[dropdownKey].show = !state[dropdownKey].show;
+      state[dropdownKey][DROPDOWN_SHOW_KEY] = !state[dropdownKey][DROPDOWN_SHOW_KEY];
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     /*
      *  Date filter Dropdown reducers
      */
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     initDateDropdown(state, action) {
       const { startDate, endDate }: DateRange = action.payload;
       const initalRange: DateRange = { startDate, endDate };
-      state.dateDropdown.savedDateRange = initalRange;
-      state.dateDropdown.tempDateRange = initalRange;
+      state[DATE_DROPDOWN_REDUCER_KEY][SAVED_DATE_RANGE_KEY] = initalRange;
+      state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY] = initalRange;
     },
+    ///////////////////////////////////////////////////////////////////////////////////////////////
     updateStartDate(state, { payload }) {
       const { startDate }: DateRange = payload;
-      const currentEndDate = state.dateDropdown.tempDateRange.endDate;
+      const currentEndDate =
+        state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY].endDate;
 
       // if the start date occurs after the currently selected endDate,
       // then move the endDate
-      if (new Date(startDate ?? '') > new Date(currentEndDate ?? '')) {
-        state.dateDropdown.tempDateRange.endDate = startDate;
+      if (!startDate || !currentEndDate) {
+        throw new Error('Dates not defined for some reason');
       }
-      state.dateDropdown.tempDateRange.startDate = startDate;
+      if (new Date(startDate) > new Date(currentEndDate)) {
+        state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY].endDate = startDate;
+      }
+      state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY].startDate = startDate;
     },
-    updateEndDate(state, action) {
-      const endDate = action.payload;
-      state.dateDropdown.tempDateRange.endDate = endDate;
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    updateEndDate(state, { payload }) {
+      const endDate: MonthYear = payload;
+      state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY].endDate = endDate;
     },
   },
 });

@@ -10,7 +10,7 @@ import {
   CheckboxDropdownState,
   DropdownKey,
   DropdownKeys,
-  FilterBarDropdown,
+  FilterBarDropdownState,
 } from 'store/interfaces/FilterBarState';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelectors';

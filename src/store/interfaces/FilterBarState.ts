@@ -23,6 +23,12 @@ export type CheckBoxDropdownKey =
 
 export type DateRangeDropdownKey = typeof DATE_DROPDOWN_REDUCER_KEY;
 
+export type SavedStateDropdownKey =
+  | typeof SAVED_DATE_RANGE_KEY
+  | typeof SAVED_CHECKBOX_KEY;
+
+export type TempStateDropdownKey = typeof TEMP_CHECKBOX_KEY | typeof TEMP_DATE_RANGE_KEY;
+
 /**
  * Defines the state for the FilterBar
  */
@@ -50,4 +56,4 @@ export interface AppliedFilters {
   filteredAccounts: string[];
 }
 
-export type FilterBarDropdown = DateDropdownState | CheckboxDropdownState;
+export type FilterBarDropdownState = DateDropdownState | CheckboxDropdownState;

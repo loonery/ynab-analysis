@@ -1,4 +1,7 @@
-import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import {
+  ChildCheckboxObject,
+  NestedCheckBoxSection,
+} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
   CheckboxDropdownState,
   DateDropdownState,
@@ -22,7 +25,6 @@ export const BAR_TOOLTIP_TYPE = 'bar-tooltip';
 /*
  * FILTER BAR SLICE CONSTS
  */
-
 // General Dropdown Consts
 export const TEMP_CHECKBOX_KEY = 'tempCheckboxes';
 export const SAVED_CHECKBOX_KEY = 'savedCheckboxes';
@@ -39,6 +41,9 @@ export const SAVED_DATE_RANGE_KEY = 'savedDateRange';
 // Account Dropdown consts
 export const ACCOUNT_DROPDOWN_REDUCER_KEY = 'accountDropdown';
 
+/**
+ * Checkbox consts
+ */
 export const EMPTY_NESTED_CHECKBOX_SECTION: NestedCheckBoxSection = {
   parentId: 'blank',
   parentName: 'blank',
@@ -46,6 +51,15 @@ export const EMPTY_NESTED_CHECKBOX_SECTION: NestedCheckBoxSection = {
   childObjects: [],
 };
 
+export const EMPTY_CHILD_CHECKBOX_SECTION: ChildCheckboxObject = {
+  childId: 'blank',
+  childName: 'blank',
+  checked: false,
+};
+
+/**
+ * Dropdown state consts
+ */
 export const INITIAL_CHECKBOX_DROPDOWN_STATE: CheckboxDropdownState = {
   [SAVED_CHECKBOX_KEY]: [],
   [TEMP_CHECKBOX_KEY]: [],
