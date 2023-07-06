@@ -6,6 +6,7 @@ interface FlexContainerProps {
   align?: CSSProperties['alignItems'];
   wrap?: CSSProperties['flexWrap'];
   gap?: CSSProperties['gap'];
+  padding?: CSSProperties['padding'];
   className?: string;
 }
 export const FlexContainer = styled.div<FlexContainerProps>`
@@ -15,6 +16,7 @@ export const FlexContainer = styled.div<FlexContainerProps>`
   align-items: ${({ align }): string => align || 'initial'};
   flex-wrap: ${({ wrap }): string => wrap || 'initial'};
   gap: ${({ gap }): string => String(gap) || '0'};
+  padding: ${({ padding }): string => String(padding) || '0px'};
 
   & > * {
     margin-right: ${({ gap }): string => String(gap) || '0'};

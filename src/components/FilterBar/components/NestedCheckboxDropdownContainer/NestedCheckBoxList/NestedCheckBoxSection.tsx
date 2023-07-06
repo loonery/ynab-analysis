@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import { Checkbox } from 'libs/reuse/elements/StyledCheckbox';
+import { Checkbox } from 'libs/reuse/elements/form-controls/components/StyledCheckbox';
 
 import { NestedCheckBoxSectionProps } from './interfaces/NestedCheckboxSection';
 import { ParentCheckboxContainer, ChildCheckboxContainer } from './styles/styles';

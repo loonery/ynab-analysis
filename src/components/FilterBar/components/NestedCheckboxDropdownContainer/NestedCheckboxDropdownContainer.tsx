@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useCheckboxState } from 'components/FilterBar/hooks/useCheckboxDispatch';
+import { useCheckboxState } from 'components/FilterBar/hooks/useCheckboxState';
 import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableListContainer';
 import { CheckBoxDropdownKey } from 'store/interfaces/FilterBarState';
 

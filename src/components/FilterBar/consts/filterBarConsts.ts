@@ -1,4 +1,9 @@
 /*
+ * General FilterBar consts
+ */
+export const GAP_BETWEEN_FILTER_DROPDOWNS = '10px';
+
+/*
  * Category Dropdown consts
  */
 export const CATEGORY_DROPDOWN_ID = 'category-filter-dropdown';
@@ -10,6 +15,7 @@ export const CATEGORY_DROPDOWN_TEMP_STATE_REDUCER_KEY = 'tempCategoryCheckBoxes'
 // the keys allow the use of the same reducer action to access
 // different keys in the state object. In this case we are
 // accessing keys related to the categoryCheckbox dropdown
+// deprecated
 export const CATEGORY_DROPDOWN_KEYS = {
   dropdownKey: CATEGORY_DROPDOWN_REDUCER_KEY,
   tempCheckboxKey: CATEGORY_DROPDOWN_TEMP_STATE_REDUCER_KEY,
@@ -20,6 +26,7 @@ export const CATEGORY_DROPDOWN_KEYS = {
  * Date Dropdown consts
  */
 export const DATE_FILTER_DROPDOWN_ID = 'date-filter-dropdown';
+export const DATE_DROPDOWN_TOGGLE_LABEL = 'Date Range';
 
 export const DATE_DROPDOWN_REDUCER_KEY = 'dateDropdown';
 export const DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY = 'savedDateRange';

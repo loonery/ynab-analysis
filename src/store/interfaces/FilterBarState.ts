@@ -12,16 +12,13 @@ import {
 
 import { DateRange } from './DateRange';
 
-export type DropdownKey =
-  | typeof CATEGORY_DROPDOWN_REDUCER_KEY
-  | typeof ACCOUNT_DROPDOWN_REDUCER_KEY
-  | typeof DATE_DROPDOWN_REDUCER_KEY;
-
 export type CheckBoxDropdownKey =
   | typeof CATEGORY_DROPDOWN_REDUCER_KEY
   | typeof ACCOUNT_DROPDOWN_REDUCER_KEY;
 
 export type DateRangeDropdownKey = typeof DATE_DROPDOWN_REDUCER_KEY;
+
+export type DropdownKey = CheckBoxDropdownKey | DateRangeDropdownKey;
 
 export type SavedStateDropdownKey =
   | typeof SAVED_DATE_RANGE_KEY

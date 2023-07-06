@@ -1,28 +1,20 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { FlexContainer } from '../containers/FlexContainer';
+import { StyledButton } from '../elements/form-controls/components/StyledButton';
 
 import { DEFAULT_BUTTON_CLASS_STRING } from './consts/consts';
+import { Button, ButtonBarProps } from './interfaces/interfaces';
 
-const ButtonContainer = styled.div`
-  display: flex;
-  padding: ${(props) => (props.padding ? props.padding : '0px')};
-  justify-content: ${(props) => (props.justify ? props.justify : 'start')};
-`;
-
-const StyledButton = styled.button`
-  margin-right: 10px;
-`;
-
-const ButtonBar = ({ buttons, justify, padding }) => {
+// eslint-disable-next-line
+const ButtonBar = ({ buttons, justify, padding }: ButtonBarProps) => {
   return (
-    <ButtonContainer padding={padding} justify={justify}>
-      {buttons.map((button) => {
+    <FlexContainer padding={padding} justify={justify}>
+      {buttons.map((button: Button, index) => {
         const { label, onClick, classString } = button;
         return (
           <StyledButton
-            key={label}
+            key={`button ${index}`}
             className={classString ? classString : DEFAULT_BUTTON_CLASS_STRING}
             onClick={onClick}
           >
@@ -30,19 +22,7 @@ const ButtonBar = ({ buttons, justify, padding }) => {
           </StyledButton>
         );
       })}
-    </ButtonContainer>
+    </FlexContainer>
   );
-};
-
-ButtonBar.propTypes = {
-  buttons: PropTypes.arrayOf(
-    PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      onClick: PropTypes.func.isRequired,
-      classString: PropTypes.string,
-    }),
-  ).isRequired,
-  justify: PropTypes.string,
-  padding: PropTypes.string,
 };
 export default ButtonBar;

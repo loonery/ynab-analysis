@@ -19,3 +19,5 @@ export const StyledSelect = styled.select`
 export const Option = styled.option`
   overflow-y: scroll;
 `;
+
+export const StyledInput = styled.input``;

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Account } from 'interfaces/Account';
 import { CategoryData, CategoryGroup } from 'interfaces/Category';
-import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import { RootState } from 'store';
 import {
   ACCOUNT_DROPDOWN_REDUCER_KEY,
@@ -44,38 +44,34 @@ export const useCheckboxState = (
 
   // process checkbox objects determined by the type of data they will be created from
   let data: Account[] | CategoryData | undefined = undefined;
+  let checkboxes: NestedCheckBoxSection[] | undefined = undefined;
   let isLoading = true;
 
+  // Assemble the checkbox data dependent upon which dropdown state this hook is being
+  // used for
   switch (dropdownKey) {
     case CATEGORY_DROPDOWN_REDUCER_KEY: {
       data = categoryData as CategoryData;
       isLoading = isCategoryDataLoading;
+      if (data && !isLoading) {
+        const { categories }: { categories: CategoryGroup[] } = data;
+        checkboxes = assembleCategoryCheckboxObjects(categories);
+      }
       break;
     }
     case ACCOUNT_DROPDOWN_REDUCER_KEY: {
       data = accountData as Account[];
       isLoading = isAccountDataLoading;
+      if (data && !isLoading) {
+        checkboxes = assembleAccountCheckboxes(data as Account[]);
+      }
       break;
     }
   }
 
   // assemble and initialize the checkboxes on start
   React.useEffect(() => {
-    if (data && !isLoading) {
-      switch (dropdownKey) {
-        case CATEGORY_DROPDOWN_REDUCER_KEY: {
-          const { categories }: { categories: CategoryGroup[] } = data as CategoryData;
-          const checkboxes = assembleCategoryCheckboxObjects(categories);
-          dispatch(initCheckboxes({ checkboxes, dropdownKey }));
-          break;
-        }
-        case ACCOUNT_DROPDOWN_REDUCER_KEY: {
-          const checkboxes = assembleAccountCheckboxes(data as Account[]);
-          dispatch(initCheckboxes({ checkboxes, dropdownKey }));
-          break;
-        }
-      }
-    }
+    dispatch(initCheckboxes({ checkboxes, dropdownKey }));
   }, [data, isLoading]);
 
   const parentOnClick = (parentId: string): void => {

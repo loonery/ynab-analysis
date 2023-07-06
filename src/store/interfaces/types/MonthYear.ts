@@ -12,4 +12,5 @@ export type MonthYear = `${
   | 'Sep'
   | 'Oct'
   | 'Nov'
-  | 'Dec'} ${YearFormat}`;
+  | 'Dec'} ${YearFormat}` &
+  string;

@@ -16,7 +16,6 @@ import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalC
 import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
-import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
 import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   setTooltipData,
