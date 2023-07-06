@@ -30,3 +30,10 @@ export interface ComposedSpendingChartProps {
   data: SpendingChartData[];
   dataKeys: DataKeys;
 }
+
+export interface CustomDotProps {
+  active: boolean;
+  cx: number | string;
+  cy: number | string;
+  payload: SpendingChartData;
+}

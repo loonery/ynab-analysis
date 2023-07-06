@@ -2,7 +2,6 @@ import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
-import PropTypes from 'prop-types';
 import { DOT_TOOLTIP_TYPE } from 'store/consts/consts';
 import {
   setTooltipData,
@@ -12,20 +11,24 @@ import {
 
 import { INNER_DOT_RADIUS, OUTER_DOT_RADIUS } from '../../consts/consts';
 
+import { DotTooltipProps, CustomDotProps } from './interfaces/interfaces';
+
 /** Custom dot is fed information from reChart's line component */
-export const CustomDot = ({ active, cx, cy, payload }) => {
+
+// eslint-disable-next-line
+export const CustomDot = ({ active, cx, cy, payload }: CustomDotProps) => {
   const dispatch = useDispatch();
   // get the data for the custom dot tooltip
   const { month, total } = payload;
-  const dotTooltipData = { month, total };
+  const dotTooltipData: DotTooltipProps = { month, total };
 
-  const onMouseOver = () => {
+  const onMouseOver = (): void => {
     dispatch(setShowTooltip(true));
     dispatch(setTooltipType(DOT_TOOLTIP_TYPE));
     dispatch(setTooltipData(dotTooltipData));
   };
 
-  const onMouseOut = () => {
+  const onMouseOut = (): void => {
     dispatch(setShowTooltip(false));
     dispatch(setTooltipType(undefined));
     dispatch(setTooltipData(undefined));

@@ -30,6 +30,10 @@ import {
   PLOT_HEIGHT,
   SPENDING_CATEGORIES_COLORS,
 } from '../../consts/consts';
+import {
+  CARTESIAN_GRID_STROKE_DASH_ARRAY,
+  constantComposedSpendingChartProps,
+} from '../consts/consts';
 
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';
@@ -64,23 +68,10 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
     dispatch(setHighlightedBarData(undefined));
   };
 
-  const composedSpendingChartProps: CategoricalChartProps = {
-    stackOffset: 'sign',
-    width: 500,
-    height: 300,
-    data,
-    margin: {
-      top: 20,
-      right: 30,
-      left: 20,
-      bottom: 5,
-    },
-  };
-
   return (
     <ResponsiveContainer width={'100%'} height={PLOT_HEIGHT}>
-      <ComposedChart {...composedSpendingChartProps}>
-        <CartesianGrid strokeDasharray='3 3' />
+      <ComposedChart {...constantComposedSpendingChartProps} data={data}>
+        <CartesianGrid strokeDasharray={CARTESIAN_GRID_STROKE_DASH_ARRAY} />
         <XAxis dataKey={MONTH_DATA_KEY_NAME} />
         <YAxis tickFormatter={(value: number): string => `$${value}`} />
         <Tooltip cursor={false} content={<CustomTooltip />} />
