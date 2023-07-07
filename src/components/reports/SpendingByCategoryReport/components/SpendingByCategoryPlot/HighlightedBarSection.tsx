@@ -1,14 +1,24 @@
 import React from 'react';
 
-import PropTypes from 'prop-types';
 import { Rectangle } from 'recharts';
 
-const HIGHLIGHTED_BAR_OVERFLOW = 5;
-const RECHARTS_SVG_CLASSNAME = 'recharts-layer recharts-bar-rectangle';
-const RECHARTS_SVG_ROLE = 'img';
+import {
+  HIGHLIGHTED_BAR_OVERFLOW,
+  RECHARTS_SVG_CLASSNAME,
+  RECHARTS_SVG_ROLE,
+} from '../../consts/consts';
 
-export const HighlightedBarSection = ({ x, y, height, width, fill }) => {
-  // shift x left by 10 pixels then widen the rectangle to show it's highlighted
+import { BarMouseOverProps } from './interfaces/interfaces';
+
+// eslint-disable-next-line
+export const HighlightedBarSection = ({
+  x,
+  y,
+  height,
+  width,
+  fill,
+}: BarMouseOverProps) => {
+  // determine the starting x coordinate for each rectangle
   const leftX = x - HIGHLIGHTED_BAR_OVERFLOW;
   const rightX = x + width;
   return (

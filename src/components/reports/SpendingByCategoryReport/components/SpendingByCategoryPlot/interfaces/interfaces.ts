@@ -1,4 +1,5 @@
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
+import { DotProps } from 'recharts';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { DataKeys } from './types/types';
@@ -32,8 +33,16 @@ export interface ComposedSpendingChartProps {
 }
 
 export interface CustomDotProps {
-  active: boolean;
-  cx: number | string;
-  cy: number | string;
-  payload: SpendingChartData;
+  active?: boolean;
+  payload?: SpendingChartData;
+  cx?: number;
+  cy?: number;
+}
+
+export interface BarMouseOverProps {
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+  fill: string;
 }

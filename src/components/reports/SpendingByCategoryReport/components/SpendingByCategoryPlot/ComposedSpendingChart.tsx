@@ -12,7 +12,6 @@ import {
   YAxis,
   Line,
 } from 'recharts';
-import { CategoricalChartProps } from 'recharts/types/chart/generateCategoricalChart';
 import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
@@ -29,10 +28,11 @@ import {
   STACK_ID,
   PLOT_HEIGHT,
   SPENDING_CATEGORIES_COLORS,
+  PLOT_WIDTH,
 } from '../../consts/consts';
 import {
   CARTESIAN_GRID_STROKE_DASH_ARRAY,
-  constantComposedSpendingChartProps,
+  COMPOSED_SPENDING_CHART_CONSTANT_PROPS,
 } from '../consts/consts';
 
 import { CustomDot } from './CustomDot';
@@ -69,8 +69,8 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
   };
 
   return (
-    <ResponsiveContainer width={'100%'} height={PLOT_HEIGHT}>
-      <ComposedChart {...constantComposedSpendingChartProps} data={data}>
+    <ResponsiveContainer width={PLOT_WIDTH} height={PLOT_HEIGHT}>
+      <ComposedChart {...COMPOSED_SPENDING_CHART_CONSTANT_PROPS} data={data}>
         <CartesianGrid strokeDasharray={CARTESIAN_GRID_STROKE_DASH_ARRAY} />
         <XAxis dataKey={MONTH_DATA_KEY_NAME} />
         <YAxis tickFormatter={(value: number): string => `$${value}`} />
@@ -93,13 +93,14 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
           activeDot={<CustomDot active={true} />}
         />
         {highlightedBarData && (
+          // assert types when we have highlighted bar data
           <g>
             <HighlightedBarSection
-              x={x}
-              y={y}
-              width={width}
-              height={height}
-              fill={fill}
+              x={x as number}
+              y={y as number}
+              width={width as number}
+              height={height as number}
+              fill={fill as string}
             />
           </g>
         )}

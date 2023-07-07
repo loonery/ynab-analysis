@@ -9,7 +9,12 @@ import {
   setTooltipType,
 } from 'store/slices/spendingAnalysisSlice';
 
-import { INNER_DOT_RADIUS, OUTER_DOT_RADIUS } from '../../consts/consts';
+import {
+  INNER_DOT_FILL,
+  INNER_DOT_RADIUS,
+  OUTER_DOT_FILL,
+  OUTER_DOT_RADIUS,
+} from '../../consts/consts';
 
 import { DotTooltipProps, CustomDotProps } from './interfaces/interfaces';
 
@@ -19,7 +24,7 @@ import { DotTooltipProps, CustomDotProps } from './interfaces/interfaces';
 export const CustomDot = ({ active, cx, cy, payload }: CustomDotProps) => {
   const dispatch = useDispatch();
   // get the data for the custom dot tooltip
-  const { month, total } = payload;
+  const { month, total } = payload ?? { month: 'Jan 2020', total: 0 };
   const dotTooltipData: DotTooltipProps = { month, total };
 
   const onMouseOver = (): void => {
@@ -36,9 +41,10 @@ export const CustomDot = ({ active, cx, cy, payload }: CustomDotProps) => {
 
   return (
     <g onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
-      {active ? <circle cx={cx} cy={cy} r={OUTER_DOT_RADIUS} fill='#4d79ff' /> : null}
-      {!active ? <circle cx={cx} cy={cy} r={OUTER_DOT_RADIUS} fill='#fffff' /> : null}
-      <circle cx={cx} cy={cy} r={INNER_DOT_RADIUS} fill='#D3D3D3' />
+      {active ? (
+        <circle cx={cx} cy={cy} r={OUTER_DOT_RADIUS} fill={OUTER_DOT_FILL} />
+      ) : null}
+      <circle cx={cx} cy={cy} r={INNER_DOT_RADIUS} fill={INNER_DOT_FILL} />
     </g>
   );
 };

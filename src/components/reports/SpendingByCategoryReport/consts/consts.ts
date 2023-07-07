@@ -68,11 +68,16 @@ export const SPENDING_CATEGORIES_COLORS = {
   '[Dormant] Strava': '#FFC0CB',
   'Pearl Hill State Park Camping 2023': '#00FA9A',
 };
+
+// MAIN PLOT CONSTS
 export const PLOT_HEIGHT = 600;
+export const PLOT_WIDTH = '100%';
 
 // CUSTOM DOT CONSTS
 export const OUTER_DOT_RADIUS = 8;
 export const INNER_DOT_RADIUS = 5;
+export const INNER_DOT_FILL = '#D3D3D3';
+export const OUTER_DOT_FILL = '#4d79ff';
 
 // PLOT DATA ASSEMBLY CONSTS
 export const UNDEFINED_CATEGORY_KEY = 'undefined category';
@@ -81,3 +86,8 @@ export const UNDEFINED_AMOUNT_VALUE = 0;
 // PLOT PROPS CONSTS
 export const MONTH_DATA_KEY_NAME = 'month';
 export const STACK_ID = 'a';
+
+// HIGHLIGHTED BAR SECTION CONSTS
+export const HIGHLIGHTED_BAR_OVERFLOW = 5;
+export const RECHARTS_SVG_CLASSNAME = 'recharts-layer recharts-bar-rectangle';
+export const RECHARTS_SVG_ROLE = 'img';
