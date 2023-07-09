@@ -9,7 +9,7 @@ import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import { CategoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import {
   selectCategoryDimension,
-  selectSelectedCategoryGroup,
+  selectSelectedCategoryGroupId,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 
 import { BarTooltipValues, BarTooltipProps } from './interfaces/interfaces';
@@ -44,7 +44,7 @@ export const BarTooltip = ({ payload, dataKey }: BarTooltipProps) => {
     selectCategoryDimension(state),
   );
   const categoryGroup = useSelector((state: RootState) =>
-    selectSelectedCategoryGroup(state),
+    selectSelectedCategoryGroupId(state),
   );
 
   // get text values for tooltip and apply to component

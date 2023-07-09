@@ -7,7 +7,7 @@ import { RootState } from 'store';
 import { CategoryDimensions } from 'store/interfaces/SpendingAnalysisState';
 import {
   selectCategoryDimension,
-  selectSelectedCategoryGroup,
+  selectSelectedCategoryGroupId,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 
 import { DotTooltipProps, DotTooltipValues } from './interfaces/interfaces';
@@ -33,7 +33,7 @@ export const DotTooltip = ({ month, total }: DotTooltipProps) => {
     selectCategoryDimension(state),
   );
   const categoryGroup = useSelector((state: RootState) =>
-    selectSelectedCategoryGroup(state),
+    selectSelectedCategoryGroupId(state),
   );
 
   const { monthString, totalString } = getDotTooltipValues(

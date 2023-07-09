@@ -9,7 +9,7 @@ export const selectCategoryData = createSelector(
   [selectCategoriesResult],
   (categories): FetchedData<CategoryData> => {
     return categories?.data
-      ? { data: categories?.data, isLoading: false }
+      ? { data: categories.data, isLoading: false }
       : { data: undefined, isLoading: true };
   },
 );

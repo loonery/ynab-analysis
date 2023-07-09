@@ -21,14 +21,14 @@ export interface CustomDropdownProps {
   children: ReactNode;
 }
 
-export interface Button {
+export interface ButtonProps {
   label: string | number | React.JSX.Element;
   onClick: () => void;
   classString?: string;
 }
 
 export interface ButtonBarProps {
-  buttons: Button[];
+  buttons: ButtonProps[];
   justify?: string;
   padding?: string;
 }

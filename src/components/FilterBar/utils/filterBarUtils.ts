@@ -1,10 +1,10 @@
-import { Account, FormattedAccountType } from 'interfaces/Account';
-import { SubCategory } from 'interfaces/Category';
-import { CategoryGroup } from 'interfaces/Category';
 import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
-} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+} from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import { Account, FormattedAccountType } from 'interfaces/Account';
+import { SubCategory } from 'interfaces/Category';
+import { CategoryGroup } from 'interfaces/Category';
 
 // todo - factor out common functionality here - these functions are too similar
 /**

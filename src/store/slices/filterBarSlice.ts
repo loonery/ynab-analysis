@@ -1,8 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-  ChildCheckboxObject,
   NestedCheckBoxSection,
-} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+  ChildCheckboxObject,
+} from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
   DROPDOWN_SHOW_KEY,
   INITIAL_CHECKBOX_DROPDOWN_STATE,

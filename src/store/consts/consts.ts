@@ -1,7 +1,8 @@
 import {
-  ChildCheckboxObject,
   NestedCheckBoxSection,
-} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+  ChildCheckboxObject,
+} from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import {
   CheckboxDropdownState,
   DateDropdownState,
@@ -11,12 +12,28 @@ import {
 export const READY_TO_ASSIGN_CATEGORY_ID = '4d13ae18-b4c2-4ac8-b69b-cfe59ca7065b';
 
 // SPENDING ANALYSIS SLICE CONSTS
+// constant options
+const ALL_SUBCATEGORIES_LABEL = 'All Categories';
+const ALL_CATEGORY_GROUPS_LABEL = 'All Category Groups';
+const ALL_CATEGORY_GROUPS_OPTION_ID = '-1';
+const ALL_SUBCATEGORIES_OPTION_ID = '-2';
+
+export const ALL_SUBCATEGORIES_OPTION: OptionInterface<string> = {
+  id: String(ALL_SUBCATEGORIES_OPTION_ID),
+  label: ALL_SUBCATEGORIES_LABEL,
+  value: String(ALL_CATEGORY_GROUPS_OPTION_ID),
+};
+
+export const ALL_CATEGORY_GROUPS_OPTION: OptionInterface<string> = {
+  id: String(ALL_CATEGORY_GROUPS_OPTION_ID),
+  label: ALL_CATEGORY_GROUPS_LABEL,
+  value: String(ALL_CATEGORY_GROUPS_OPTION_ID),
+};
+
 export const ALL_CATEGORIES_DIMENSION = 'all-categories';
 export const CATEGORY_GROUP_DIMENSION = 'category-group';
 export const SINGLE_CATEGORY_DIMENSION = 'single-category';
 
-export const ALL_CATEGORIES_ITEM = 'All Categories';
-export const ALL_CATEGORY_GROUPS_ITEM = 'All Category Groups';
 export const NO_PARENT = 'no parent';
 
 export const DOT_TOOLTIP_TYPE = 'dot-tooltip';

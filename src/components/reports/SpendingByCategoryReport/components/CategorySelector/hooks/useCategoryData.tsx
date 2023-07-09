@@ -1,35 +1,32 @@
 import { useSelector } from 'react-redux';
 
-import { faL } from '@fortawesome/free-solid-svg-icons';
-
-import { CategoryGroup, SubCategory } from 'interfaces/Category';
+import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import { RootState } from 'store';
-import { FetchedData } from 'store/interfaces/FetchedData';
 import {
-  selectCategorySelectorCategoryOptions,
-  selectCategorySelectorGroupOptions,
-  selectSelectedCategoryGroup,
-  selectSelectedCategory,
+  selectCategoryOptions,
+  selectCategoryGroupOptions,
+  selectSelectedCategoryGroupId,
+  selectSelectedCategoryId,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 
 export const useCategoryData = (): {
-  categoryGroupOptions: string[];
-  categoryDrilldownOptions: string[];
-  selectedCategoryGroup: CategoryGroup | string;
-  selectedCategory: SubCategory | string;
+  categoryGroupOptions: OptionInterface<string>[];
+  categoryDrilldownOptions: OptionInterface<string>[];
+  selectedCategoryGroupId: string;
+  selectedSubCategoryId: string;
   isLoading: boolean;
 } => {
   const { data: categoryGroupOptions, isLoading: categoryGroupOptionsLoading } =
-    useSelector((state: RootState) => selectCategorySelectorGroupOptions(state));
+    useSelector((state: RootState) => selectCategoryGroupOptions(state));
 
   const { data: categoryDrilldownOptions, isLoading: categoryDrilldownOptionsLoading } =
-    useSelector((state: RootState) => selectCategorySelectorCategoryOptions(state));
+    useSelector((state: RootState) => selectCategoryOptions(state));
 
-  const selectedCategoryGroup = useSelector((state: RootState) =>
-    selectSelectedCategoryGroup(state),
+  const selectedCategoryGroupId = useSelector((state: RootState) =>
+    selectSelectedCategoryGroupId(state),
   );
-  const selectedCategory = useSelector((state: RootState) =>
-    selectSelectedCategory(state),
+  const selectedSubCategoryId = useSelector((state: RootState) =>
+    selectSelectedCategoryId(state),
   );
 
   const dataLoading =
@@ -42,15 +39,15 @@ export const useCategoryData = (): {
     ? {
         categoryGroupOptions: [],
         categoryDrilldownOptions: [],
-        selectedCategoryGroup,
-        selectedCategory,
+        selectedCategoryGroupId,
+        selectedSubCategoryId,
         isLoading: true,
       }
     : {
         categoryGroupOptions,
         categoryDrilldownOptions,
-        selectedCategoryGroup,
-        selectedCategory,
+        selectedCategoryGroupId,
+        selectedSubCategoryId,
         isLoading: false,
       };
 };

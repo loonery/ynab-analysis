@@ -2,9 +2,18 @@ import { createSelector } from '@reduxjs/toolkit';
 import { InternMap, rollup } from 'd3';
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
+import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
+import { getOptionsFromValues } from 'libs/utils/utils';
+import {
+  mapCategoryValueToAllowedType,
+  mapCategoryValueToId,
+  mapCategoryValueToLabel,
+} from 'libs/utils/utils';
 import { RootState } from 'store';
-import { ALL_CATEGORIES_ITEM } from 'store/consts/consts';
-import { ALL_CATEGORY_GROUPS_ITEM } from 'store/consts/consts';
+import {
+  ALL_CATEGORY_GROUPS_OPTION,
+  ALL_SUBCATEGORIES_OPTION,
+} from 'store/consts/consts';
 import { FetchedData } from 'store/interfaces/FetchedData';
 import {
   HighlightedBarData,
@@ -18,19 +27,19 @@ import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 import { selectCategoryData } from '../dataSelectors/categorySelectors';
 import {
   selectFilteredTransactions,
-  selectFilteredTransactionCategories,
+  selectFilteredTransactionSubCategories,
   selectFilteredTransactionCategoryGroups,
 } from '../dataSelectors/transactionSliceSelectors';
 
 /**
  * atomic selectors
  */
-export const selectSelectedCategory = (state: RootState): SubCategory | string => {
-  return state.spendingAnalysis.selectedCategory;
+export const selectSelectedCategoryId = (state: RootState): string => {
+  return state.spendingAnalysis.selectedSubCategoryId;
 };
 
-export const selectSelectedCategoryGroup = (state: RootState): CategoryGroup | string => {
-  return state.spendingAnalysis.selectedCategoryGroup;
+export const selectSelectedCategoryGroupId = (state: RootState): string => {
+  return state.spendingAnalysis.selectedCategoryGroupId;
 };
 
 export const selectCategoryDimension = (state: RootState): CategoryDimensions => {
@@ -40,13 +49,13 @@ export const selectCategoryDimension = (state: RootState): CategoryDimensions =>
 export const selectParentOfSelectedCategory = (
   state: RootState,
 ): CategoryGroup | string => {
-  return state.spendingAnalysis.parentOfSelected;
+  return state.spendingAnalysis.parentIdOfSelected;
 };
 
 // selectors for selectFilteredTransactionsByCategoryDimension
 // todo - debug id matching
 const selectTransactionsForCategoryGroupDimension = createSelector(
-  [selectFilteredTransactions, selectSelectedCategoryGroup],
+  [selectFilteredTransactions, selectSelectedCategoryGroupId],
   (filteredTransactionsData, selectedCategoryGroup): FetchedData<Transaction[]> => {
     const { data: filteredTransactions } = filteredTransactionsData;
     if (filteredTransactions) {
@@ -63,7 +72,7 @@ const selectTransactionsForCategoryGroupDimension = createSelector(
 
 // todo - debug id matching
 const selectTransactionsForSingleCategoryDimension = createSelector(
-  [selectFilteredTransactions, selectSelectedCategory],
+  [selectFilteredTransactions, selectSelectedCategoryId],
   (filteredTransactionsData, selectedCategory): FetchedData<Transaction[]> => {
     const { data: filteredTransactions } = filteredTransactionsData;
     if (filteredTransactions) {
@@ -121,60 +130,83 @@ export const selectFilteredTransactionsByCategoryDimension = createSelector(
 );
 
 // selectors for category selector component
-export const selectCategorySelectorGroupOptions = createSelector(
+/**
+ *
+ */
+export const selectCategoryGroupOptions = createSelector(
   [selectFilteredTransactionCategoryGroups],
-  (categoryGroupNamesData): FetchedData<string[]> => {
-    const { data: categoryGroupNames } = categoryGroupNamesData;
-    if (categoryGroupNames) {
-      const options = categoryGroupNames.sort();
-      options.splice(0, 0, ALL_CATEGORY_GROUPS_ITEM);
-      return { data: options, isLoading: false };
+  (categoryGroupNamesData): FetchedData<OptionInterface<string>[]> => {
+    const { data: categoryGroups } = categoryGroupNamesData;
+
+    // if we have the category groups data, we can compile the list of options
+    if (categoryGroups) {
+      const options = categoryGroups.sort((a, b) => a.name.localeCompare(b.name));
+      const assembledOptions = getOptionsFromValues<CategoryGroup>(
+        options,
+        mapCategoryValueToAllowedType,
+        mapCategoryValueToId,
+        mapCategoryValueToLabel,
+      );
+      assembledOptions.splice(0, 0, ALL_CATEGORY_GROUPS_OPTION);
+      return { data: assembledOptions as OptionInterface<string>[], isLoading: false };
     }
     return { data: undefined, isLoading: true };
   },
 );
 
-export const selectCategorySelectorCategoryOptions = createSelector(
+export const selectCategoryOptions = createSelector(
   [
     selectCategoryData,
-    selectSelectedCategoryGroup,
+    selectSelectedCategoryGroupId,
     selectCategoryDimension,
-    selectFilteredTransactionCategories,
+    selectFilteredTransactionSubCategories,
   ],
   (
-    fetchedCategoryData,
-    selectedCategoryGroup,
+    categoryData,
     categoryDimension,
-    filteredCategoriesData,
-  ): FetchedData<string[]> => {
-    // if there is no selected category group, we don't want any drilldown options
+    selectedCategoryGroupId,
+    filteredSubCategoriesData,
+  ): FetchedData<OptionInterface<string>[]> => {
+    // if there is no parent, we don't want any drilldown options
+    if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
+      return { data: [], isLoading: false };
+    }
+
+    const { data: filteredSubCategories } = filteredSubCategoriesData;
+
+    // drilldown options are the selected category's children.
+    // If the category dimension is not 'all categories' then the selectedCategoryGroup is not a string
+    let allPossibleSubcategories: SubCategory[] = [];
+
     if (
-      categoryDimension === CategoryDimensions.allCategoriesDimension &&
-      typeof selectedCategoryGroup === 'string'
+      categoryData.data &&
+      !categoryData.isLoading &&
+      filteredSubCategories &&
+      !filteredSubCategoriesData.isLoading
     ) {
-      return { data: [] as string[], isLoading: false };
-    }
+      // assert that we will always find a selected subcategory at this stage
+      allPossibleSubcategories = categoryData.data.categories.find(
+        (el) => el.id === selectedCategoryGroupId,
+      )?.subCategories as SubCategory[];
 
-    // drilldown options are the selected categories' children
-    const { data: categoryData } = fetchedCategoryData;
-    const { data: filteredCategories } = filteredCategoriesData;
-    const categoryHirearchy = categoryData?.categories;
-
-    if (categoryHirearchy && filteredCategories) {
-      const options = categoryHirearchy.find(
-        (el): el is CategoryGroup =>
-          el.id === (selectedCategoryGroup as CategoryGroup)?.id,
+      allPossibleSubcategories.filter((subcategory) =>
+        filteredSubCategories.map((e) => e.id).includes(subcategory.id),
       );
-
-      // get names of all child categories and filter them based upon which are
-      // included in the analysis
-      const returnedOptions = options?.subCategories
-        .map(({ name }) => name)
-        .filter((name) => filteredCategories.includes(name))
-        .splice(0, 0, ALL_CATEGORIES_ITEM);
-      return { data: returnedOptions, isLoading: false };
+    } else {
+      return { data: [], isLoading: true };
     }
-    return { data: undefined, isLoading: true };
+
+    // get names of all child categories and filter them based upon which are
+    // included in the analysis
+    const returnedOptions = getOptionsFromValues(
+      allPossibleSubcategories,
+      mapCategoryValueToAllowedType,
+      mapCategoryValueToId,
+      mapCategoryValueToLabel,
+    ) as OptionInterface<string>[];
+
+    returnedOptions.splice(0, 0, ALL_SUBCATEGORIES_OPTION);
+    return { data: returnedOptions, isLoading: false };
   },
 );
 
@@ -324,18 +356,20 @@ export const selectTotalSpendingDataByDimension = createSelector(
 export const selectDataKeysByCategoryDimension = createSelector(
   [
     selectCategoryDimension,
-    selectFilteredTransactionCategories,
+    selectFilteredTransactionSubCategories,
     selectFilteredTransactionCategoryGroups,
   ],
   (categoryDimension, categoriesData, categoryGroupsData): FetchedData<string[]> => {
     const { data: categoryGroups } = categoryGroupsData;
-    const { data: categories } = categoriesData;
-    if (categoryGroups && categories) {
+    const { data: subCategories } = categoriesData;
+    if (categoryGroups && subCategories) {
       if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
         // todo - maybe use some constant here to take out the 'all categories' name
-        return { data: categoryGroups.slice(1), isLoading: false };
+        const dataKeys = categoryGroups.map((e) => e.name);
+        return { data: dataKeys, isLoading: false };
       }
-      return { data: categories, isLoading: true };
+      const dataKeys = subCategories.map((e) => e.name);
+      return { data: dataKeys, isLoading: true };
     }
     return { data: undefined, isLoading: true };
   },

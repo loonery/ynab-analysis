@@ -4,6 +4,7 @@ import {
   YnabTransaction,
 } from 'interfaces/externalDataInterfaces/ynabTransaction';
 import { Transaction } from 'interfaces/Transaction';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { convertAmount } from './generalHelpers';
 
@@ -86,7 +87,7 @@ const convertYnabSubtransactionToTransaction = (
  */
 const getTransactionDate = (
   transaction: YnabTransaction,
-): { day: string; month: string; year: string; month_year: string } => {
+): { day: string; month: string; year: string; month_year: MonthYear } => {
   const options: Intl.DateTimeFormatOptions = {
     year: 'numeric',
     month: 'short',
@@ -104,7 +105,7 @@ const getTransactionDate = (
   const day = stringDate[1];
   const month = stringDate[0];
   const year = stringDate[2];
-  const month_year = stringDate[0] + ' ' + stringDate[2];
+  const month_year: MonthYear = (stringDate[0] + ' ' + stringDate[2]) as MonthYear;
   return { day, month, year, month_year };
 };
 

@@ -1,8 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { CategoryGroup } from 'interfaces/Category';
 import {
-  ALL_CATEGORY_GROUPS_ITEM,
-  ALL_CATEGORIES_ITEM,
+  ALL_CATEGORY_GROUPS_OPTION,
+  ALL_SUBCATEGORIES_OPTION,
   NO_PARENT,
 } from 'store/consts/consts';
 import {
@@ -22,9 +21,9 @@ const initialPlotState: PlotState = {
 
 const initialState: SpendingAnalysisState = {
   categoryDimension: CategoryDimensions.allCategoriesDimension,
-  selectedCategoryGroup: ALL_CATEGORY_GROUPS_ITEM,
-  selectedCategory: ALL_CATEGORIES_ITEM,
-  parentOfSelected: NO_PARENT,
+  selectedCategoryGroupId: ALL_CATEGORY_GROUPS_OPTION.id,
+  selectedSubCategoryId: ALL_SUBCATEGORIES_OPTION.id,
+  parentIdOfSelected: NO_PARENT,
   plotState: initialPlotState,
 };
 
@@ -39,16 +38,16 @@ const spendingAnalysisSlice = createSlice({
       state.categoryDimension = categoryDimension;
     },
     setSelectedCategory(state, { payload }) {
-      const selectedCategory: string = payload;
-      state.selectedCategory = selectedCategory;
+      const selectedCategoryId: string = payload;
+      state.selectedSubCategoryId = selectedCategoryId;
     },
     setSelectedCategoryGroup(state, { payload }) {
-      const selectedCategoryGroup: CategoryGroup | string = payload;
-      state.selectedCategoryGroup = selectedCategoryGroup;
+      const selectedCategoryGroupId: string = payload;
+      state.selectedCategoryGroupId = selectedCategoryGroupId;
     },
     setParentOfSelected(state, { payload }) {
-      const parentOfSelected: CategoryGroup | string = payload;
-      state.parentOfSelected = parentOfSelected;
+      const parentIdOfSelected: string = payload;
+      state.parentIdOfSelected = parentIdOfSelected;
     },
     setTooltipData(state, { payload }) {
       const tooltipData: TooltipData = payload;

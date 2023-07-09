@@ -4,13 +4,13 @@ import { FlexContainer } from '../containers/FlexContainer';
 import { StyledButton } from '../elements/form-controls/components/StyledButton';
 
 import { DEFAULT_BUTTON_CLASS_STRING } from './consts/consts';
-import { Button, ButtonBarProps } from './interfaces/interfaces';
+import { ButtonProps, ButtonBarProps } from './interfaces/interfaces';
 
 // eslint-disable-next-line
 const ButtonBar = ({ buttons, justify, padding }: ButtonBarProps) => {
   return (
     <FlexContainer padding={padding} justify={justify}>
-      {buttons.map((button: Button, index) => {
+      {buttons.map((button: ButtonProps, index) => {
         const { label, onClick, classString } = button;
         return (
           <StyledButton

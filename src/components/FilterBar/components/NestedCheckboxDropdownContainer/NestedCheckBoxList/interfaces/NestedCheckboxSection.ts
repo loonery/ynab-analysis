@@ -13,6 +13,12 @@ export interface ChildCheckboxObject {
 
 export interface NestedCheckBoxSectionProps {
   checkBoxSection: NestedCheckBoxSection;
-  parentOnClick: () => void;
-  childOnClick: () => void;
+  parentOnClick: (parentId: string) => void;
+  childOnClick: (parentId: string, childId: string) => void;
+}
+
+export interface NestedCheckboxListProps {
+  checkboxSections: NestedCheckBoxSection[];
+  parentOnClick: (parentId: string) => void;
+  childOnClick: (parentId: string, childId: string) => void;
 }

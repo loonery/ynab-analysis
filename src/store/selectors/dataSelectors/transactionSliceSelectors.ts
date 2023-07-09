@@ -1,6 +1,8 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { processTransactions } from 'api/utils/transactionHelpers';
 import { ynabApi } from 'api/ynabApi';
+import { CategoryGroup } from 'interfaces/Category';
+import { SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
 import _ from 'lodash';
 import { RootState } from 'store';
@@ -123,15 +125,17 @@ export const selectTransactionDates = createSelector(
   },
 );
 
-export const selectFilteredTransactionCategories = createSelector(
+export const selectFilteredTransactionSubCategories = createSelector(
   [selectFilteredTransactions],
-  (transactionsData): FetchedData<string[]> => {
+  (transactionsData): FetchedData<SubCategory[]> => {
     const { data: transactions } = transactionsData;
     if (transactions) {
       // get unique values and filter all undefined values
-      const data: string[] = _.uniq(
-        transactions.map((transaction) => transaction.subcategory?.id),
-      ).filter((item: string | undefined): item is string => item !== undefined);
+      const data: SubCategory[] = _.uniq(
+        transactions.map((transaction: Transaction) => transaction.subcategory),
+      ).filter(
+        (item: SubCategory | undefined): item is SubCategory => item !== undefined,
+      );
       return {
         data,
         isLoading: false,
@@ -143,13 +147,15 @@ export const selectFilteredTransactionCategories = createSelector(
 
 export const selectFilteredTransactionCategoryGroups = createSelector(
   [selectFilteredTransactions],
-  (transactionsData): FetchedData<string[]> => {
+  (transactionsData): FetchedData<CategoryGroup[]> => {
     const { data: transactions } = transactionsData;
     if (transactions) {
-      // get unique values and filter all undefined values
-      const data: string[] = _.uniq(
-        transactions.map((transaction) => transaction.category_group?.id),
-      ).filter((item: string | undefined): item is string => item !== undefined);
+      // get unique categoryGroups that are active in transactions and filter all undefined values
+      const data: CategoryGroup[] = _.uniq(
+        transactions.map((transaction: Transaction) => transaction.category_group),
+      ).filter(
+        (item: CategoryGroup | undefined): item is CategoryGroup => item !== undefined,
+      );
       return {
         data,
         isLoading: false,

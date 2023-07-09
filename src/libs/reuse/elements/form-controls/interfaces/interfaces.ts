@@ -1,6 +1,6 @@
 export interface CheckboxProps {
   id: string;
-  label: string;
+  labelText: string;
   checked: boolean;
   onChange: (newValue: boolean) => void;
 }
@@ -32,6 +32,7 @@ export type RuntimeSelectProps<Value> = Value extends AllowedValueTypes
   : Required<SelectProps<Value>> & {
       selectElementClassname?: string;
       selectContainerClassName?: string;
+      isFloatingSelect?: boolean;
     };
 
 // type guard function checks value and refines type

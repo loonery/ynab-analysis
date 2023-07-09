@@ -1,18 +1,16 @@
 import React from 'react';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
-import FloatingSelect from 'libs/reuse/elements/form-controls/components/FloatingSelect';
 import Select from 'libs/reuse/elements/form-controls/components/Select';
-import { getOptionsFromValues } from 'libs/utils/utils';
 import {
   CATEGORY_GROUP_DIMENSION,
   ALL_CATEGORIES_DIMENSION,
-  ALL_CATEGORIES_ITEM,
   NO_PARENT,
-  ALL_CATEGORY_GROUPS_ITEM,
   SINGLE_CATEGORY_DIMENSION,
+  ALL_CATEGORY_GROUPS_OPTION,
+  ALL_SUBCATEGORIES_OPTION,
 } from 'store/consts/consts';
 import {
   setCategoryDimension,
@@ -21,6 +19,8 @@ import {
   setSelectedCategoryGroup,
 } from 'store/slices/spendingAnalysisSlice';
 
+import { CATEGORY_GROUP_SELECT_ID, SUB_CATEGORY_SELECT_ID } from '../consts/consts';
+
 import { useCategoryData } from './hooks/useCategoryData';
 
 // eslint-disable-next-line
@@ -28,10 +28,10 @@ const CategorySelector = () => {
   const dispatch = useDispatch();
 
   const {
+    selectedSubCategoryId,
+    selectedCategoryGroupId,
     categoryGroupOptions,
-    selectedCategoryGroup,
     categoryDrilldownOptions,
-    selectedCategory,
     isLoading,
   } = useCategoryData();
 
@@ -41,7 +41,7 @@ const CategorySelector = () => {
     dispatch(setParentOfSelected(NO_PARENT));
 
     // if we want to see all category groups
-    if (selected === ALL_CATEGORY_GROUPS_ITEM) {
+    if (selected === ALL_CATEGORY_GROUPS_OPTION.id) {
       dispatch(setCategoryDimension(ALL_CATEGORIES_DIMENSION));
       // if we're starting to drill down to look at all subcategories of a category group
     } else {
@@ -54,13 +54,13 @@ const CategorySelector = () => {
     dispatch(setSelectedCategory(selected));
 
     // if we're drilling down to look at all subcategories of a category group
-    if (selected === ALL_CATEGORIES_ITEM) {
+    if (selected === ALL_SUBCATEGORIES_OPTION.id) {
       dispatch(setParentOfSelected(NO_PARENT));
       dispatch(setCategoryDimension(CATEGORY_GROUP_DIMENSION));
 
       // if we're drilling down to look at 1 subcategory of a category group
     } else {
-      dispatch(setParentOfSelected(selectedCategoryGroup));
+      dispatch(setParentOfSelected(selectedCategoryGroupId));
       dispatch(setCategoryDimension(SINGLE_CATEGORY_DIMENSION));
     }
   };
@@ -68,17 +68,19 @@ const CategorySelector = () => {
   return (
     <FlexContainer gap={'10px'}>
       <Select
-        options={getOptionsFromValues(categoryGroupOptions)}
+        id={CATEGORY_GROUP_SELECT_ID}
+        options={categoryGroupOptions}
         selectLabel={'Category Group'}
-        value={selectedCategoryGroup}
+        value={selectedCategoryGroupId}
         isFloatingSelect={true}
         onChange={selectCategoryGroup}
       />
       {categoryDrilldownOptions.length > 0 && (
         <Select
+          id={SUB_CATEGORY_SELECT_ID}
           options={categoryDrilldownOptions}
           selectLabel={'Category'}
-          value={selectedCategory}
+          value={selectedSubCategoryId}
           isFloatingSelect={true}
           onChange={selectCategory}
         />

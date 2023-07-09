@@ -1,4 +1,4 @@
-import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+import { NestedCheckBoxSection } from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
   CATEGORY_DROPDOWN_REDUCER_KEY,
   ACCOUNT_DROPDOWN_REDUCER_KEY,

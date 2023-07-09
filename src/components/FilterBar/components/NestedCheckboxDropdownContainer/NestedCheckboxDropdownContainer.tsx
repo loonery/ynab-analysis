@@ -5,6 +5,7 @@ import { ScrollableContentContainer } from 'libs/reuse/containers/ScrollableList
 import { CheckBoxDropdownKey } from 'store/interfaces/FilterBarState';
 
 import NestedCheckBoxList from './NestedCheckBoxList/NestedCheckboxList';
+
 // eslint-disable-next-line
 const NestedCheckboxDropdownContainer = ({
   dropdownKey,

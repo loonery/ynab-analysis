@@ -1,7 +1,7 @@
 import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
-} from 'libs/reuse/components/NestedCheckBoxList/interfaces/NestedCheckboxSection';
+} from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import { TEMP_CHECKBOX_KEY } from 'store/consts/consts';
 import { AppliedFilters, CheckboxDropdownState } from 'store/interfaces/FilterBarState';
 

@@ -1,4 +1,4 @@
-import { Button } from 'libs/reuse/components/interfaces/interfaces';
+import { ButtonProps } from 'libs/reuse/components/interfaces/interfaces';
 import { DropdownKey } from 'store/interfaces/FilterBarState';
 
 export interface FilterBarDropdownProps {
@@ -6,6 +6,6 @@ export interface FilterBarDropdownProps {
   headerText: string;
   dropdownLinkText: string;
   dropdownKey: DropdownKey;
-  headerButtons: Button[];
-  footerButtons: Button[];
+  headerButtons: ButtonProps[];
+  footerButtons: ButtonProps[];
 }

@@ -8,7 +8,7 @@ import {
   RECHARTS_SVG_ROLE,
 } from '../../consts/consts';
 
-import { BarMouseOverProps } from './interfaces/interfaces';
+import { HighlightedBarProps } from './interfaces/interfaces';
 
 // eslint-disable-next-line
 export const HighlightedBarSection = ({
@@ -17,7 +17,7 @@ export const HighlightedBarSection = ({
   height,
   width,
   fill,
-}: BarMouseOverProps) => {
+}: HighlightedBarProps) => {
   // determine the starting x coordinate for each rectangle
   const leftX = x - HIGHLIGHTED_BAR_OVERFLOW;
   const rightX = x + width;

@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { Button } from 'libs/reuse/components/interfaces/interfaces';
+import { ButtonProps } from 'libs/reuse/components/interfaces/interfaces';
 import { DropdownKey } from 'store/interfaces/FilterBarState';
 import {
   setAllCheckboxes,
@@ -15,9 +15,9 @@ import {
 } from 'store/slices/filterBarSlice';
 
 export const useButtons = (): {
-  dateHeaderButtons: Button[];
-  getCheckboxHeaderButtons: (dropdownKey: DropdownKey) => Button[];
-  getFooterButtons: (dropdownKey: DropdownKey) => Button[];
+  dateHeaderButtons: ButtonProps[];
+  getCheckboxHeaderButtons: (dropdownKey: DropdownKey) => ButtonProps[];
+  getFooterButtons: (dropdownKey: DropdownKey) => ButtonProps[];
 } => {
   const dispatch = useDispatch();
 
@@ -81,7 +81,7 @@ export const useButtons = (): {
   ];
 
   // header button definitions
-  const getCheckboxHeaderButtons = (dropdownKey: DropdownKey): Button[] => {
+  const getCheckboxHeaderButtons = (dropdownKey: DropdownKey): ButtonProps[] => {
     const selectNoCheckboxes = (): void => {
       dispatch(setAllCheckboxes({ dropdownKey, value: false }));
     };
@@ -104,7 +104,7 @@ export const useButtons = (): {
   };
 
   // footer button definitions
-  const getFooterButtons = (dropdownKey: DropdownKey): Button[] => {
+  const getFooterButtons = (dropdownKey: DropdownKey): ButtonProps[] => {
     // BUTTON FUNCTIONS
     const saveChanges = () => {
       dispatch(toggleShowDropdown({ dropdownKey }));

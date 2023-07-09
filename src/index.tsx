@@ -10,13 +10,15 @@ import { store } from './store';
 
 // use helper function to configigre the Apollo client
 const rootElement = document.getElementById('root');
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <BrowserRouter>
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>
-  </BrowserRouter>,
-);
+if (rootElement !== null) {
+  const root = ReactDOM.createRoot(rootElement);
+  root.render(
+    <BrowserRouter>
+      <React.StrictMode>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </React.StrictMode>
+    </BrowserRouter>,
+  );
+}

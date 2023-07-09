@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Account } from 'interfaces/Account';
 import { CategoryData, CategoryGroup } from 'interfaces/Category';
-import { NestedCheckBoxSection } from 'libs/reuse/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import { RootState } from 'store';
 import {
   ACCOUNT_DROPDOWN_REDUCER_KEY,
@@ -20,6 +19,7 @@ import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelect
 import { initCheckboxes } from 'store/slices/filterBarSlice';
 import { toggleParentCheckbox, toggleChildCheckbox } from 'store/slices/filterBarSlice';
 
+import { NestedCheckBoxSection } from '../components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import {
   assembleAccountCheckboxes,
   assembleCategoryCheckboxObjects,

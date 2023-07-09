@@ -4,7 +4,8 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
-import SelectElement from 'libs/reuse/elements/form-controls/components/Select';
+import Select from 'libs/reuse/elements/form-controls/components/Select';
+import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import { getOptionsFromValues } from 'libs/utils/utils';
 import { RootState } from 'store';
 import {
@@ -54,26 +55,41 @@ const DateFilterForm = () => {
   );
 
   const dataLoading =
-    !toOptions || toOptionsLoading || !fromOptions || fromOptionsLoading;
+    !toOptions ||
+    toOptionsLoading ||
+    !fromOptions ||
+    fromOptionsLoading ||
+    !startDate ||
+    !endDate;
+
+  let allowedFromOptions: OptionInterface<string>[] = [];
+  let allowedToOptions: OptionInterface<string>[] = [];
+  if (!dataLoading) {
+    allowedFromOptions = getOptionsFromValues(fromOptions) as OptionInterface<string>[];
+    allowedToOptions = getOptionsFromValues(toOptions) as OptionInterface<string>[];
+  }
 
   return (
     <FlexContainer className={'justify-content-around'}>
       {!dataLoading ? (
         <>
-          <SelectElement
-            options={getOptionsFromValues(fromOptions)}
-            label={DATE_DROPDOWN_FROM_LABEL}
+          <Select
             id={DATE_DROPDOWN_FROM_ID}
+            options={allowedFromOptions}
+            selectLabel={DATE_DROPDOWN_FROM_LABEL}
             value={startDate}
+            isFloatingSelect={true}
             onChange={(value): void => {
               dispatch(updateStartDate(value));
             }}
           />
-          <SelectElement
-            options={getOptionsFromValues(toOptions)}
-            label={DATE_DROPDOWN_TO_LABEL}
+
+          <Select
             id={DATE_DROPDOWN_TO_ID}
+            options={allowedToOptions}
+            selectLabel={DATE_DROPDOWN_TO_LABEL}
             value={endDate}
+            isFloatingSelect={false}
             onChange={(value): void => {
               dispatch(updateEndDate(value));
             }}

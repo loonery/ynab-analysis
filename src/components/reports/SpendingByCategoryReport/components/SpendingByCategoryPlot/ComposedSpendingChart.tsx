@@ -38,7 +38,7 @@ import {
 import { CustomDot } from './CustomDot';
 import { CustomTooltip } from './CustomTooltip';
 import { HighlightedBarSection } from './HighlightedBarSection';
-import { ComposedSpendingChartProps } from './interfaces/interfaces';
+import { BarMouseOverData, ComposedSpendingChartProps } from './interfaces/interfaces';
 
 // eslint-disable-next-line
 export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartProps) => {
@@ -49,12 +49,11 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
   );
   const { x, y, height, width, fill } = highlightedBarData ?? {};
 
-  // todo - add parameter typing
-  const handleMouseEnterBar = (data: any): void => {
+  const handleMouseEnterBar = (data: BarMouseOverData): void => {
     // mousing over any bar yields these variables
     const { x, y, height, width } = data;
-    const barTooltipData = data.tooltipPayload[0];
-    const { color: fill } = barTooltipData;
+    const barTooltipData = data.tooltipPayload.at(0) ?? { fill: 'bad color' };
+    const { fill } = barTooltipData;
 
     dispatch(setHighlightedBarData({ x, y, height, width, fill }));
     dispatch(setTooltipData(barTooltipData));
