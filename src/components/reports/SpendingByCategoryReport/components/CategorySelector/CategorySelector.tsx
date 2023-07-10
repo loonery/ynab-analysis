@@ -15,7 +15,6 @@ import {
 import {
   setCategoryDimension,
   setSelectedCategory,
-  setParentOfSelected,
   setSelectedCategoryGroup,
 } from 'store/slices/spendingAnalysisSlice';
 

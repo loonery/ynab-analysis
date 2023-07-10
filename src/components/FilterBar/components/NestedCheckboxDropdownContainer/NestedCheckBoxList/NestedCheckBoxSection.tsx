@@ -11,7 +11,7 @@ export const NestedCheckBoxSection = ({
   parentOnClick,
   childOnClick,
 }: NestedCheckBoxSectionProps) => {
-  const { parentName, checked, childObjects } = checkBoxSection;
+  const { parentName, parentId, checked, childObjects } = checkBoxSection;
 
   return (
     <Fragment>
@@ -20,18 +20,18 @@ export const NestedCheckBoxSection = ({
           labelText={parentName}
           id={'parent-checkbox-' + parentName}
           checked={checked}
-          onChange={(): void => parentOnClick(parentName)}
+          onChange={(): void => parentOnClick(parentId)}
         />
       </ParentCheckboxContainer>
 
       {/* children checkboxes */}
-      {childObjects.map(({ childName, checked }, index) => (
-        <ChildCheckboxContainer key={'child-checkbox-' + childName + index}>
+      {childObjects.map(({ childName, childId, checked }, index) => (
+        <ChildCheckboxContainer key={'child-checkbox-container-' + index}>
           <Checkbox
             labelText={childName}
-            id={'child-checkbox-' + childName}
+            id={'child-checkbox-' + index}
             checked={checked}
-            onChange={(): void => childOnClick(parentName, childName)}
+            onChange={(): void => childOnClick(parentId, childId)}
           />
         </ChildCheckboxContainer>
       ))}

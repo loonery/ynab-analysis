@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { useTooltipState } from 'components/reports/SpendingByCategoryReport/hooks/useTooltipState';
 import { tooltipType } from 'store/interfaces/SpendingAnalysisState';
 
-import { useTooltipState } from '../../../hooks/useTooltipState';
-import { DotTooltip } from './DotTooltip';
 import { DotTooltipProps, BarTooltipProps } from '../interfaces/interfaces';
 import { StyledTooltipContainer } from '../styles/styles';
 
 import { BarTooltip } from './BarTooltip';
+import { DotTooltip } from './DotTooltip';
 
 // eslint-disable-next-line
 export const CustomTooltip = () => {

@@ -22,7 +22,7 @@ export const useButtons = (): {
   const dispatch = useDispatch();
 
   // SAVE AND CANCEL LABELS
-  const CANCEL_CHANGES_LABEL = <FontAwesomeIcon icon={'xmark'} />;
+  const CANCEL_CHANGES_LABEL = <FontAwesomeIcon icon={'save'} />;
   const SAVE_LABEL = <FontAwesomeIcon icon={'save'} />;
 
   // CHECKBOX LABELS

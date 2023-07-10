@@ -45,10 +45,6 @@ const spendingAnalysisSlice = createSlice({
       const { newCategoryGroupId }: { newCategoryGroupId: string } = payload;
       state.selectedCategoryGroupId = newCategoryGroupId;
     },
-    setParentOfSelected(state, { payload }) {
-      const parentIdOfSelected: string = payload;
-      state.parentIdOfSelected = parentIdOfSelected;
-    },
     setTooltipData(state, { payload }) {
       const tooltipData: TooltipData = payload;
       state.plotState.tooltipData = tooltipData;
@@ -71,7 +67,6 @@ export const {
   setCategoryDimension,
   setSelectedCategory,
   setSelectedCategoryGroup,
-  setParentOfSelected,
   setTooltipData,
   setTooltipType,
   setShowTooltip,

@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import { NestedCheckboxListProps } from './interfaces/NestedCheckboxSection';
 import { NestedCheckBoxSection } from './NestedCheckBoxSection';
 
+// eslint-disable-next-line
 const NestedCheckBoxList = ({
   checkboxSections,
   parentOnClick,

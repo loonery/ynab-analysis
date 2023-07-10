@@ -10,12 +10,7 @@ import { CheckboxProps } from '../interfaces/interfaces';
 import { Label, StyledInput } from '../styles/elementStyles';
 
 // eslint-disable-next-line
-export const Checkbox = ({
-  labelText: labelText,
-  checked = false,
-  onChange,
-  id,
-}: CheckboxProps) => {
+export const Checkbox = ({ labelText, checked = false, onChange, id }: CheckboxProps) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const newValue = e.target.value === 'true' ? true : false;
     onChange(newValue);
