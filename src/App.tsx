@@ -10,8 +10,8 @@ import SpendingByCategoryPage from './components/pages/SpendingAnalysisPage';
 
 const App = () => {
   // populate the store on app render
-  const { data: transactions, isLoading: transactionsLoading } = useGetCategoriesQuery();
-  const { data: categories, isLoading: categoriesLoading } = useGetTransactionsQuery();
+  useGetCategoriesQuery();
+  useGetTransactionsQuery();
 
   return (
     <AppContainer>

@@ -10,7 +10,7 @@ import {
 import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors';
 
 import { DataKeys } from '../components/SpendingByCategoryPlot/interfaces/types/types';
-import { assembleSpendingPlotData } from '../utils/assemblePlotData';
+import { assembleSpendingPlotData } from '../utils/plotUtils';
 
 /**
  *

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { InternMap, rollup } from 'd3';
-import { CategoryGroup, SubCategory } from 'interfaces/Category';
+import { CategoryData, CategoryGroup, SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
 import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import { getOptionsFromValues } from 'libs/utils/utils';
@@ -41,6 +41,20 @@ export const selectSelectedCategoryId = (state: RootState): string => {
 export const selectSelectedCategoryGroupId = (state: RootState): string => {
   return state.spendingAnalysis.selectedCategoryGroupId;
 };
+
+export const selectSelectedCategoryGroupName = createSelector(
+  [selectCategoryData, selectSelectedCategoryGroupId],
+  (categoryData, selectedCategoryGroupId): string => {
+    const { data, isLoading } = categoryData;
+    let selectedCategoryName = 'Name not found';
+    if (data && !isLoading) {
+      selectedCategoryName =
+        data.categories.find((el) => el.id === selectedCategoryGroupId)?.name ??
+        'Name not found';
+    }
+    return selectedCategoryName;
+  },
+);
 
 export const selectCategoryDimension = (state: RootState): CategoryDimensions => {
   return state.spendingAnalysis.categoryDimension;
@@ -163,12 +177,15 @@ export const selectCategoryOptions = createSelector(
   ],
   (
     categoryData,
-    categoryDimension,
     selectedCategoryGroupId,
+    categoryDimension,
     filteredSubCategoriesData,
   ): FetchedData<OptionInterface<string>[]> => {
     // if there is no parent, we don't want any drilldown options
-    if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
+    if (
+      categoryDimension === CategoryDimensions.allCategoriesDimension &&
+      selectedCategoryGroupId === ALL_CATEGORY_GROUPS_OPTION.id
+    ) {
       return { data: [], isLoading: false };
     }
 
@@ -262,7 +279,7 @@ const selectFilteredTotalsForSingleCategoryDimension = createSelector(
         (t: Transaction) => t.month_year,
         (t: Transaction) => t.subcategory?.name,
       );
-      return { data: spendingByMonthMap, isLoading: true };
+      return { data: spendingByMonthMap, isLoading: false };
     }
     return { data: undefined, isLoading: true };
   },
@@ -311,7 +328,7 @@ const selectFilteredTotalsForAllCategoryGroups = createSelector(
       );
       return { data: spendingByMonthMap, isLoading: false };
     }
-    return { data: undefined, isLoading: false };
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -331,7 +348,7 @@ const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
       );
       return { data: spendingByMonthMap, isLoading: false };
     }
-    return { data: undefined, isLoading: false };
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -369,7 +386,7 @@ export const selectDataKeysByCategoryDimension = createSelector(
         return { data: dataKeys, isLoading: false };
       }
       const dataKeys = subCategories.map((e) => e.name);
-      return { data: dataKeys, isLoading: true };
+      return { data: dataKeys, isLoading: false };
     }
     return { data: undefined, isLoading: true };
   },

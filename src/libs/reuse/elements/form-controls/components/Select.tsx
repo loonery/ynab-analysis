@@ -20,20 +20,20 @@ const Select = <Value,>({
   isFloatingSelect = false,
   mapValueToAllowedType,
 }: RuntimeSelectProps<Value>) => {
-  // these are optional props, but if they are included they may not be undefined
-  if (
-    selectContainerClassName === undefined ||
-    selectElementClassname === undefined ||
-    mapValueToAllowedType === undefined ||
-    isFloatingSelect === undefined
-  ) {
-    throw new Error(
-      `if provided, optional properties may not be undefined but were argued as 
-      selectContainerClassName: ${selectContainerClassName}, 
-      selectElementClassname: ${selectElementClassname},
-      mapValueToAllowedType: ${mapValueToAllowedType}`,
-    );
-  }
+  // // these are optional props, but if they are included they may not be undefined
+  // if (
+  //   selectContainerClassName === undefined ||
+  //   selectElementClassname === undefined ||
+  //   mapValueToAllowedType === undefined ||
+  //   isFloatingSelect === undefined
+  // ) {
+  //   throw new Error(
+  //     `if provided, optional properties may not be undefined but were argued as
+  //     selectContainerClassName: ${selectContainerClassName},
+  //     selectElementClassname: ${selectElementClassname},
+  //     mapValueToAllowedType: ${mapValueToAllowedType}`,
+  //   );
+  // }
 
   // function ensures that all values are of the allowed type for the select
   const toValue = (option: Value): AllowedValueTypes => {
@@ -67,7 +67,6 @@ const Select = <Value,>({
           : selectContainerClassName
       }
     >
-      <Label htmlFor={id}>{selectLabel}</Label>
       <StyledSelect
         id={id}
         className={
@@ -86,6 +85,7 @@ const Select = <Value,>({
           ),
         )}
       </StyledSelect>
+      <Label htmlFor={id}>{selectLabel}</Label>
     </Container>
   );
 };

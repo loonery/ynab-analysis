@@ -126,6 +126,9 @@ const getSubcategoryBySubcategoryId = (
   categoryData: CategoryData,
   subCategoryId: string,
 ): SubCategory | undefined => {
+  if (subCategoryId === null) {
+    return undefined;
+  }
   const categoryGroup = categoryData.subCategoryReverseMap[subCategoryId];
   return categoryGroup.subCategories.find(
     (subcategory) => subcategory.id === subCategoryId,

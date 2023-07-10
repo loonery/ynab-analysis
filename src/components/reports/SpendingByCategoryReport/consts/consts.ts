@@ -73,6 +73,9 @@ export const SPENDING_CATEGORIES_COLORS = {
 export const PLOT_HEIGHT = 600;
 export const PLOT_WIDTH = '100%';
 
+// CATEGORY SELECTOR CONSTS
+export const GAP_BETWEEN_CATEGORY_SELECTORS = '10px';
+
 // CUSTOM DOT CONSTS
 export const OUTER_DOT_RADIUS = 8;
 export const INNER_DOT_RADIUS = 5;
@@ -89,5 +92,6 @@ export const STACK_ID = 'a';
 
 // HIGHLIGHTED BAR SECTION CONSTS
 export const HIGHLIGHTED_BAR_OVERFLOW = 5;
+export const HIGHLIGHTED_BAR_OVERFLOW_OFFSET = 1;
 export const RECHARTS_SVG_CLASSNAME = 'recharts-layer recharts-bar-rectangle';
 export const RECHARTS_SVG_ROLE = 'img';

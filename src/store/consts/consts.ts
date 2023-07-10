@@ -25,9 +25,9 @@ export const ALL_SUBCATEGORIES_OPTION: OptionInterface<string> = {
 };
 
 export const ALL_CATEGORY_GROUPS_OPTION: OptionInterface<string> = {
-  id: String(ALL_CATEGORY_GROUPS_OPTION_ID),
+  id: ALL_CATEGORY_GROUPS_OPTION_ID,
   label: ALL_CATEGORY_GROUPS_LABEL,
-  value: String(ALL_CATEGORY_GROUPS_OPTION_ID),
+  value: ALL_CATEGORY_GROUPS_OPTION_ID,
 };
 
 export const ALL_CATEGORIES_DIMENSION = 'all-categories';

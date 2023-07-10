@@ -14,4 +14,6 @@ export const COMPOSED_SPENDING_CHART_CONSTANT_PROPS: CategoricalChartProps = {
 
 export const CARTESIAN_GRID_STROKE_DASH_ARRAY = '3 3';
 export const CATEGORY_GROUP_SELECT_ID = 'category-group-select';
+export const CATEGORY_GROUP_SELECT_LABEL = 'Category Group';
 export const SUB_CATEGORY_SELECT_ID = 'subcategory-select';
+export const SUB_CATEGORY_GROUP_SELECT_LABEL = 'Subcategory';

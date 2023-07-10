@@ -38,12 +38,12 @@ const spendingAnalysisSlice = createSlice({
       state.categoryDimension = categoryDimension;
     },
     setSelectedCategory(state, { payload }) {
-      const selectedCategoryId: string = payload;
-      state.selectedSubCategoryId = selectedCategoryId;
+      const { newSubCategoryId }: { newSubCategoryId: string } = payload;
+      state.selectedSubCategoryId = newSubCategoryId;
     },
     setSelectedCategoryGroup(state, { payload }) {
-      const selectedCategoryGroupId: string = payload;
-      state.selectedCategoryGroupId = selectedCategoryGroupId;
+      const { newCategoryGroupId }: { newCategoryGroupId: string } = payload;
+      state.selectedCategoryGroupId = newCategoryGroupId;
     },
     setParentOfSelected(state, { payload }) {
       const parentIdOfSelected: string = payload;

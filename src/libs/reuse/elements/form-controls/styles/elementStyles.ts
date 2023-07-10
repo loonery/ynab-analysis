@@ -12,7 +12,6 @@ export const Label = styled.label`
 
 export const StyledSelect = styled.select`
   width: 100%;
-  max-height: 30px;
   overflow-y: auto;
 `;
 

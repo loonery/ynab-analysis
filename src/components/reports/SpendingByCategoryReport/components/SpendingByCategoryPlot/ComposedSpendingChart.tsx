@@ -36,9 +36,9 @@ import {
 } from '../consts/consts';
 
 import { CustomDot } from './CustomDot';
-import { CustomTooltip } from './CustomTooltip';
 import { HighlightedBarSection } from './HighlightedBarSection';
 import { BarMouseOverData, ComposedSpendingChartProps } from './interfaces/interfaces';
+import { CustomTooltip } from './Tooltip/CustomTooltip';
 
 // eslint-disable-next-line
 export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartProps) => {

@@ -19,7 +19,13 @@ import {
   setSelectedCategoryGroup,
 } from 'store/slices/spendingAnalysisSlice';
 
-import { CATEGORY_GROUP_SELECT_ID, SUB_CATEGORY_SELECT_ID } from '../consts/consts';
+import { GAP_BETWEEN_CATEGORY_SELECTORS } from '../../consts/consts';
+import {
+  CATEGORY_GROUP_SELECT_ID,
+  CATEGORY_GROUP_SELECT_LABEL,
+  SUB_CATEGORY_GROUP_SELECT_LABEL,
+  SUB_CATEGORY_SELECT_ID,
+} from '../consts/consts';
 
 import { useCategoryData } from './hooks/useCategoryData';
 
@@ -32,45 +38,39 @@ const CategorySelector = () => {
     selectedCategoryGroupId,
     categoryGroupOptions,
     categoryDrilldownOptions,
-    isLoading,
   } = useCategoryData();
 
-  const selectCategoryGroup = (e) => {
-    const selected = e.target.value;
-    dispatch(setSelectedCategoryGroup(selected));
-    dispatch(setParentOfSelected(NO_PARENT));
+  const selectCategoryGroup = (newCategoryGroupId: string): void => {
+    dispatch(setSelectedCategoryGroup({ newCategoryGroupId }));
 
     // if we want to see all category groups
-    if (selected === ALL_CATEGORY_GROUPS_OPTION.id) {
+    if (newCategoryGroupId === ALL_CATEGORY_GROUPS_OPTION.id) {
       dispatch(setCategoryDimension(ALL_CATEGORIES_DIMENSION));
-      // if we're starting to drill down to look at all subcategories of a category group
     } else {
+      // otherwise we're starting to drill down to look at all subcategories of a category group
       dispatch(setCategoryDimension(CATEGORY_GROUP_DIMENSION));
     }
   };
 
-  const selectCategory = (e) => {
-    const selected = e.target.value;
-    dispatch(setSelectedCategory(selected));
+  const selectCategory = (newSubCategoryId: string): void => {
+    dispatch(setSelectedCategory({ newSubCategoryId }));
 
     // if we're drilling down to look at all subcategories of a category group
-    if (selected === ALL_SUBCATEGORIES_OPTION.id) {
-      dispatch(setParentOfSelected(NO_PARENT));
+    if (newSubCategoryId === ALL_SUBCATEGORIES_OPTION.id) {
       dispatch(setCategoryDimension(CATEGORY_GROUP_DIMENSION));
 
       // if we're drilling down to look at 1 subcategory of a category group
     } else {
-      dispatch(setParentOfSelected(selectedCategoryGroupId));
       dispatch(setCategoryDimension(SINGLE_CATEGORY_DIMENSION));
     }
   };
 
   return (
-    <FlexContainer gap={'10px'}>
+    <FlexContainer gap={GAP_BETWEEN_CATEGORY_SELECTORS}>
       <Select
         id={CATEGORY_GROUP_SELECT_ID}
         options={categoryGroupOptions}
-        selectLabel={'Category Group'}
+        selectLabel={CATEGORY_GROUP_SELECT_LABEL}
         value={selectedCategoryGroupId}
         isFloatingSelect={true}
         onChange={selectCategoryGroup}
@@ -79,7 +79,7 @@ const CategorySelector = () => {
         <Select
           id={SUB_CATEGORY_SELECT_ID}
           options={categoryDrilldownOptions}
-          selectLabel={'Category'}
+          selectLabel={SUB_CATEGORY_GROUP_SELECT_LABEL}
           value={selectedSubCategoryId}
           isFloatingSelect={true}
           onChange={selectCategory}

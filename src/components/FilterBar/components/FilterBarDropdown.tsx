@@ -27,9 +27,9 @@ export const FilterBarDropdown = ({
 
   const onToggle = (): void => {
     // toggle the dropdown in state
-    dispatch(toggleShowDropdown(dropdownKey));
+    dispatch(toggleShowDropdown({ dropdownKey }));
     // revert temp state back to saved state if clicked away
-    dispatch(cancelDropdownChanges(dropdownKey));
+    dispatch(cancelDropdownChanges({ dropdownKey }));
   };
 
   return (

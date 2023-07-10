@@ -11,9 +11,9 @@ import { DateRange } from 'store/interfaces/DateRange';
 import { FetchedData } from 'store/interfaces/FetchedData';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
-import { selectFilters } from '../componentSelectors/filterBarSelectors';
-
 import { selectCategoriesResult } from './categorySelectors';
+
+const selectFilters = (state: RootState) => state.filterBar.appliedFilters;
 
 export const selectTransactionsResult = ynabApi.endpoints.getTransactions.select();
 
