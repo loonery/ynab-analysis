@@ -1,61 +1,26 @@
+import { YNAB_ACCOUNT_TYPES_TO_FORMMATTED_TYPE_MAP } from 'consts/consts';
 import { Account } from 'interfaces/Account';
 import { FormattedAccountType } from 'interfaces/Account';
-import { YnabAccount, AccountType } from 'interfaces/externalDataInterfaces/ynabAccount';
+import {
+  YnabAccount,
+  YnabApiAccountType,
+} from 'interfaces/externalDataInterfaces/ynabAccount';
 
-import { convertAmount } from './generalHelpers';
+import { convertAmount } from './generalUtils';
 
-const getNewAccountType = (type: AccountType): FormattedAccountType => {
-  let newType;
-
-  switch (type) {
-    case AccountType['checking']:
-      newType = FormattedAccountType['Checking'];
-      break;
-    case AccountType['savings']:
-      newType = FormattedAccountType['Savings'];
-      break;
-    case AccountType['cash']:
-      newType = FormattedAccountType['Cash'];
-      break;
-    case AccountType['creditCard']:
-      newType = FormattedAccountType['Credit Card'];
-      break;
-    case AccountType['lineOfCredit']:
-      newType = FormattedAccountType['Line of Credit'];
-      break;
-    case AccountType['otherAsset']:
-      newType = FormattedAccountType['Other Asset'];
-      break;
-    case AccountType['otherLiability']:
-      newType = FormattedAccountType['Other Liability'];
-      break;
-    case AccountType['mortgage']:
-      newType = FormattedAccountType['Mortgage'];
-      break;
-    case AccountType['autoLoan']:
-      newType = FormattedAccountType['Auto Loan'];
-      break;
-    case AccountType['studentLoan']:
-      newType = FormattedAccountType['Student Loan'];
-      break;
-    case AccountType['personalLoan']:
-      newType = FormattedAccountType['Personal Loan'];
-      break;
-    case AccountType['medicalDebt']:
-      newType = FormattedAccountType['Medical Debt'];
-      break;
-    case AccountType['otherDebt']:
-      newType = FormattedAccountType['Other Debt'];
-      break;
+const getNewAccountType = (type: YnabApiAccountType): FormattedAccountType => {
+  if (YNAB_ACCOUNT_TYPES_TO_FORMMATTED_TYPE_MAP[type]) {
+    return YNAB_ACCOUNT_TYPES_TO_FORMMATTED_TYPE_MAP[type];
   }
-  return newType;
+  throw new Error('account type could not be mapped');
 };
 
 const convertYnabAccountToAccount = (ynabAccount: YnabAccount): Account => {
   return {
     id: ynabAccount.id, // Required, string with $uuid format
     name: ynabAccount.name, // Required
-    type: getNewAccountType(ynabAccount.type),
+    type: ynabAccount.type,
+    typeLabel: getNewAccountType(ynabAccount.type),
     on_budget: ynabAccount.on_budget, // Required
     closed: ynabAccount.closed, // Required
     note: ynabAccount.note, // Optional

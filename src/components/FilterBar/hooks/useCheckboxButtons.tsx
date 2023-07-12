@@ -2,10 +2,12 @@ import React from 'react';
 
 import { useDispatch } from 'react-redux';
 
+import { faSave, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ButtonProps } from 'libs/reuse/components/interfaces/interfaces';
-import { DropdownKey } from 'store/interfaces/FilterBarState';
+import { TEMP_CHECKBOX_KEY, SAVED_CHECKBOX_KEY } from 'store/consts/consts';
+import { DropdownKey, DateRangeDropdownKey } from 'store/interfaces/FilterBarState';
 import {
   setAllCheckboxes,
   cancelDropdownChanges,
@@ -13,6 +15,11 @@ import {
   toggleShowDropdown,
   setFiltersFromState,
 } from 'store/slices/filterBarSlice';
+
+import {
+  DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY,
+  DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY,
+} from '../consts/filterBarConsts';
 
 export const useButtons = (): {
   dateHeaderButtons: ButtonProps[];
@@ -22,8 +29,8 @@ export const useButtons = (): {
   const dispatch = useDispatch();
 
   // SAVE AND CANCEL LABELS
-  const CANCEL_CHANGES_LABEL = <FontAwesomeIcon icon={'save'} />;
-  const SAVE_LABEL = <FontAwesomeIcon icon={'save'} />;
+  const CANCEL_CHANGES_LABEL = <FontAwesomeIcon icon={faX} />;
+  const SAVE_LABEL = <FontAwesomeIcon icon={faSave} />;
 
   // CHECKBOX LABELS
   const SELECT_ALL_LABEL = 'Select All';
@@ -105,15 +112,41 @@ export const useButtons = (): {
 
   // footer button definitions
   const getFooterButtons = (dropdownKey: DropdownKey): ButtonProps[] => {
+    const isDateDropdown = (
+      dropdownKey: DropdownKey,
+    ): dropdownKey is DateRangeDropdownKey => {
+      return true;
+    };
+
+    const tempKey = isDateDropdown(dropdownKey)
+      ? DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY
+      : TEMP_CHECKBOX_KEY;
+
+    const savedKey = isDateDropdown(dropdownKey)
+      ? DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY
+      : SAVED_CHECKBOX_KEY;
+
     // BUTTON FUNCTIONS
     const saveChanges = () => {
       dispatch(toggleShowDropdown({ dropdownKey }));
-      dispatch(saveDropdownState({ dropdownKey }));
+      dispatch(
+        saveDropdownState({
+          dropdownKey,
+          tempKey,
+          savedKey,
+        }),
+      );
       dispatch(setFiltersFromState());
     };
 
     const discardChanges = () => {
-      dispatch(cancelDropdownChanges({ dropdownKey }));
+      dispatch(
+        cancelDropdownChanges({
+          dropdownKey,
+          tempKey,
+          savedKey,
+        }),
+      );
     };
     return [
       {

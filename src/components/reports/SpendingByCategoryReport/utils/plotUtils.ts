@@ -18,6 +18,7 @@ export const assembleSpendingPlotData = (
   // for each month of active spending, assemble an object representing spending data for that month
   // to be fed to the Recharts composed chart
   categorySpendingData.forEach((monthlySpendingData, month) => {
+    // initialize the data object with the total and the month
     const monthlySpendingDataObject: SpendingChartData = {
       month,
       total: -(totalSpendingData.get(month) ?? UNDEFINED_AMOUNT_VALUE),

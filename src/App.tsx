@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useGetTransactionsQuery } from 'api/ynabApi';
+import { useGetAccountsQuery, useGetTransactionsQuery } from 'api/ynabApi';
 import { useGetCategoriesQuery } from 'api/ynabApi';
 import { AppContainer } from 'libs/reuse/containers/AppContainer';
 import { Route, Routes } from 'react-router';
@@ -12,6 +12,7 @@ const App = () => {
   // populate the store on app render
   useGetCategoriesQuery();
   useGetTransactionsQuery();
+  useGetAccountsQuery();
 
   return (
     <AppContainer>

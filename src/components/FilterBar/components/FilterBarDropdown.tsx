@@ -11,6 +11,10 @@ import { RootState } from 'store';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
 import { cancelDropdownChanges, toggleShowDropdown } from 'store/slices/filterBarSlice';
 
+import {
+  BUTTON_BAR_GAP_BETWEEN_BUTTONS,
+  BOTTOM_BUTTON_BAR_PADDING,
+} from '../consts/filterBarConsts';
 import { FilterBarDropdownProps } from '../interfaces/interfaces';
 // eslint-disable-next-line
 export const FilterBarDropdown = ({
@@ -41,13 +45,16 @@ export const FilterBarDropdown = ({
     >
       <StyledHeader4>{headerText}</StyledHeader4>
       <StyledHr />
-      <ButtonBar buttons={headerButtons} />
+      <ButtonBar
+        buttons={headerButtons}
+        gapBetweenButtons={BUTTON_BAR_GAP_BETWEEN_BUTTONS}
+      />
       <StyledHr />
-
       {children}
       <ButtonBar
         buttons={footerButtons}
-        padding={'30px 0px 0px 0px'}
+        gapBetweenButtons={BUTTON_BAR_GAP_BETWEEN_BUTTONS}
+        padding={BOTTOM_BUTTON_BAR_PADDING}
         justify={'flex-end'}
       />
     </CustomDropdown>

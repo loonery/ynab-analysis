@@ -6,7 +6,7 @@ import {
 import { Transaction } from 'interfaces/Transaction';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
-import { convertAmount } from './generalHelpers';
+import { convertAmount } from './generalUtils';
 
 const convertYnabTransactionToTransaction = (
   transaction: YnabTransaction,

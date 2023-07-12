@@ -7,7 +7,6 @@ import Select from 'libs/reuse/elements/form-controls/components/Select';
 import {
   CATEGORY_GROUP_DIMENSION,
   ALL_CATEGORIES_DIMENSION,
-  NO_PARENT,
   SINGLE_CATEGORY_DIMENSION,
   ALL_CATEGORY_GROUPS_OPTION,
   ALL_SUBCATEGORIES_OPTION,

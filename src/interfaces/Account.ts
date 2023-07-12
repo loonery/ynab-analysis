@@ -1,7 +1,11 @@
+import { ACCOUNT_SUPER_TYPES, FORMATTED_YNAB_API_ACCOUNT_TYPES } from 'consts/consts';
+
+import { YnabApiAccountType } from './externalDataInterfaces/ynabAccount';
 export interface Account {
   id: string; // Required, string with $uuid format
   name: string; // Required
-  type: FormattedAccountType;
+  type: YnabApiAccountType;
+  typeLabel: FormattedAccountType;
   on_budget: boolean; // Required
   closed: boolean; // Required
   note?: string | undefined; // Optional
@@ -19,22 +23,9 @@ export interface Account {
   deleted: boolean; // Required
 }
 
-export enum FormattedAccountType {
-  'Checking',
-  'Savings',
-  'Cash',
-  'Credit Card',
-  'Line of Credit',
-  'Other Asset',
-  'Other Liability',
-  'Mortgage',
-  'Auto Loan',
-  'Student Loan',
-  'Personal Loan',
-  'Medical Debt',
-  'Other Debt',
-}
+export type AccountSuperType = (typeof ACCOUNT_SUPER_TYPES)[number];
 
+export type FormattedAccountType = (typeof FORMATTED_YNAB_API_ACCOUNT_TYPES)[number];
 interface LoanAccountPeriodicValue {
   [key: string]: number; // Keys can be any string, values are integers with $int64 format
 }

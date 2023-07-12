@@ -10,8 +10,8 @@ import {
 
 import { API_BASE, GET_CATEGORIES_PATH, GET_TRANSACTIONS_PATH } from './consts/apiConsts';
 import { AUTHORIZATION_STRING, GET_ACCOUNTS_PATH } from './consts/apiConsts';
-import { processAccounts } from './utils/accountHelpers';
-import { processCategories } from './utils/categoriesHelpers';
+import { processAccounts } from './utils/accountUtils';
+import { processCategories } from './utils/categoriesUtils';
 
 export const ynabApi = createApi({
   baseQuery: fetchBaseQuery({

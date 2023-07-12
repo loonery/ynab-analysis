@@ -1,9 +1,9 @@
-import { Account } from '../Account';
+import { YNAB_API_ACCOUNT_TYPES } from 'consts/consts';
 
 export interface YnabAccount {
   id: string; // Required, string with $uuid format
   name: string; // Required
-  type: AccountType;
+  type: YnabApiAccountType;
   on_budget: boolean; // Required
   closed: boolean; // Required
   note?: string | undefined; // Optional
@@ -21,21 +21,7 @@ export interface YnabAccount {
   deleted: boolean; // Required
 }
 
-export enum AccountType {
-  'checking',
-  'savings',
-  'cash',
-  'creditCard',
-  'lineOfCredit',
-  'otherAsset',
-  'otherLiability',
-  'mortgage',
-  'autoLoan',
-  'studentLoan',
-  'personalLoan',
-  'medicalDebt',
-  'otherDebt',
-}
+export type YnabApiAccountType = (typeof YNAB_API_ACCOUNT_TYPES)[number];
 
 interface LoanAccountPeriodicValue {
   [key: string]: number; // Keys can be any string, values are integers with $int64 format

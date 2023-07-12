@@ -21,7 +21,7 @@ export const selectDatesAfterStartDate = createSelector(
     const { startDate } = dates;
     const { data: allDates } = transactionDates;
 
-    if (allDates && startDate) {
+    if (allDates) {
       const datesAfterStart = allDates.filter((date: MonthYear) => {
         // null protect dates
         if (date && startDate) {
@@ -33,6 +33,6 @@ export const selectDatesAfterStartDate = createSelector(
       });
       return { data: datesAfterStart, isLoading: false };
     }
-    return { data: undefined, isLoading: false };
+    return { data: undefined, isLoading: true };
   },
 );

@@ -2,7 +2,8 @@ import {
   NestedCheckBoxSection,
   ChildCheckboxObject,
 } from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
-import { Account, FormattedAccountType } from 'interfaces/Account';
+import { ACCOUNT_SUPER_TYPES, TRACKING_ACCOUNTS_STRING } from 'consts/consts';
+import { Account, AccountSuperType } from 'interfaces/Account';
 import { SubCategory } from 'interfaces/Category';
 import { CategoryGroup } from 'interfaces/Category';
 
@@ -46,23 +47,28 @@ export const assembleCategoryCheckboxObjects = (
  * @param dataArray
  * @returns
  */
+// todo - simplify the logic in this function
 export const assembleAccountCheckboxes = (
   dataArray: Account[],
 ): NestedCheckBoxSection[] => {
-  const accountTypes = Object.values(FormattedAccountType) as string[];
-
-  const parents = accountTypes.map((accountType: string) => {
+  const parents = ACCOUNT_SUPER_TYPES.map((accountType: AccountSuperType) => {
     const parentName = accountType;
     const parentId = accountType;
     const checked = true;
 
-    const childObjects: ChildCheckboxObject[] = dataArray.map((account: Account) => {
-      return {
-        childName: account.name,
-        childId: account.id,
-        checked,
-      };
-    });
+    const childObjects: ChildCheckboxObject[] = dataArray
+      // if we are creating checkboxes for the tracking accounts, then we create a child for it if the account is not on budget, since that is
+      // synonymous with being a tracking account
+      .filter((account: Account) =>
+        accountType === TRACKING_ACCOUNTS_STRING ? !account.on_budget : account.on_budget,
+      )
+      .map((account: Account) => {
+        return {
+          childName: account.name,
+          childId: account.id,
+          checked,
+        };
+      });
     return {
       parentId,
       parentName,

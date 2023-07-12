@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
-import { PageContainer } from 'libs/reuse/containers/PageContainer';
 import {
   ACCOUNT_DROPDOWN_REDUCER_KEY,
   CATEGORY_DROPDOWN_REDUCER_KEY,
@@ -17,7 +16,7 @@ import {
   GAP_BETWEEN_FILTER_DROPDOWNS,
 } from '../consts/filterBarConsts';
 import { CATEGORY_DROPDOWN_TOGGLE_LABEL } from '../consts/filterBarConsts';
-import { useButtons } from '../hooks/useButtons';
+import { useButtons } from '../hooks/useCheckboxButtons';
 
 import DateFilterFormContainer from './DateFilterDropdown/DateFilterForm';
 import { FilterBarDropdown } from './FilterBarDropdown';

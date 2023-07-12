@@ -159,8 +159,8 @@ const filterBarSlice = createSlice({
      *  Date filter Dropdown reducers
      */
     ///////////////////////////////////////////////////////////////////////////////////////////////
-    initDateDropdown(state, action) {
-      const { startDate, endDate }: DateRange = action.payload;
+    initDateDropdown(state, { payload }) {
+      const { startDate, endDate }: DateRange = payload.data;
       const initalRange: DateRange = { startDate, endDate };
       state[DATE_DROPDOWN_REDUCER_KEY][SAVED_DATE_RANGE_KEY] = initalRange;
       state[DATE_DROPDOWN_REDUCER_KEY][TEMP_DATE_RANGE_KEY] = initalRange;

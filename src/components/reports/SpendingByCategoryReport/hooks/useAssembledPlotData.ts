@@ -34,7 +34,6 @@ export const useAssembledPlotData = (): {
   const { data: dataKeys, isLoading: dataKeysLoading } = useSelector((state: RootState) =>
     selectDataKeysByCategoryDimension(state),
   );
-
   // exhaustive dependency checking to make compiler happy
   const isDataLoaded =
     !isCatsLoading &&

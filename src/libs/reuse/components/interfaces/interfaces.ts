@@ -29,6 +29,7 @@ export interface ButtonProps {
 
 export interface ButtonBarProps {
   buttons: ButtonProps[];
+  gapBetweenButtons?: number | string;
   justify?: string;
   padding?: string;
 }

@@ -1,4 +1,6 @@
+import { MonthYear } from './types/MonthYear';
+
 export interface DateRange {
-  startDate: string | undefined;
-  endDate: string | undefined;
+  startDate: MonthYear | undefined;
+  endDate: MonthYear | undefined;
 }

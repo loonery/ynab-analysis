@@ -80,7 +80,7 @@ const DateFilterForm = () => {
             value={startDate}
             isFloatingSelect={true}
             onChange={(value): void => {
-              dispatch(updateStartDate(value));
+              dispatch(updateStartDate({ startDate: value }));
             }}
           />
 
@@ -89,7 +89,7 @@ const DateFilterForm = () => {
             options={allowedToOptions}
             selectLabel={DATE_DROPDOWN_TO_LABEL}
             value={endDate}
-            isFloatingSelect={false}
+            isFloatingSelect={true}
             onChange={(value): void => {
               dispatch(updateEndDate(value));
             }}

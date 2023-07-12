@@ -1,5 +1,5 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { processTransactions } from 'api/utils/transactionHelpers';
+import { processTransactions } from 'api/utils/transactionUtils';
 import { ynabApi } from 'api/ynabApi';
 import { CategoryGroup } from 'interfaces/Category';
 import { SubCategory } from 'interfaces/Category';
@@ -9,11 +9,13 @@ import { RootState } from 'store';
 import { READY_TO_ASSIGN_CATEGORY_ID } from 'store/consts/consts';
 import { DateRange } from 'store/interfaces/DateRange';
 import { FetchedData } from 'store/interfaces/FetchedData';
+import { AppliedFilters } from 'store/interfaces/FilterBarState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { selectCategoriesResult } from './categorySelectors';
 
-const selectFilters = (state: RootState) => state.filterBar.appliedFilters;
+const selectFilters = (state: RootState): AppliedFilters =>
+  state.filterBar.appliedFilters;
 
 export const selectTransactionsResult = ynabApi.endpoints.getTransactions.select();
 
@@ -77,7 +79,7 @@ export const selectFilteredTransactions = createSelector(
 
         const passAccount =
           filteredAccounts.length > 0
-            ? !filteredAccounts.includes(transaction.account_name)
+            ? !filteredAccounts.includes(transaction.account_id)
             : true;
 
         // let the transaction through if it passes through all filters
@@ -111,6 +113,9 @@ export const selectTransactionDateRange = createSelector(
   },
 );
 
+/**
+ * Gets all of the active months that are available on this YNAB budget
+ * */
 export const selectTransactionDates = createSelector(
   [selectTransactions],
   (transactionsData): FetchedData<MonthYear[]> => {
