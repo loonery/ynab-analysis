@@ -16,7 +16,7 @@ import {
   GAP_BETWEEN_FILTER_DROPDOWNS,
 } from '../consts/filterBarConsts';
 import { CATEGORY_DROPDOWN_TOGGLE_LABEL } from '../consts/filterBarConsts';
-import { useButtons } from '../hooks/useCheckboxButtons';
+import { useButtons } from '../hooks/useFilterbarButtons';
 
 import DateFilterFormContainer from './DateFilterDropdown/DateFilterForm';
 import { FilterBarDropdown } from './FilterBarDropdown';

@@ -13,6 +13,7 @@ const NestedCheckBoxList = ({
     {checkboxSections.map((sectionObject, index) => (
       <NestedCheckBoxSection
         key={'nested-section-' + index}
+        index={index}
         checkBoxSection={sectionObject}
         parentOnClick={parentOnClick}
         childOnClick={childOnClick}

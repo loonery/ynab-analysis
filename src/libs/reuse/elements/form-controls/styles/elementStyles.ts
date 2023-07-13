@@ -20,3 +20,5 @@ export const Option = styled.option`
 `;
 
 export const StyledInput = styled.input``;
+
+export const StyledCheckboxContainer = styled.div``;

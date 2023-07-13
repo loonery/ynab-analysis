@@ -10,6 +10,7 @@ import {
 import { UNDEFINED_CATEGORY_KEY, UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
 
 export const assembleSpendingPlotData = (
+  activeMonths: MonthYear[],
   categorySpendingData: InternMap<MonthYear, InternMap<string | undefined, string>>,
   totalSpendingData: InternMap<MonthYear, string>,
 ): SpendingChartData[] => {

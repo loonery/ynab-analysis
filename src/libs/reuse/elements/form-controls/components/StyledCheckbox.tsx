@@ -7,7 +7,7 @@ import {
   CHECKBOX_DIV_CLASSNAME,
 } from '../consts/consts';
 import { CheckboxProps } from '../interfaces/interfaces';
-import { Label, StyledInput } from '../styles/elementStyles';
+import { Label, StyledInput, StyledCheckboxContainer } from '../styles/elementStyles';
 
 // eslint-disable-next-line
 export const Checkbox = ({ labelText, checked = false, onChange, id }: CheckboxProps) => {
@@ -16,17 +16,25 @@ export const Checkbox = ({ labelText, checked = false, onChange, id }: CheckboxP
     onChange(newValue);
   };
   return (
-    <div key={id} className={CHECKBOX_DIV_CLASSNAME}>
+    <StyledCheckboxContainer
+      key={`${id}-checkbox-container`}
+      id={`${id}-checkbox-container`}
+      className={CHECKBOX_DIV_CLASSNAME}
+    >
       <StyledInput
         className={CHECKBOX_INPUT_CLASSNAME}
         type={CHECKBOX_INPUT_TYPE}
-        id={id}
+        id={`${id}-input`}
         checked={checked}
         onChange={handleChange}
       />
-      <Label className={CHECKBOX_LABEL_CLASSNAME} htmlFor={id}>
+      <Label
+        className={CHECKBOX_LABEL_CLASSNAME}
+        id={`${id}-label`}
+        htmlFor={`${id}-input`}
+      >
         {labelText}
       </Label>
-    </div>
+    </StyledCheckboxContainer>
   );
 };

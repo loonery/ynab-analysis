@@ -130,6 +130,42 @@ export const selectTransactionDates = createSelector(
   },
 );
 
+/**
+ * Gets all of the active months that are available on this YNAB budget
+ * */
+export const selectFilteredTransactionDates = createSelector(
+  [selectTransactions, selectTransactionDates, selectFilters, selectTransactionDateRange],
+  (
+    transactionsData,
+    transactionDatesData,
+    appliedFilters,
+    transactionDateRangeData,
+  ): FetchedData<MonthYear[]> => {
+    const { data: transactionDateRange } = transactionDateRangeData;
+    const { data: transactionDates } = transactionDatesData;
+    const { data: transactions } = transactionsData;
+
+    const startDate = appliedFilters.startDate ?? transactionDateRange?.startDate;
+    const endDate = appliedFilters.endDate ?? transactionDateRange?.endDate;
+
+    // check dependencies
+    if (transactions && transactionDates && startDate && endDate) {
+      // filter
+      const filteredTransactionDates = transactionDates.filter((monthYear) => {
+        const passStart = startDate ? new Date(monthYear) >= new Date(startDate) : true;
+        const passEnd = endDate ? new Date(monthYear) <= new Date(endDate) : true;
+        return passStart && passEnd;
+      });
+
+      return {
+        data: filteredTransactionDates,
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
+  },
+);
+
 export const selectFilteredTransactionSubCategories = createSelector(
   [selectFilteredTransactions],
   (transactionsData): FetchedData<SubCategory[]> => {

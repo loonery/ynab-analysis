@@ -7,7 +7,10 @@ import {
   selectDataKeysByCategoryDimension,
   selectTotalSpendingDataByDimension,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
-import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors';
+import {
+  selectFilteredTransactionDates,
+  selectTransactions,
+} from 'store/selectors/dataSelectors/transactionSliceSelectors';
 
 import { DataKeys } from '../components/SpendingByCategoryPlot/interfaces/types/types';
 import { assembleSpendingPlotData } from '../utils/plotUtils';
@@ -34,6 +37,9 @@ export const useAssembledPlotData = (): {
   const { data: dataKeys, isLoading: dataKeysLoading } = useSelector((state: RootState) =>
     selectDataKeysByCategoryDimension(state),
   );
+  const { data: activeMonths, isLoading: isActiveMonthsLoading } = useSelector(
+    (state: RootState) => selectFilteredTransactionDates(state),
+  );
   // exhaustive dependency checking to make compiler happy
   const isDataLoaded =
     !isCatsLoading &&
@@ -42,10 +48,16 @@ export const useAssembledPlotData = (): {
     totalSpendingData &&
     !isTransactionsLoading &&
     !dataKeysLoading &&
-    dataKeys;
+    dataKeys &&
+    activeMonths &&
+    !isActiveMonthsLoading;
 
   if (!isDataLoaded) return { data: undefined, dataKeys: undefined, isLoading: true };
 
-  const data = assembleSpendingPlotData(categorySpendingData, totalSpendingData);
+  const data = assembleSpendingPlotData(
+    activeMonths,
+    categorySpendingData,
+    totalSpendingData,
+  );
   return { data, dataKeys, isLoading: false };
 };

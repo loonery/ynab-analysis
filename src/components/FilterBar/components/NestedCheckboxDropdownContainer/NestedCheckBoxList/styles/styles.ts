@@ -6,4 +6,5 @@ export const ParentCheckboxContainer = styled.div`
 
 export const ChildCheckboxContainer = styled.div`
   margin-left: 15px;
+  font-weight: initial;
 `;

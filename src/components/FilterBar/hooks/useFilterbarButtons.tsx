@@ -111,6 +111,7 @@ export const useButtons = (): {
   };
 
   // footer button definitions
+  // I don't understand why this predicate seems reversed, but it is working this way
   const getFooterButtons = (dropdownKey: DropdownKey): ButtonProps[] => {
     const isDateDropdown = (
       dropdownKey: DropdownKey,
@@ -119,12 +120,12 @@ export const useButtons = (): {
     };
 
     const tempKey = isDateDropdown(dropdownKey)
-      ? DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY
-      : TEMP_CHECKBOX_KEY;
+      ? TEMP_CHECKBOX_KEY
+      : DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY;
 
     const savedKey = isDateDropdown(dropdownKey)
-      ? DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY
-      : SAVED_CHECKBOX_KEY;
+      ? SAVED_CHECKBOX_KEY
+      : DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY;
 
     // BUTTON FUNCTIONS
     const saveChanges = () => {

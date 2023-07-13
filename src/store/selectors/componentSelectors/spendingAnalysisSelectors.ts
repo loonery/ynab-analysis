@@ -29,6 +29,7 @@ import {
   selectFilteredTransactions,
   selectFilteredTransactionSubCategories,
   selectFilteredTransactionCategoryGroups,
+  selectFilteredTransactionDates,
 } from '../dataSelectors/transactionSliceSelectors';
 
 /**
@@ -267,12 +268,15 @@ const selectFilteredTotalsForCategoryGroupDimension = createSelector(
 );
 
 const selectFilteredTotalsForSingleCategoryDimension = createSelector(
-  [selectTransactionsForSingleCategoryDimension],
+  [selectTransactionsForSingleCategoryDimension, selectFilteredTransactionDates],
   (
     transactionsData,
+    filteredTransactionDatesData,
   ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
     const { data: transactions } = transactionsData;
-    if (transactions) {
+    const { data: filteredTransactionDates } = filteredTransactionDatesData;
+    if (transactions && filteredTransactionDates) {
+      // get the active dates for the transactions we are currently looking at
       const spendingByMonthMap = rollup(
         transactions,
         (t: Transaction[]) => totalSpendingHelper(t),

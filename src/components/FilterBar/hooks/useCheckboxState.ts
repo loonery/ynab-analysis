@@ -49,6 +49,7 @@ export const useCheckboxState = (
 
   // Assemble the checkbox data dependent upon which dropdown state this hook is being
   // used for
+  console.log(dropdownKey);
   switch (dropdownKey) {
     case CATEGORY_DROPDOWN_REDUCER_KEY: {
       data = categoryData as CategoryData;

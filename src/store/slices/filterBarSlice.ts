@@ -63,6 +63,7 @@ const filterBarSlice = createSlice({
       const checkboxState: CheckboxDropdownState = state[dropdownKey];
       checkboxState[SAVED_CHECKBOX_KEY] = checkboxes;
       checkboxState[TEMP_CHECKBOX_KEY] = checkboxes;
+      console.log('initializing checkboxes for ', dropdownKey, 'dropdown');
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////
     toggleParentCheckbox(state, action) {
@@ -76,6 +77,7 @@ const filterBarSlice = createSlice({
       // reassign state
       parent.checked = toggleCheckboxValue(parent);
       parent.childObjects = setAllChildrenToValue(parent.childObjects, parent.checked);
+      console.log('toggling parent checkbox in ', dropdownKey, 'dropdown');
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////
     toggleChildCheckbox(state, action) {
@@ -99,6 +101,7 @@ const filterBarSlice = createSlice({
       // check or uncheck the parent depending on the value of its children
       if (allChildrenChecked) parent.checked = true;
       else if (noChildrenChecked) parent.checked = false;
+      console.log('toggling child checkbox in ', dropdownKey, 'dropdown');
     },
     ///////////////////////////////////////////////////////////////////////////////////////////////
     setAllCheckboxes(state, { payload }) {
