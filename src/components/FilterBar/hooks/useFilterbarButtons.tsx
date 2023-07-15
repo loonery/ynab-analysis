@@ -6,20 +6,10 @@ import { faSave, faX } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { ButtonProps } from 'libs/reuse/components/interfaces/interfaces';
-import { TEMP_CHECKBOX_KEY, SAVED_CHECKBOX_KEY } from 'store/consts/consts';
-import { DropdownKey, DateRangeDropdownKey } from 'store/interfaces/FilterBarState';
-import {
-  setAllCheckboxes,
-  cancelDropdownChanges,
-  saveDropdownState,
-  toggleShowDropdown,
-  setFiltersFromState,
-} from 'store/slices/filterBarSlice';
+import { DropdownKey } from 'store/interfaces/FilterBarState';
+import { setAllCheckboxes, cancelDropdownChanges } from 'store/slices/filterBarSlice';
 
-import {
-  DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY,
-  DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY,
-} from '../consts/filterBarConsts';
+import { getDropdownStateKeys } from '../utils/filterBarUtils';
 
 export const useButtons = (): {
   dateHeaderButtons: ButtonProps[];
@@ -52,35 +42,35 @@ export const useButtons = (): {
   const dateHeaderButtons = [
     {
       label: THIS_MONTH_LABEL,
-      onClick: () => {
+      onClick: (): void => {
         return;
       },
       classString: BASIC_BUTTON_CLASSTRING,
     },
     {
       label: THREE_MONTHS_LABEL,
-      onClick: () => {
+      onClick: (): void => {
         return;
       },
       classString: BASIC_BUTTON_CLASSTRING,
     },
     {
       label: THIS_YEAR_LABEL,
-      onClick: () => {
+      onClick: (): void => {
         return;
       },
       classString: BASIC_BUTTON_CLASSTRING,
     },
     {
       label: LAST_YEAR_LABEL,
-      onClick: () => {
+      onClick: (): void => {
         return;
       },
       classString: BASIC_BUTTON_CLASSTRING,
     },
     {
       label: ALL_TIME_LABEL,
-      onClick: () => {
+      onClick: (): void => {
         return;
       },
       classString: BASIC_BUTTON_CLASSTRING,
@@ -113,34 +103,10 @@ export const useButtons = (): {
   // footer button definitions
   // I don't understand why this predicate seems reversed, but it is working this way
   const getFooterButtons = (dropdownKey: DropdownKey): ButtonProps[] => {
-    const isDateDropdown = (
-      dropdownKey: DropdownKey,
-    ): dropdownKey is DateRangeDropdownKey => {
-      return true;
-    };
-
-    const tempKey = isDateDropdown(dropdownKey)
-      ? TEMP_CHECKBOX_KEY
-      : DATE_DROPDOWN_TEMP_STATE_REDUCER_KEY;
-
-    const savedKey = isDateDropdown(dropdownKey)
-      ? SAVED_CHECKBOX_KEY
-      : DATE_DROPDOWN_SAVED_STATE_REDUCER_KEY;
+    const { savedKey, tempKey } = getDropdownStateKeys(dropdownKey);
 
     // BUTTON FUNCTIONS
-    const saveChanges = () => {
-      dispatch(toggleShowDropdown({ dropdownKey }));
-      dispatch(
-        saveDropdownState({
-          dropdownKey,
-          tempKey,
-          savedKey,
-        }),
-      );
-      dispatch(setFiltersFromState());
-    };
-
-    const discardChanges = () => {
+    const cancelChanges = (): void => {
       dispatch(
         cancelDropdownChanges({
           dropdownKey,
@@ -149,16 +115,12 @@ export const useButtons = (): {
         }),
       );
     };
+
     return [
       {
         label: CANCEL_CHANGES_LABEL,
-        onClick: discardChanges,
+        onClick: cancelChanges,
         classString: DENY_BUTTON_CLASSTRING,
-      },
-      {
-        label: SAVE_LABEL,
-        onClick: saveChanges,
-        classString: CONFIRM_BUTTON_CLASSTRING,
       },
     ];
   };

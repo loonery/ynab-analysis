@@ -1,12 +1,14 @@
 import React from 'react';
 
+import { FlexContainer } from 'libs/reuse/containers/FlexContainer';
+
 import {
   FLOATING_SELECT_CLASS_STRING,
   FLOATING_SELECT_CONTAINER_CLASS_STRING,
 } from '../consts/consts';
 import { AllowedValueTypes, RuntimeSelectProps } from '../interfaces/interfaces';
 import { OptionInterface, isAllowed } from '../interfaces/interfaces';
-import { Container, StyledSelect, Label, Option } from '../styles/elementStyles';
+import { StyledSelect, Label, Option } from '../styles/elementStyles';
 
 // eslint-disable-next-line
 const Select = <Value,>({
@@ -15,26 +17,11 @@ const Select = <Value,>({
   options = [],
   value,
   onChange,
-  selectContainerClassName = '',
-  selectElementClassname = '',
+  selectContainerProps = { className: '' },
+  selectElementProps = { className: '' },
   isFloatingSelect = false,
   mapValueToAllowedType,
 }: RuntimeSelectProps<Value>) => {
-  // // these are optional props, but if they are included they may not be undefined
-  // if (
-  //   selectContainerClassName === undefined ||
-  //   selectElementClassname === undefined ||
-  //   mapValueToAllowedType === undefined ||
-  //   isFloatingSelect === undefined
-  // ) {
-  //   throw new Error(
-  //     `if provided, optional properties may not be undefined but were argued as
-  //     selectContainerClassName: ${selectContainerClassName},
-  //     selectElementClassname: ${selectElementClassname},
-  //     mapValueToAllowedType: ${mapValueToAllowedType}`,
-  //   );
-  // }
-
   // function ensures that all values are of the allowed type for the select
   const toValue = (option: Value): AllowedValueTypes => {
     if (mapValueToAllowedType) {
@@ -58,21 +45,26 @@ const Select = <Value,>({
     onChange(option?.value);
   };
 
+  const { className: selectContainerClassName = '' } = selectContainerProps;
+  const { className: selectElementClassname = '' } = selectContainerProps;
+
   return (
-    <Container
+    <FlexContainer
+      {...selectContainerProps}
       key={id}
       className={
         isFloatingSelect
-          ? FLOATING_SELECT_CONTAINER_CLASS_STRING + selectContainerClassName
+          ? `${FLOATING_SELECT_CONTAINER_CLASS_STRING} ${selectContainerClassName}`
           : selectContainerClassName
       }
     >
       <StyledSelect
+        {...selectElementProps}
         id={id}
         className={
           isFloatingSelect
-            ? FLOATING_SELECT_CLASS_STRING + selectContainerClassName
-            : selectContainerClassName
+            ? `${FLOATING_SELECT_CLASS_STRING} ${selectContainerClassName}`
+            : selectElementClassname
         }
         value={toValue(value)}
         onChange={handleChange}
@@ -86,7 +78,7 @@ const Select = <Value,>({
         )}
       </StyledSelect>
       <Label htmlFor={id}>{selectLabel}</Label>
-    </Container>
+    </FlexContainer>
   );
 };
 export default Select;

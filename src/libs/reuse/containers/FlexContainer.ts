@@ -1,13 +1,14 @@
 import { CSSProperties } from 'react';
 
 import styled from 'styled-components';
-interface FlexContainerProps {
+export interface FlexContainerProps {
   justify?: CSSProperties['justifyContent'];
   align?: CSSProperties['alignItems'];
   wrap?: CSSProperties['flexWrap'];
   gap?: CSSProperties['gap'];
   padding?: CSSProperties['padding'];
-  className?: string;
+  width?: CSSProperties['width'];
+  className?: string | undefined;
 }
 export const FlexContainer = styled.div<FlexContainerProps>`
   display: flex;
@@ -28,4 +29,5 @@ export const FlexContainer = styled.div<FlexContainerProps>`
   }
 
   ${({ className }): string => (className ? `& ${className}` : '')}
+  ${({ width }): string => (width ? `${width}` : '')}
 `;

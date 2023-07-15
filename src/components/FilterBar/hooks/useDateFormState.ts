@@ -38,20 +38,12 @@ export const useDateFormState = (): {
   );
 
   // only should be allowed to select dates that occur after any selected start date
-  const { data: fromOptions = [], isLoading: fromOptionsLoading } = useSelector(
-    (state: RootState) => selectTransactionDates(state),
+  const { data: fromOptions = [] } = useSelector((state: RootState) =>
+    selectTransactionDates(state),
   );
-  const { data: toOptions = [], isLoading: toOptionsLoading } = useSelector(
-    (state: RootState) => selectDatesAfterStartDate(state),
+  const { data: toOptions = [] } = useSelector((state: RootState) =>
+    selectDatesAfterStartDate(state),
   );
-
-  const dataLoading: boolean =
-    !toOptions ||
-    toOptionsLoading ||
-    !fromOptions ||
-    fromOptionsLoading ||
-    !startDate ||
-    !endDate;
 
   let allowedFromOptions: OptionInterface<string>[] = [];
   let allowedToOptions: OptionInterface<string>[] = [];

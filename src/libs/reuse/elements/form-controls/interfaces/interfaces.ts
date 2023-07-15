@@ -1,3 +1,7 @@
+import { CSSProperties } from 'react';
+
+import { FlexContainerProps } from 'libs/reuse/containers/FlexContainer';
+
 export interface CheckboxProps {
   id: string;
   labelText: string;
@@ -16,23 +20,29 @@ export interface OptionInterface<Value> {
   value: Value;
 }
 
+export interface SelectElementProps {
+  flex?: CSSProperties['flex'];
+  className?: string | undefined;
+}
+
 export interface SelectProps<Value> {
   id: string;
   selectLabel: string;
   options: OptionInterface<Value>[];
   value: Value;
   onChange: (newValue: Value) => void;
-  selectElementClassname?: string;
-  selectContainerClassName?: string;
-  isFloatingSelect?: boolean;
   mapValueToAllowedType?: (option: Value) => AllowedValueTypes;
+  isFloatingSelect?: boolean;
+  selectElementProps?: SelectElementProps;
+  selectContainerProps?: FlexContainerProps;
 }
+
 export type RuntimeSelectProps<Value> = Value extends AllowedValueTypes
   ? SelectProps<Value>
   : Required<SelectProps<Value>> & {
-      selectElementClassname?: string;
-      selectContainerClassName?: string;
       isFloatingSelect?: boolean;
+      selectElementProps?: SelectElementProps;
+      selectContainerProps?: FlexContainerProps;
     };
 
 // type guard function checks value and refines type

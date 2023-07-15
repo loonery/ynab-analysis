@@ -6,6 +6,18 @@ import { ACCOUNT_SUPER_TYPES, TRACKING_ACCOUNTS_STRING } from 'consts/consts';
 import { Account, AccountSuperType } from 'interfaces/Account';
 import { SubCategory } from 'interfaces/Category';
 import { CategoryGroup } from 'interfaces/Category';
+import {
+  DATE_DROPDOWN_REDUCER_KEY,
+  SAVED_DATE_RANGE_KEY,
+  TEMP_CHECKBOX_KEY,
+  SAVED_CHECKBOX_KEY,
+  TEMP_DATE_RANGE_KEY,
+} from 'store/consts/consts';
+import {
+  DropdownKey,
+  SavedStateDropdownKey,
+  TempStateDropdownKey,
+} from 'store/interfaces/FilterBarState';
 
 // todo - factor out common functionality here - these functions are too similar
 /**
@@ -77,4 +89,22 @@ export const assembleAccountCheckboxes = (
     };
   });
   return parents;
+};
+
+// helper function gets the correct state-accessor keys based on the dropdown key provided
+export const getDropdownStateKeys = (
+  dropdownKey: DropdownKey,
+): { savedKey: SavedStateDropdownKey; tempKey: TempStateDropdownKey } => {
+  switch (dropdownKey) {
+    case DATE_DROPDOWN_REDUCER_KEY:
+      return {
+        tempKey: TEMP_DATE_RANGE_KEY,
+        savedKey: SAVED_DATE_RANGE_KEY,
+      };
+    default:
+      return {
+        tempKey: TEMP_CHECKBOX_KEY,
+        savedKey: SAVED_CHECKBOX_KEY,
+      };
+  }
 };

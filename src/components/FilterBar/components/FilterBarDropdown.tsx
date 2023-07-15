@@ -9,13 +9,18 @@ import { StyledHeader4 } from 'libs/reuse/elements/StyledHeader4';
 import { StyledHr } from 'libs/reuse/elements/StyledHr';
 import { RootState } from 'store';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
-import { cancelDropdownChanges, toggleShowDropdown } from 'store/slices/filterBarSlice';
+import {
+  saveDropdownChanges,
+  setFiltersFromState,
+  toggleShowDropdown,
+} from 'store/slices/filterBarSlice';
 
 import {
   BUTTON_BAR_GAP_BETWEEN_BUTTONS,
   BOTTOM_BUTTON_BAR_PADDING,
 } from '../consts/filterBarConsts';
 import { FilterBarDropdownProps } from '../interfaces/interfaces';
+import { getDropdownStateKeys } from '../utils/filterBarUtils';
 // eslint-disable-next-line
 export const FilterBarDropdown = ({
   id,
@@ -32,8 +37,14 @@ export const FilterBarDropdown = ({
   const onToggle = (): void => {
     // toggle the dropdown in state
     dispatch(toggleShowDropdown({ dropdownKey }));
-    // revert temp state back to saved state if clicked away
-    dispatch(cancelDropdownChanges({ dropdownKey }));
+    // save user's changes without explicit need for save
+    dispatch(
+      saveDropdownChanges({
+        dropdownKey,
+        ...getDropdownStateKeys(dropdownKey),
+      }),
+    );
+    dispatch(setFiltersFromState());
   };
 
   return (

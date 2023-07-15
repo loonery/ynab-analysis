@@ -70,7 +70,7 @@ const DateFilterForm = () => {
   }
 
   return (
-    <FlexContainer className={'justify-content-around'}>
+    <FlexContainer align={'stretch'} width={'100%'} justify={'space-evenly'}>
       {!dataLoading ? (
         <>
           <Select
@@ -79,6 +79,7 @@ const DateFilterForm = () => {
             selectLabel={DATE_DROPDOWN_FROM_LABEL}
             value={startDate}
             isFloatingSelect={true}
+            selectElementProps={{ flex: '1' }}
             onChange={(value): void => {
               dispatch(updateStartDate({ startDate: value }));
             }}
@@ -90,6 +91,7 @@ const DateFilterForm = () => {
             selectLabel={DATE_DROPDOWN_TO_LABEL}
             value={endDate}
             isFloatingSelect={true}
+            selectElementProps={{ flex: '1' }}
             onChange={(value): void => {
               dispatch(updateEndDate(value));
             }}
