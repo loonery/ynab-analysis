@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "jsx": "react",
+    "exactOptionalPropertyTypes": true,
+    "allowJs": true,
+    "strict": true,
+    "target": "es6",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "baseUrl": "src",
+    "outDir": "dist",
+    "noImplicitAny": false,
+    "noErrorTruncation": true
+  },
+  "include": ["src"]
+}
