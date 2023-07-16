@@ -46,7 +46,7 @@ const Select = <Value,>({
   };
 
   const { className: selectContainerClassName = '' } = selectContainerProps;
-  const { className: selectElementClassname = '' } = selectContainerProps;
+  const { className: selectElementClassname = '' } = selectElementProps;
 
   return (
     <FlexContainer
