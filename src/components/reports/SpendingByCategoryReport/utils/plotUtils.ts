@@ -7,27 +7,38 @@ import {
   BarTooltipValues,
   DotTooltipValues,
 } from '../components/SpendingByCategoryPlot/interfaces/interfaces';
-import { UNDEFINED_CATEGORY_KEY, UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
+import { UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
 
+/**
+ * Assembles the array of objects that are fed into the spending chart
+ *
+ * @param activeMonths the MonthYear dates in the filtered range of dates
+ * @param dataKeys the possible categories that exist in the filter
+ * @param categorySpendingData the month-to-month spending data for each category for each month
+ * @param totalSpendingData the month-to-month total spending data for each month
+ * @returns an array of SpendingChart objects
+ */
 export const assembleSpendingPlotData = (
   activeMonths: MonthYear[],
+  dataKeys: string[],
   categorySpendingData: InternMap<MonthYear, InternMap<string | undefined, string>>,
   totalSpendingData: InternMap<MonthYear, string>,
 ): SpendingChartData[] => {
   const spendingChartData: SpendingChartData[] = [];
 
-  // for each month of active spending, assemble an object representing spending data for that month
-  // to be fed to the Recharts composed chart
-  categorySpendingData.forEach((monthlySpendingData, month) => {
+  activeMonths.forEach((month) => {
     // initialize the data object with the total and the month
     const monthlySpendingDataObject: SpendingChartData = {
       month,
       total: -(totalSpendingData.get(month) ?? UNDEFINED_AMOUNT_VALUE),
     };
-    // make an array of categories that appear in a month's spending
-    monthlySpendingData.forEach((amount, category) => {
-      monthlySpendingDataObject[category ?? UNDEFINED_CATEGORY_KEY] =
-        -amount ?? UNDEFINED_AMOUNT_VALUE;
+    // for each month, get the map of category -> value, then use it to assemble the
+    // monthly spending object
+    const monthlySpendingData = categorySpendingData.get(month);
+    dataKeys.forEach((key) => {
+      monthlySpendingDataObject[key] = -Number(
+        monthlySpendingData?.get(key) ?? UNDEFINED_AMOUNT_VALUE,
+      );
     });
     spendingChartData.push(monthlySpendingDataObject);
   });

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { InternMap, rollup } from 'd3';
-import { CategoryData, CategoryGroup, SubCategory } from 'interfaces/Category';
+import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
 import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import { getOptionsFromValues } from 'libs/utils/utils';
@@ -43,6 +43,13 @@ export const selectSelectedCategoryGroupId = (state: RootState): string => {
   return state.spendingAnalysis.selectedCategoryGroupId;
 };
 
+export const selectCategoryDimension = (state: RootState): CategoryDimensions => {
+  return state.spendingAnalysis.categoryDimension;
+};
+
+/**
+ * Gets the name of the selectedCategoryGroupId
+ */
 export const selectSelectedCategoryGroupName = createSelector(
   [selectCategoryData, selectSelectedCategoryGroupId],
   (categoryData, selectedCategoryGroupId): string => {
@@ -57,18 +64,7 @@ export const selectSelectedCategoryGroupName = createSelector(
   },
 );
 
-export const selectCategoryDimension = (state: RootState): CategoryDimensions => {
-  return state.spendingAnalysis.categoryDimension;
-};
-
-export const selectParentOfSelectedCategory = (
-  state: RootState,
-): CategoryGroup | string => {
-  return state.spendingAnalysis.parentIdOfSelected;
-};
-
 // selectors for selectFilteredTransactionsByCategoryDimension
-// todo - debug id matching
 const selectTransactionsForCategoryGroupDimension = createSelector(
   [selectFilteredTransactions, selectSelectedCategoryGroupId],
   (filteredTransactionsData, selectedCategoryGroup): FetchedData<Transaction[]> => {
