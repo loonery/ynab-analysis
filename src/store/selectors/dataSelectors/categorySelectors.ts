@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { ynabApi } from 'api/ynabApi';
-import { CategoryData } from 'interfaces/Category';
+import { CategoryData, CategoryGroup } from 'interfaces/Category';
 import { FetchedData } from 'store/interfaces/FetchedData';
 
 export const selectCategoriesResult = ynabApi.endpoints.getCategories.select();
@@ -11,6 +11,20 @@ export const selectCategoryData = createSelector(
     return categories?.data
       ? { data: categories.data, isLoading: false }
       : { data: undefined, isLoading: true };
+  },
+);
+
+export const selectAllCategoryGroups = createSelector(
+  [selectCategoryData],
+  (data): FetchedData<CategoryGroup[]> => {
+    const { data: categoryData } = data;
+    if (categoryData) {
+      return {
+        data: categoryData?.categories,
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
   },
 );
 

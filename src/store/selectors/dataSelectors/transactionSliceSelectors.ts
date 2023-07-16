@@ -114,7 +114,7 @@ export const selectTransactionDateRange = createSelector(
 );
 
 /**
- * Gets all of the active months that are available on this YNAB budget
+ * Gets all of the months in this YNAB budget that have transactions associated with them
  * */
 export const selectTransactionDates = createSelector(
   [selectTransactions],
@@ -131,8 +131,8 @@ export const selectTransactionDates = createSelector(
 );
 
 /**
- * Gets all of the active months that are available on this YNAB budget
- * */
+ * Gets all of the months on this budget that meet the filter criteria as a MonthYear[]
+ */
 export const selectFilteredTransactionDates = createSelector(
   [selectTransactions, selectTransactionDates, selectFilters, selectTransactionDateRange],
   (
@@ -166,6 +166,9 @@ export const selectFilteredTransactionDates = createSelector(
   },
 );
 
+/**
+ * Gets the category groups that exist on the set of transactions that meet the active filter criteria
+ */
 export const selectFilteredTransactionSubCategories = createSelector(
   [selectFilteredTransactions],
   (transactionsData): FetchedData<SubCategory[]> => {
@@ -186,6 +189,9 @@ export const selectFilteredTransactionSubCategories = createSelector(
   },
 );
 
+/**
+ * Gets the category groups that exist on the set of transactions that meet the active filter criteria
+ */
 export const selectFilteredTransactionCategoryGroups = createSelector(
   [selectFilteredTransactions],
   (transactionsData): FetchedData<CategoryGroup[]> => {

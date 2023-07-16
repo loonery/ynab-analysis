@@ -2,6 +2,8 @@ import { useSelector } from 'react-redux';
 
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { RootState } from 'store';
+import { FetchedData } from 'store/interfaces/FetchedData';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 import {
   selectCategorySpendingDataByDimension,
   selectDataKeysByCategoryDimension,
@@ -34,8 +36,9 @@ export const useAssembledPlotData = (): {
   const { data: totalSpendingData, isLoading: isTotalsLoading } = useSelector(
     (state: RootState) => selectTotalSpendingDataByDimension(state),
   );
-  const { data: dataKeys, isLoading: dataKeysLoading } = useSelector((state: RootState) =>
-    selectDataKeysByCategoryDimension(state),
+  const { data: dataKeys, isLoading: dataKeysLoading } = useSelector(
+    (state: RootState) =>
+      selectDataKeysByCategoryDimension(state) as FetchedData<MonthYear[]>,
   );
   const { data: activeMonths, isLoading: isActiveMonthsLoading } = useSelector(
     (state: RootState) => selectFilteredTransactionDates(state),
@@ -56,6 +59,7 @@ export const useAssembledPlotData = (): {
 
   const data = assembleSpendingPlotData(
     activeMonths,
+    dataKeys,
     categorySpendingData,
     totalSpendingData,
   );
