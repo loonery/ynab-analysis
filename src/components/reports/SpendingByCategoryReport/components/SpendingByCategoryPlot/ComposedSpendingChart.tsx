@@ -79,6 +79,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
             <Bar
               key={index}
               stackId={STACK_ID}
+              isAnimationActive={false}
               dataKey={key}
               fill={SPENDING_CATEGORIES_COLORS[key]}
               onMouseEnter={handleMouseEnterBar}
@@ -90,6 +91,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
           dataKey={'total'}
           dot={<CustomDot active={false} />}
           activeDot={<CustomDot active={true} />}
+          isAnimationActive={false}
         />
         {highlightedBarData && (
           // assert types when we have highlighted bar data

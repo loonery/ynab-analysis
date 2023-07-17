@@ -14,7 +14,7 @@ import {
   CheckboxDropdownState,
 } from 'store/interfaces/FilterBarState';
 import { selectDropdown } from 'store/selectors/componentSelectors/filterBarSelectors';
-import { selectAccountData } from 'store/selectors/dataSelectors/accountSelectors';
+import { selectAccounts } from 'store/selectors/dataSelectors/accountSelectors';
 import { selectCategoryData } from 'store/selectors/dataSelectors/categorySelectors';
 import { initCheckboxes } from 'store/slices/filterBarSlice';
 import { toggleParentCheckbox, toggleChildCheckbox } from 'store/slices/filterBarSlice';
@@ -39,7 +39,7 @@ export const useCheckboxState = (
     (state: RootState) => selectCategoryData(state),
   );
   const { data: accountData, isLoading: isAccountDataLoading } = useSelector(
-    (state: RootState) => selectAccountData(state),
+    (state: RootState) => selectAccounts(state),
   );
 
   // process checkbox objects determined by the type of data they will be created from

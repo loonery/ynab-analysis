@@ -5,7 +5,7 @@ import { FetchedData } from 'store/interfaces/FetchedData';
 
 export const selectAccountsResult = ynabApi.endpoints.getAccounts.select();
 
-export const selectAccountData = createSelector(
+export const selectAccounts = createSelector(
   [selectAccountsResult],
   (accountsResult): FetchedData<Account[]> => {
     const accounts = accountsResult.data;
