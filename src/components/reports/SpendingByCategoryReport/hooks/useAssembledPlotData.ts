@@ -2,19 +2,19 @@ import { useSelector } from 'react-redux';
 
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { RootState } from 'store';
-import { FetchedData } from 'store/interfaces/FetchedData';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
+import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import {
-  selectCategorySpendingDataByDimension,
-  selectDataKeysByCategoryDimension,
-  selectTotalSpendingDataByDimension,
+  selectCategoryDimension,
+  selectConstructedSpendingMap,
+  selectFilteredActiveMonths,
+  selectSelectedCategoryGroupId,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
-  selectFilteredTransactionDates,
-  selectTransactions,
-} from 'store/selectors/dataSelectors/transactionSliceSelectors';
+  selectAllCategoryGroupNames,
+  selectSubcategoryNamesByParentId,
+} from 'store/selectors/dataSelectors/categorySelectors';
+import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors';
 
-import { DataKeys } from '../components/SpendingByCategoryPlot/interfaces/types/types';
 import { assembleSpendingPlotData } from '../utils/plotUtils';
 
 /**
@@ -23,45 +23,52 @@ import { assembleSpendingPlotData } from '../utils/plotUtils';
  */
 export const useAssembledPlotData = (): {
   data: SpendingChartData[] | undefined;
-  dataKeys: DataKeys | undefined;
+  dataKeys: string[] | undefined;
   isLoading: boolean;
 } => {
-  // Parse the fetched data from our selectors
+  // get data from our selectors
   const { isLoading: isTransactionsLoading } = useSelector((state: RootState) =>
     selectTransactions(state),
   );
   const { data: categorySpendingData, isLoading: isCatsLoading } = useSelector(
-    (state: RootState) => selectCategorySpendingDataByDimension(state),
-  );
-  const { data: totalSpendingData, isLoading: isTotalsLoading } = useSelector(
-    (state: RootState) => selectTotalSpendingDataByDimension(state),
-  );
-  const { data: dataKeys, isLoading: dataKeysLoading } = useSelector(
-    (state: RootState) =>
-      selectDataKeysByCategoryDimension(state) as FetchedData<MonthYear[]>,
+    (state: RootState) => selectConstructedSpendingMap(state),
   );
   const { data: activeMonths, isLoading: isActiveMonthsLoading } = useSelector(
-    (state: RootState) => selectFilteredTransactionDates(state),
+    (state: RootState) => selectFilteredActiveMonths(state),
   );
+
+  // use the state of the spending analysis
+  const selectedCategoryGroupId = useSelector((state: RootState) =>
+    selectSelectedCategoryGroupId(state),
+  );
+  const categoryDimension = useSelector((state: RootState) =>
+    selectCategoryDimension(state),
+  );
+
+  // use names to determine datakeys
+  const { data: categoryGroupNames } = useSelector((state: RootState) =>
+    selectAllCategoryGroupNames(state),
+  );
+  const { data: subCategoryNames } = useSelector((state: RootState) =>
+    selectSubcategoryNamesByParentId(state, selectedCategoryGroupId),
+  );
+
   // exhaustive dependency checking to make compiler happy
   const isDataLoaded =
     !isCatsLoading &&
     categorySpendingData &&
-    !isTotalsLoading &&
-    totalSpendingData &&
     !isTransactionsLoading &&
-    !dataKeysLoading &&
-    dataKeys &&
     activeMonths &&
     !isActiveMonthsLoading;
 
   if (!isDataLoaded) return { data: undefined, dataKeys: undefined, isLoading: true };
 
-  const data = assembleSpendingPlotData(
-    activeMonths,
-    dataKeys,
-    categorySpendingData,
-    totalSpendingData,
-  );
+  // The data keys define the accessors into the spending objects for each month
+  const dataKeys =
+    categoryDimension === ALL_CATEGORIES_DIMENSION
+      ? categoryGroupNames
+      : subCategoryNames;
+
+  const data = assembleSpendingPlotData(activeMonths, categorySpendingData);
   return { data, dataKeys, isLoading: false };
 };

@@ -4,7 +4,7 @@ import { CategoryGroup, SubCategory } from './Category';
 export interface Transaction {
   account_id: string;
   account_name: string;
-  amount: string;
+  amount: number;
   approved: boolean;
   category_group: CategoryGroup | undefined;
   subcategory: SubCategory | undefined;

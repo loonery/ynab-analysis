@@ -11,6 +11,7 @@ import {
 } from 'store/consts/consts';
 
 import { DateRange } from './DateRange';
+import { MonthYear } from './types/MonthYear';
 
 export type CheckBoxDropdownKey =
   | typeof CATEGORY_DROPDOWN_REDUCER_KEY
@@ -47,8 +48,8 @@ export interface DateDropdownState {
   [DROPDOWN_SHOW_KEY]: boolean;
 }
 export interface AppliedFilters {
-  startDate: string | undefined;
-  endDate: string | undefined;
+  startDate: MonthYear | undefined;
+  endDate: MonthYear | undefined;
   filteredCategories: string[];
   filteredAccounts: string[];
 }

@@ -11,6 +11,7 @@ import {
 } from 'libs/utils/utils';
 import { RootState } from 'store';
 import {
+  ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORY_GROUPS_OPTION,
   ALL_SUBCATEGORIES_OPTION,
 } from 'store/consts/consts';
@@ -18,19 +19,34 @@ import { FetchedData } from 'store/interfaces/FetchedData';
 import {
   HighlightedBarData,
   TooltipData,
-  CategoryDimensions,
   tooltipType,
-} from 'store/interfaces/SpendingAnalysisState';
+  CategoryDimensions,
+} from 'store/interfaces/SpendingAnalysis';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 import { totalSpendingHelper } from 'store/utils/selectorHelpers';
 
+import { selectActiveMonths } from '../dataSelectors/budgetMonthSelectors';
 import { selectCategoryData } from '../dataSelectors/categorySelectors';
 import {
   selectFilteredTransactions,
   selectFilteredTransactionSubCategories,
   selectFilteredTransactionCategoryGroups,
-  selectFilteredTransactionDates,
 } from '../dataSelectors/transactionSliceSelectors';
+import {
+  MonthlySpendingMap,
+  CategoryGroupSpendingData,
+  MonthlySpendingData,
+  TOTAL_MONTHLY_SPENDING_KEY,
+  SUBCATEGORY_MAP_KEY,
+  SUB_CATEGORY_SPENDING_VALUE_KEY,
+  SUB_CATEGORY_NAME_KEY,
+  CATEGORY_GROUP_NAME_KEY,
+  CATEGORY_GROUP_TOTAL_KEY,
+  CATEGORY_GROUPS_MAP_KEY,
+  SubCategorySpendingData,
+} from '../interfaces/interfaces';
+
+import { selectAppliedDateFilter } from './filterBarSelectors';
 
 /**
  * atomic selectors
@@ -61,82 +77,6 @@ export const selectSelectedCategoryGroupName = createSelector(
         'Name not found';
     }
     return selectedCategoryName;
-  },
-);
-
-// selectors for selectFilteredTransactionsByCategoryDimension
-const selectTransactionsForCategoryGroupDimension = createSelector(
-  [selectFilteredTransactions, selectSelectedCategoryGroupId],
-  (filteredTransactionsData, selectedCategoryGroup): FetchedData<Transaction[]> => {
-    const { data: filteredTransactions } = filteredTransactionsData;
-    if (filteredTransactions) {
-      return {
-        data: filteredTransactions.filter(
-          (transaction) => transaction.category_group?.id === selectedCategoryGroup,
-        ),
-        isLoading: false,
-      };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-// todo - debug id matching
-const selectTransactionsForSingleCategoryDimension = createSelector(
-  [selectFilteredTransactions, selectSelectedCategoryId],
-  (filteredTransactionsData, selectedCategory): FetchedData<Transaction[]> => {
-    const { data: filteredTransactions } = filteredTransactionsData;
-    if (filteredTransactions) {
-      return {
-        data: filteredTransactions.filter(
-          (transaction) => transaction.subcategory?.id === selectedCategory,
-        ),
-        isLoading: false,
-      };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-const selectTransactionsForAllCategoryDimension = createSelector(
-  [selectFilteredTransactions],
-  (filteredTransactionsData): FetchedData<Transaction[]> => {
-    const { data: filteredTransactions } = filteredTransactionsData;
-    if (filteredTransactions) {
-      return { data: filteredTransactions, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-export const selectFilteredTransactionsByCategoryDimension = createSelector(
-  [
-    selectCategoryDimension,
-    selectTransactionsForAllCategoryDimension,
-    selectTransactionsForCategoryGroupDimension,
-    selectTransactionsForSingleCategoryDimension,
-  ],
-  (
-    categoryDimension,
-    transactionsAllData,
-    transactionsGroupData,
-    transactionsSingleData,
-  ): FetchedData<Transaction[]> => {
-    const { data: transactionsAll } = transactionsAllData;
-    const { data: transactionsGroup } = transactionsGroupData;
-    const { data: transactionsSingle } = transactionsSingleData;
-    if (transactionsAll && transactionsGroup && transactionsSingle) {
-      let returnedData: Transaction[] = [];
-      if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
-        returnedData = transactionsAll;
-      } else if (categoryDimension === CategoryDimensions.categoryGroupDimension) {
-        returnedData = transactionsGroup;
-      } else if (categoryDimension === CategoryDimensions.singleCategoryDimension) {
-        returnedData = transactionsSingle;
-      }
-      return { data: returnedData, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
   },
 );
 
@@ -180,7 +120,7 @@ export const selectCategoryOptions = createSelector(
   ): FetchedData<OptionInterface<string>[]> => {
     // if there is no parent, we don't want any drilldown options
     if (
-      categoryDimension === CategoryDimensions.allCategoriesDimension &&
+      categoryDimension === ALL_CATEGORIES_DIMENSION &&
       selectedCategoryGroupId === ALL_CATEGORY_GROUPS_OPTION.id
     ) {
       return { data: [], isLoading: false };
@@ -223,178 +163,125 @@ export const selectCategoryOptions = createSelector(
     return { data: returnedOptions, isLoading: false };
   },
 );
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+// SELECTORS FOR SPENDING CALCULATIONS //
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+const selectRolledUpCategorySpending = createSelector(
+  [selectFilteredTransactions],
+  (
+    transactionsData: FetchedData<Transaction[]>,
+  ): FetchedData<
+    InternMap<
+      MonthYear,
+      InternMap<string | undefined, InternMap<string | undefined, number>>
+    >
+  > => {
+    const { data: transactions } = transactionsData;
+    if (transactions) {
+      const spendingByMonthMap = rollup(
+        transactions,
+        (t: Transaction[]) => totalSpendingHelper(t),
+        (t: Transaction) => t.month_year,
+        (t: Transaction) => t.category_group?.id,
+        (t: Transaction) => t.subcategory?.id,
+      );
+      return { data: spendingByMonthMap, isLoading: false };
+    }
+    return { data: undefined, isLoading: true };
+  },
+);
 
 // selectors for getting spending along the lines of category and category group
-const selectFilteredTotalsForAllCategoryDimension = createSelector(
-  [selectTransactionsForAllCategoryDimension],
-  (
-    transactionsData,
-  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
-    const { data: transactions } = transactionsData;
-    if (transactions) {
-      const spendingByMonthMap = rollup(
-        transactions,
-        (t: Transaction[]) => totalSpendingHelper(t),
-        (t: Transaction) => t.month_year,
-        (t: Transaction) => t.category_group?.name,
+const selectConstructedSpendingMap = createSelector(
+  [selectRolledUpCategorySpending, selectCategoryData],
+  (spendingByMonthMapData, categoryDataResponse): FetchedData<MonthlySpendingMap> => {
+    const { data: spendingByMonthMap } = spendingByMonthMapData;
+    const { data: categoryData } = categoryDataResponse;
+    if (spendingByMonthMap && categoryData) {
+      const returnedMap: MonthlySpendingMap = new Map();
+      // for each month and its inner maps...
+      spendingByMonthMap.forEach(
+        (
+          categoryGroupToInnerMap: InternMap<
+            string | undefined,
+            InternMap<string | undefined, number>
+          >,
+          month: MonthYear,
+        ) => {
+          returnedMap.set(month, {
+            [TOTAL_MONTHLY_SPENDING_KEY]: 0,
+            [CATEGORY_GROUPS_MAP_KEY]: new Map(),
+          });
+
+          // iterate over each category groupId in the month map, as well as the subCategory map
+          let monthlySum = 0;
+          categoryGroupToInnerMap.forEach((subCategoryToSpendingMap, categoryGroupId) => {
+            // build the CategoryGroupSpendingObject for each category group
+            const categoryGroupName = categoryData.idToNameMap[categoryGroupId ?? ''];
+            const monthlyMap = returnedMap.get(month) ?? {}; // nevr undefined
+            const currentCategoryGroupsMap = monthlyMap[CATEGORY_GROUPS_MAP_KEY];
+
+            // initialize the object for this categorygroup Id
+            currentCategoryGroupsMap.set(categoryGroupId, {
+              [CATEGORY_GROUP_NAME_KEY]: categoryGroupName,
+              [CATEGORY_GROUP_TOTAL_KEY]: 0,
+              [SUBCATEGORY_MAP_KEY]: new Map(),
+            });
+
+            // for each inner map, we store the information in our CategoryGroupSpendingObject object,
+            // and use the value to calculate the total category group's spending value
+            let totalCategorySpendingValue = 0;
+            subCategoryToSpendingMap.forEach(
+              (subcategorySpendingValue: number, subCategoryId: string | undefined) => {
+                totalCategorySpendingValue += subcategorySpendingValue;
+
+                // set the categoryGroupsMap's subcategories for this categoryGroupId
+                const subCatName = categoryData.idToNameMap[subCategoryId ?? ''];
+                currentCategoryGroupsMap
+                  .get(categoryGroupId)
+                  [SUBCATEGORY_MAP_KEY].set(subCategoryId ?? 'undefined', {
+                    [SUB_CATEGORY_SPENDING_VALUE_KEY]: subcategorySpendingValue,
+                    [SUB_CATEGORY_NAME_KEY]: subCatName,
+                  });
+              },
+            );
+
+            // after summing, apply the totalCategorySpending value, and add it to the total for
+            // the month that we are iterating over in the outer loop
+            currentCategoryGroupsMap.set(categoryGroupId, {
+              ...currentCategoryGroupsMap.get(categoryGroupId),
+              [CATEGORY_GROUP_TOTAL_KEY]: totalCategorySpendingValue,
+            });
+            monthlySum += totalCategorySpendingValue;
+          });
+
+          const currentMonthData = returnedMap.get(month) ?? {}; // never undefined
+          returnedMap.set(month, {
+            [CATEGORY_GROUPS_MAP_KEY]: currentMonthData[CATEGORY_GROUPS_MAP_KEY],
+            [TOTAL_MONTHLY_SPENDING_KEY]: monthlySum,
+          });
+        },
       );
-      return { data: spendingByMonthMap, isLoading: true };
+
+      return { data: returnedMap, isLoading: false };
     }
-    return { data: undefined, isLoading: true };
+    return { data: undefined, isLoading: false };
   },
 );
 
-const selectFilteredTotalsForCategoryGroupDimension = createSelector(
-  [selectTransactionsForCategoryGroupDimension],
-  (
-    transactionsData,
-  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
-    const { data: transactions } = transactionsData;
-    if (transactions) {
-      const spendingByMonthMap = rollup(
-        transactions,
-        (t: Transaction[]) => totalSpendingHelper(t),
-        (t: Transaction) => t.month_year,
-        (t: Transaction) => t.subcategory?.name,
-      );
-      return { data: spendingByMonthMap, isLoading: true };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-const selectFilteredTotalsForSingleCategoryDimension = createSelector(
-  [selectTransactionsForSingleCategoryDimension, selectFilteredTransactionDates],
-  (
-    transactionsData,
-    filteredTransactionDatesData,
-  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
-    const { data: transactions } = transactionsData;
-    const { data: filteredTransactionDates } = filteredTransactionDatesData;
-    if (transactions && filteredTransactionDates) {
-      // get the active dates for the transactions we are currently looking at
-      const spendingByMonthMap = rollup(
-        transactions,
-        (t: Transaction[]) => totalSpendingHelper(t),
-        (t: Transaction) => t.month_year,
-        (t: Transaction) => t.subcategory?.name,
-      );
-      return { data: spendingByMonthMap, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-export const selectCategorySpendingDataByDimension = createSelector(
-  [
-    selectCategoryDimension,
-    selectFilteredTotalsForAllCategoryDimension,
-    selectFilteredTotalsForCategoryGroupDimension,
-    selectFilteredTotalsForSingleCategoryDimension,
-  ],
-  (
-    categoryDimension,
-    TotalsForAllCategoryDimension,
-    TotalsForCategoryGroupDimension,
-    TotalsForSingleCategoryDimension,
-  ): FetchedData<InternMap<MonthYear, InternMap<string | undefined, string>>> => {
-    const { data: all } = TotalsForAllCategoryDimension;
-    const { data: group } = TotalsForCategoryGroupDimension;
-    const { data: single } = TotalsForSingleCategoryDimension;
-
-    switch (categoryDimension) {
-      case CategoryDimensions.allCategoriesDimension:
-        return { data: all, isLoading: false };
-      case CategoryDimensions.categoryGroupDimension:
-        return { data: group, isLoading: false };
-      case CategoryDimensions.singleCategoryDimension:
-        return { data: single, isLoading: false };
-      default:
-        return { data: undefined, isLoading: true };
+export const selectSpendingDataByCategoryDimension = createSelector(
+  [selectConstructedSpendingMap, selectCategoryDimension],
+  (constructedSpendingMapData) => {
+    const { data: constructedSpendingMap } = constructedSpendingMapData;
+    if (constructedSpendingMapData) {
+      switch()
     }
   },
 );
 
-// selectors for getting total spending
-const selectFilteredTotalsForAllCategoryGroups = createSelector(
-  [selectFilteredTransactions],
-  (transactionsData): FetchedData<InternMap<MonthYear, string>> => {
-    const { data: transactions } = transactionsData;
-    if (transactions) {
-      const spendingByMonthMap = rollup(
-        transactions,
-        (t: Transaction[]) => totalSpendingHelper(t),
-        (t: Transaction) => t.month_year,
-      );
-      return { data: spendingByMonthMap, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-/**
- * todo Should factor some stuff out - other than the data that this selector is being fed, it is
- * exactly the same as the one above
- */
-const selectFilteredTotalsForSelectedCategoryGroup = createSelector(
-  [selectTransactionsForCategoryGroupDimension],
-  (transactionsData): FetchedData<InternMap<MonthYear, string>> => {
-    const { data: transactions } = transactionsData;
-    if (transactions) {
-      const spendingByMonthMap = rollup(
-        transactions,
-        (t: Transaction[]) => totalSpendingHelper(t),
-        (t: Transaction) => t.month_year,
-      );
-      return { data: spendingByMonthMap, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-export const selectTotalSpendingDataByDimension = createSelector(
-  [
-    selectCategoryDimension,
-    selectFilteredTotalsForAllCategoryGroups,
-    selectFilteredTotalsForSelectedCategoryGroup,
-  ],
-  (categoryDimension, all, group): FetchedData<InternMap<MonthYear, string>> => {
-    switch (categoryDimension) {
-      case CategoryDimensions.allCategoriesDimension:
-        return all;
-      case CategoryDimensions.categoryGroupDimension:
-      case CategoryDimensions.singleCategoryDimension:
-        return group;
-    }
-  },
-);
-
-// selects the keys that will be used to represent the data in the graph
-export const selectDataKeysByCategoryDimension = createSelector(
-  [
-    selectCategoryDimension,
-    selectFilteredTransactionSubCategories,
-    selectFilteredTransactionCategoryGroups,
-  ],
-  (categoryDimension, categoriesData, categoryGroupsData): FetchedData<string[]> => {
-    const { data: categoryGroups } = categoryGroupsData;
-    const { data: subCategories } = categoriesData;
-    if (categoryGroups && subCategories) {
-      if (categoryDimension === CategoryDimensions.allCategoriesDimension) {
-        // todo - maybe use some constant here to take out the 'all categories' name
-        const dataKeys = categoryGroups.map((e) => e.name);
-        return { data: dataKeys, isLoading: false };
-      }
-      const dataKeys = subCategories.map((e) => e.name);
-      return { data: dataKeys, isLoading: false };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-/**
- * Selectors for Plot Component's data
- */
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+// Selectors for Plot Component's data //
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 export const selectTooltipType = (state: RootState): tooltipType | undefined =>
   state.spendingAnalysis.plotState.tooltipType;
 
@@ -407,3 +294,28 @@ export const selectHighlightedBarData = (
 
 export const selectShowTooltip = (state: RootState): boolean =>
   state.spendingAnalysis.plotState.showTooltip;
+
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+// OTHER MISC SELECTORS RELATED TO THE SPENDING BY CATEGORY ANALYSIS PLOT //
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+/**
+ * Gets the subset of active months that are within range of the applied date filter
+ */
+export const selectFilteredActiveMonths = createSelector(
+  [selectAppliedDateFilter, selectActiveMonths],
+  ({ startDate, endDate }, activeMonthsData): FetchedData<MonthYear[]> => {
+    const { data: activeMonths } = activeMonthsData;
+    if (activeMonths) {
+      return {
+        data: activeMonths.filter((month) => {
+          // if no date boundary date defined, let all through, else apply filter predicates
+          const passStart = startDate ? new Date(month) >= new Date(startDate) : true;
+          const passEnd = endDate ? new Date(month) <= new Date(endDate) : true;
+          return passStart && passEnd;
+        }),
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
+  },
+);

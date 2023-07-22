@@ -1,6 +1,6 @@
 import { BUDGET_MONTH_GOAL_TYPES } from 'consts/consts';
 
-export interface TruncatedBudgetMonth {
+export interface YnabTruncatedBudgetMonth {
   month: string;
   note: string;
   income: number;
@@ -11,33 +11,33 @@ export interface TruncatedBudgetMonth {
   deleted: boolean;
 }
 
-export interface FullBudgetMonth extends TruncatedBudgetMonth {
-  categories: BudgetCategory[];
+export interface YnabFullBudgetMonth extends YnabTruncatedBudgetMonth {
+  categories: YnabBudgetCategory[];
 }
 
-export interface BudgetCategory {
+export interface YnabBudgetCategory {
   id: string;
   category_group_id: string;
-  category_group_name: string;
+  category_group_name?: string;
   name: string;
   hidden: boolean;
-  original_category_group_id: null;
-  note: string;
+  original_category_group_id?: null;
+  note?: string;
   budgeted: number;
   activity: number;
   balance: number;
-  goal_type: BudgetGoalType;
-  goal_day: number;
-  goal_cadence: number;
-  goal_cadence_frequency: number;
-  goal_creation_month: string;
-  goal_target: number;
-  goal_target_month: string;
-  goal_percentage_complete: number;
-  goal_months_to_budget: number;
-  goal_under_funded: number;
-  goal_overall_funded: number;
-  goal_overall_left: number;
+  goal_day?: number | null;
+  goal_cadence?: number | null;
+  goal_type?: BudgetGoalType | null;
+  goal_cadence_frequency?: number | null;
+  goal_creation_month?: string | null;
+  goal_target?: number | null;
+  goal_target_month?: string | null;
+  goal_percentage_complete?: number | null;
+  goal_months_to_budget?: number | null;
+  goal_under_funded?: number | null;
+  goal_overall_funded?: number | null;
+  goal_overall_left?: number | null;
   deleted: boolean;
 }
 
@@ -45,13 +45,13 @@ export type BudgetGoalType = (typeof BUDGET_MONTH_GOAL_TYPES)[number];
 
 export interface YnabBudgetMonthsResponse {
   data: {
-    months: TruncatedBudgetMonth[];
+    months: YnabTruncatedBudgetMonth[];
     server_knowledge: number;
   };
 }
 export interface YnabFullBudgetMonthResponse {
   data: {
-    month: FullBudgetMonth;
+    month: YnabFullBudgetMonth;
     server_knowledge: number;
   };
 }

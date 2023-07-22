@@ -1,11 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { FetchBaseQueryError } from '@reduxjs/toolkit/query/react';
 import { Account } from 'interfaces/Account';
+import { BudgetMonth } from 'interfaces/BudgetMonth';
 import { CategoryData } from 'interfaces/Category';
 import { YnabAccountResponse } from 'interfaces/externalDataInterfaces/ynabAccount';
 import {
-  FullBudgetMonth,
-  TruncatedBudgetMonth,
+  YnabFullBudgetMonth,
+  YnabTruncatedBudgetMonth,
   YnabBudgetMonthsResponse,
   YnabFullBudgetMonthResponse,
 } from 'interfaces/externalDataInterfaces/ynabBudgetMonth';
@@ -23,6 +24,7 @@ import {
 } from './consts/apiConsts';
 import { AUTHORIZATION_STRING, GET_ACCOUNTS_PATH } from './consts/apiConsts';
 import { processAccounts } from './utils/accountUtils';
+import { processBudgetMonths } from './utils/budgetMonthUtils';
 import { processCategories } from './utils/categoriesUtils';
 
 export const ynabApi = createApi({
@@ -35,7 +37,7 @@ export const ynabApi = createApi({
     getTransactions: build.query<YnabTransaction[], void>({
       query: () => GET_TRANSACTIONS_PATH,
       transformResponse: (response: YnabTransactionsResponse) => {
-        // we don't transform much here because we need the categories query to do the
+        // we don't transform anything here because we need the categories query to do the
         // transformation we really want
         return response.data.transactions;
       },
@@ -52,21 +54,22 @@ export const ynabApi = createApi({
         return processAccounts(response.data.accounts);
       },
     }),
-    getTruncatedBudgetMonths: build.query<TruncatedBudgetMonth[], void>({
+    getTruncatedBudgetMonths: build.query<YnabTruncatedBudgetMonth[], void>({
       query: () => GET_BUDGET_MONTHS_PATH,
       transformResponse: (response: YnabBudgetMonthsResponse) => {
         return response.data.months;
       },
     }),
-    getFullBudgetMonth: build.query<FullBudgetMonth, string>({
+    getFullBudgetMonth: build.query<YnabFullBudgetMonth, string>({
       query: (month) => `${GET_BUDGET_MONTHS_PATH}/${month}`,
       transformResponse: (response: YnabFullBudgetMonthResponse) => {
         return response.data.month;
       },
     }),
-    getAllBudgetMonths: build.query<FullBudgetMonth[], void>({
+    // multiple fetch calls made from this endpoint
+    getAllBudgetMonths: build.query<BudgetMonth[], void>({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
-        // get all budget months
+        // get all budget months from the bulk endpoint
         const truncatedBudgetMonthsResponse = await fetchWithBQ(
           `${GET_BUDGET_MONTHS_PATH}`,
         );
@@ -75,26 +78,31 @@ export const ynabApi = createApi({
         if (truncatedBudgetMonthsResponse.error)
           return { error: truncatedBudgetMonthsResponse.error as FetchBaseQueryError };
 
+        // get the months, which will act as arguments to the detailed budget month endpoint
         const budgetMonthsData =
           truncatedBudgetMonthsResponse.data as YnabBudgetMonthsResponse;
         const months: string[] = budgetMonthsData.data.months.map((month) => month.month);
 
+        // loop over the months and fetch the detailed budget months, for each month
         let error: FetchBaseQueryError | undefined = undefined;
-        const budgetMonthsResponse = months.map(async (month) => {
-          const budgetMonthResponse = await fetchWithBQ(
-            `${GET_BUDGET_MONTHS_PATH}/${month}`,
-          );
-          if (budgetMonthResponse.error) {
-            error = budgetMonthResponse.error;
-          }
-          const innerData = budgetMonthResponse.data as YnabFullBudgetMonthResponse;
-          return innerData.data.month;
-        });
-        const resolvedBudgetMonths = (await Promise.all(
+        const budgetMonthsResponse: Promise<YnabFullBudgetMonth>[] = months.map(
+          async (month) => {
+            const budgetMonthResponse = await fetchWithBQ(
+              `${GET_BUDGET_MONTHS_PATH}/${month}`,
+            );
+            if (budgetMonthResponse.error) {
+              error = budgetMonthResponse.error;
+            }
+            const innerData = budgetMonthResponse.data as YnabFullBudgetMonthResponse;
+            return innerData.data.month;
+          },
+        );
+        // wait for all promises to resolve
+        const resolvedBudgetMonths: YnabFullBudgetMonth[] = await Promise.all(
           budgetMonthsResponse,
-        )) as FullBudgetMonth[];
+        );
 
-        return error ? { error } : { data: resolvedBudgetMonths };
+        return error ? { error } : { data: processBudgetMonths(resolvedBudgetMonths) };
       },
     }),
   }),

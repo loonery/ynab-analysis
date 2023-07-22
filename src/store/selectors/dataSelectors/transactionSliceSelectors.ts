@@ -9,13 +9,13 @@ import { RootState } from 'store';
 import { READY_TO_ASSIGN_CATEGORY_ID } from 'store/consts/consts';
 import { DateRange } from 'store/interfaces/DateRange';
 import { FetchedData } from 'store/interfaces/FetchedData';
-import { AppliedFilters } from 'store/interfaces/FilterBarState';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
+
+import {
+  selectAppliedAccountFilters,
+  selectAppliedCategoryFilters,
+} from '../componentSelectors/filterBarSelectors';
 
 import { selectCategoriesResult } from './categorySelectors';
-
-const selectFilters = (state: RootState): AppliedFilters =>
-  state.filterBar.appliedFilters;
 
 export const selectTransactionsResult = ynabApi.endpoints.getTransactions.select();
 
@@ -35,16 +35,23 @@ export const selectTransactions = createSelector(
 );
 
 /**
- * Filters transactions based on filters active in the filterBar
+ * Filters transactions based on filters active in the filterBar. We don't filter on dates. Since we stratify the
+ * data by months, we can calculate spending for each month, for all active months, and then just show what we want
+ * from that calculation. There is no need to recalculate anything for each transaction if the month filter changes.
  */
 export const selectFilteredTransactions = createSelector(
   [
     selectTransactions,
-    selectFilters,
+    selectAppliedCategoryFilters,
+    selectAppliedAccountFilters,
     (state: RootState, onlySpending = true): boolean => onlySpending,
   ],
-  (transactionsData, appliedFilters, onlySpending): FetchedData<Transaction[]> => {
-    const { startDate, endDate, filteredCategories, filteredAccounts } = appliedFilters;
+  (
+    transactionsData,
+    filteredCategories,
+    filteredAccounts,
+    onlySpending,
+  ): FetchedData<Transaction[]> => {
     const { data: transactions, isLoading } = transactionsData;
 
     // if we only want to have the transactions related to spending
@@ -65,13 +72,6 @@ export const selectFilteredTransactions = createSelector(
     if (preFilteredTransactions && !isLoading) {
       const filteredTransactions = preFilteredTransactions.filter((transaction) => {
         // if filter defined, apply filter. If not defined, let anything through
-        const passStart = startDate
-          ? new Date(transaction.month_year) >= new Date(startDate)
-          : true;
-
-        const passEnd = endDate
-          ? new Date(transaction.month_year) <= new Date(endDate)
-          : true;
 
         const tid = transaction.subcategory?.id;
         const passCategory =
@@ -83,7 +83,7 @@ export const selectFilteredTransactions = createSelector(
             : true;
 
         // let the transaction through if it passes through all filters
-        return passStart && passEnd && passCategory && passAccount;
+        return passCategory && passAccount;
       });
       return { data: filteredTransactions, isLoading: false };
     }
@@ -106,59 +106,6 @@ export const selectTransactionDateRange = createSelector(
           startDate: transactions.length ? transactions.at(0)?.month_year : undefined,
           endDate: transactions.length ? transactions.at(-1)?.month_year : undefined,
         },
-        isLoading: false,
-      };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-/**
- * Gets all of the months in this YNAB budget that have transactions associated with them
- * */
-export const selectTransactionDates = createSelector(
-  [selectTransactions],
-  (transactionsData): FetchedData<MonthYear[]> => {
-    const { data: transactions } = transactionsData;
-    if (transactions) {
-      return {
-        data: _.uniq(transactions.map((transaction) => transaction?.month_year)),
-        isLoading: false,
-      };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
-
-/**
- * Gets all of the months on this budget that meet the filter criteria as a MonthYear[]
- */
-export const selectFilteredTransactionDates = createSelector(
-  [selectTransactions, selectTransactionDates, selectFilters, selectTransactionDateRange],
-  (
-    transactionsData,
-    transactionDatesData,
-    appliedFilters,
-    transactionDateRangeData,
-  ): FetchedData<MonthYear[]> => {
-    const { data: transactionDateRange } = transactionDateRangeData;
-    const { data: transactionDates } = transactionDatesData;
-    const { data: transactions } = transactionsData;
-
-    const startDate = appliedFilters.startDate ?? transactionDateRange?.startDate;
-    const endDate = appliedFilters.endDate ?? transactionDateRange?.endDate;
-
-    // check dependencies
-    if (transactions && transactionDates && startDate && endDate) {
-      // filter
-      const filteredTransactionDates = transactionDates.filter((monthYear) => {
-        const passStart = startDate ? new Date(monthYear) >= new Date(startDate) : true;
-        const passEnd = endDate ? new Date(monthYear) <= new Date(endDate) : true;
-        return passStart && passEnd;
-      });
-
-      return {
-        data: filteredTransactionDates,
         isLoading: false,
       };
     }
@@ -192,6 +139,7 @@ export const selectFilteredTransactionSubCategories = createSelector(
 /**
  * Gets the category groups that exist on the set of transactions that meet the active filter criteria
  */
+// todo - derive these from the categoryData, not the list of transactions
 export const selectFilteredTransactionCategoryGroups = createSelector(
   [selectFilteredTransactions],
   (transactionsData): FetchedData<CategoryGroup[]> => {

@@ -4,6 +4,7 @@ import {
 } from 'components/FilterBar/components/NestedCheckboxDropdownContainer/NestedCheckBoxList/interfaces/NestedCheckboxSection';
 import { TEMP_CHECKBOX_KEY } from 'store/consts/consts';
 import { AppliedFilters, CheckboxDropdownState } from 'store/interfaces/FilterBarState';
+import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 const getFilteredItemsFromNestedCheckboxes = (
   checkboxes: NestedCheckBoxSection[],
@@ -27,8 +28,8 @@ const getFilteredItemsFromNestedCheckboxes = (
  * @returns
  */
 export const getFiltersFromState = (savedState: {
-  startDate: string | undefined;
-  endDate: string | undefined;
+  startDate: MonthYear | undefined;
+  endDate: MonthYear | undefined;
   categories: NestedCheckBoxSection[];
   accounts: NestedCheckBoxSection[];
 }): AppliedFilters => {

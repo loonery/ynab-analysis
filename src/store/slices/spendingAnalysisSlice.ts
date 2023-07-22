@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
+  ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORY_GROUPS_OPTION,
   ALL_SUBCATEGORIES_OPTION,
   NO_PARENT,
@@ -8,9 +9,9 @@ import {
   SpendingAnalysisState,
   CategoryDimensions,
   TooltipData,
-} from 'store/interfaces/SpendingAnalysisState';
-import { HighlightedBarData, PlotState } from 'store/interfaces/SpendingAnalysisState';
-import { tooltipType } from 'store/interfaces/SpendingAnalysisState';
+} from 'store/interfaces/SpendingAnalysis';
+import { HighlightedBarData, PlotState } from 'store/interfaces/SpendingAnalysis';
+import { tooltipType } from 'store/interfaces/SpendingAnalysis';
 
 const initialPlotState: PlotState = {
   tooltipType: undefined,
@@ -20,7 +21,7 @@ const initialPlotState: PlotState = {
 };
 
 const initialState: SpendingAnalysisState = {
-  categoryDimension: CategoryDimensions.allCategoriesDimension,
+  categoryDimension: ALL_CATEGORIES_DIMENSION,
   selectedCategoryGroupId: ALL_CATEGORY_GROUPS_OPTION.id,
   selectedSubCategoryId: ALL_SUBCATEGORIES_OPTION.id,
   parentIdOfSelected: NO_PARENT,

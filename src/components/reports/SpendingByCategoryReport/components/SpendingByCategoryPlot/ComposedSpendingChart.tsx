@@ -14,7 +14,7 @@ import {
 } from 'recharts';
 import { RootState } from 'store';
 import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
-import { HighlightedBarData } from 'store/interfaces/SpendingAnalysisState';
+import { HighlightedBarData } from 'store/interfaces/SpendingAnalysis';
 import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   setTooltipData,
@@ -79,7 +79,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
             <Bar
               key={index}
               stackId={STACK_ID}
-              isAnimationActive={false}
+              isAnimationActive={true}
               dataKey={key}
               fill={SPENDING_CATEGORIES_COLORS[key]}
               onMouseEnter={handleMouseEnterBar}
@@ -91,7 +91,7 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
           dataKey={'total'}
           dot={<CustomDot active={false} />}
           activeDot={<CustomDot active={true} />}
-          isAnimationActive={false}
+          isAnimationActive={true}
         />
         {highlightedBarData && (
           // assert types when we have highlighted bar data

@@ -1,7 +1,8 @@
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
-import { InternMap } from 'd3';
-import { CategoryDimensions } from 'store/interfaces/SpendingAnalysisState';
+import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
+import { CategoryDimensions } from 'store/interfaces/SpendingAnalysis';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
+import { MonthlySpendingData } from 'store/selectors/interfaces/interfaces';
 
 import {
   BarTooltipValues,
@@ -20,9 +21,7 @@ import { UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
  */
 export const assembleSpendingPlotData = (
   activeMonths: MonthYear[],
-  dataKeys: string[],
-  categorySpendingData: InternMap<MonthYear, InternMap<string | undefined, string>>,
-  totalSpendingData: InternMap<MonthYear, string>,
+  categorySpendingData: Map<MonthYear, MonthlySpendingData>,
 ): SpendingChartData[] => {
   const spendingChartData: SpendingChartData[] = [];
 
@@ -30,16 +29,9 @@ export const assembleSpendingPlotData = (
     // initialize the data object with the total and the month
     const monthlySpendingDataObject: SpendingChartData = {
       month,
-      total: -(totalSpendingData.get(month) ?? UNDEFINED_AMOUNT_VALUE),
+      ...categorySpendingData[month],
+      total: -(categorySpendingData[month].total ?? UNDEFINED_AMOUNT_VALUE),
     };
-    // for each month, get the map of category -> value, then use it to assemble the
-    // monthly spending object
-    const monthlySpendingData = categorySpendingData.get(month);
-    dataKeys.forEach((key) => {
-      monthlySpendingDataObject[key] = -Number(
-        monthlySpendingData?.get(key) ?? UNDEFINED_AMOUNT_VALUE,
-      );
-    });
     spendingChartData.push(monthlySpendingDataObject);
   });
 
@@ -63,7 +55,7 @@ export const getBarTooltipValues = (
     ? ((dollarValue / payload.total) * 100).toFixed(2)
     : undefined;
   const percentString =
-    categoryDimension === CategoryDimensions.allCategoriesDimension
+    categoryDimension === ALL_CATEGORIES_DIMENSION
       ? `${percentOfTotal}% of ${month} spending`
       : `${percentOfTotal}% of ${month} ${selectedCategoryGroupName} spending`;
 
@@ -77,7 +69,7 @@ export const getDotTooltipValues = (
   categoryGroupName: string,
 ): DotTooltipValues => {
   const monthString =
-    categoryDimension === CategoryDimensions.allCategoriesDimension
+    categoryDimension === ALL_CATEGORIES_DIMENSION
       ? `${month} total spending`
       : `${month} spending on ${categoryGroupName}`;
   const totalString = `$${total}`;

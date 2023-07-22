@@ -2,7 +2,6 @@ import {
   BarTooltipProps,
   DotTooltipProps,
 } from 'components/reports/SpendingByCategoryReport/components/SpendingByCategoryPlot/interfaces/interfaces';
-import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import {
   ALL_CATEGORIES_DIMENSION,
   CATEGORY_GROUP_DIMENSION,
@@ -10,11 +9,12 @@ import {
 } from 'store/consts/consts';
 import { DOT_TOOLTIP_TYPE, BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 
-export enum CategoryDimensions {
-  allCategoriesDimension = ALL_CATEGORIES_DIMENSION,
-  categoryGroupDimension = CATEGORY_GROUP_DIMENSION,
-  singleCategoryDimension = SINGLE_CATEGORY_DIMENSION,
-}
+import { MonthYear } from './types/MonthYear';
+
+export type CategoryDimensions =
+  | typeof ALL_CATEGORIES_DIMENSION
+  | typeof CATEGORY_GROUP_DIMENSION
+  | typeof SINGLE_CATEGORY_DIMENSION;
 
 export enum tooltipType {
   dotTooltipType = DOT_TOOLTIP_TYPE,
@@ -45,3 +45,7 @@ export interface HighlightedBarData {
 }
 
 export type TooltipData = DotTooltipProps | BarTooltipProps | undefined;
+
+export interface MonthToCategorySpendingMap {
+  [month: MonthYear]: { total: number; [categoryTypeId: string]: number };
+}

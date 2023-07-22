@@ -89,6 +89,17 @@ const createReverseMap = (
   return reverseMap;
 };
 
+const createIdMap = (categoryGroups: CategoryGroup[]): { [id: string]: string } => {
+  const resObject = {};
+  categoryGroups.forEach((categoryGroup) => {
+    resObject[categoryGroup.id] = categoryGroup.name;
+    categoryGroup.subCategories.forEach((subCat) => {
+      resObject[subCat.id] = subCat.name;
+    });
+  });
+  return resObject;
+};
+
 const getSubcategories = (categoryGroups: CategoryGroup[]): SubCategory[] => {
   const returned: SubCategory[] = [];
   categoryGroups.forEach((categoryGroup: CategoryGroup) => {
@@ -126,12 +137,14 @@ export const processCategories = (categories: YnabCategoryGroup[]): CategoryData
     categories: [],
     subCategoryReverseMap: {},
     subcategories: [],
+    idToNameMap: {},
   };
   // filter the incoming data
   const filteredCategories: YnabCategoryGroup[] = filterCategories(categories);
   // transform category data from YNAB into internal CategoryGroup type
   categoryData.categories = convertYnabCategoryData(filteredCategories);
   categoryData.subCategoryReverseMap = createReverseMap(categoryData.categories);
+  categoryData.idToNameMap = createIdMap(categoryData.categories);
   categoryData.subcategories = getSubcategories(categoryData.categories);
   return categoryData;
 };
