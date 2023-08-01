@@ -11,7 +11,7 @@ import { useGetCategoriesQuery } from 'api/ynabApi';
 import { AppContainer } from 'libs/reuse/containers/AppContainer';
 import { Route, Routes } from 'react-router';
 import { RootState } from 'store';
-import { selectConstructedSpendingMap } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
+import { selectSpendingCharyDataByCategoryDimension } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 
 import FilterBar from './components/FilterBar/components/FilterBar';
 import SpendingByCategoryPage from './components/pages/SpendingAnalysisPage';
@@ -24,7 +24,9 @@ const App = () => {
   useGetTransactionsQuery();
   useGetAccountsQuery();
 
-  const x = useSelector((state: RootState) => selectConstructedSpendingMap(state));
+  const x = useSelector((state: RootState) =>
+    selectSpendingCharyDataByCategoryDimension(state),
+  );
 
   return (
     <AppContainer>

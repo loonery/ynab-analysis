@@ -1,42 +1,11 @@
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import { CategoryDimensions } from 'store/interfaces/SpendingAnalysis';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
-import { MonthlySpendingData } from 'store/selectors/interfaces/interfaces';
 
 import {
   BarTooltipValues,
   DotTooltipValues,
 } from '../components/SpendingByCategoryPlot/interfaces/interfaces';
-import { UNDEFINED_AMOUNT_VALUE } from '../consts/consts';
-
-/**
- * Assembles the array of objects that are fed into the spending chart
- *
- * @param activeMonths the MonthYear dates in the filtered range of dates
- * @param dataKeys the possible categories that exist in the filter
- * @param categorySpendingData the month-to-month spending data for each category for each month
- * @param totalSpendingData the month-to-month total spending data for each month
- * @returns an array of SpendingChart objects
- */
-export const assembleSpendingPlotData = (
-  activeMonths: MonthYear[],
-  categorySpendingData: Map<MonthYear, MonthlySpendingData>,
-): SpendingChartData[] => {
-  const spendingChartData: SpendingChartData[] = [];
-
-  activeMonths.forEach((month) => {
-    // initialize the data object with the total and the month
-    const monthlySpendingDataObject: SpendingChartData = {
-      month,
-      ...categorySpendingData[month],
-      total: -(categorySpendingData[month].total ?? UNDEFINED_AMOUNT_VALUE),
-    };
-    spendingChartData.push(monthlySpendingDataObject);
-  });
-
-  return spendingChartData;
-};
 
 // export const getCategoryColor = () => {};
 

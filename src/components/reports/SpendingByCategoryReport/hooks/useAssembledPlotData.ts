@@ -5,17 +5,13 @@ import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import {
   selectCategoryDimension,
-  selectConstructedSpendingMap,
-  selectFilteredActiveMonths,
   selectSelectedCategoryGroupId,
+  selectSpendingCharyDataByCategoryDimension,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
   selectAllCategoryGroupNames,
   selectSubcategoryNamesByParentId,
 } from 'store/selectors/dataSelectors/categorySelectors';
-import { selectTransactions } from 'store/selectors/dataSelectors/transactionSliceSelectors';
-
-import { assembleSpendingPlotData } from '../utils/plotUtils';
 
 /**
  *
@@ -26,23 +22,15 @@ export const useAssembledPlotData = (): {
   dataKeys: string[] | undefined;
   isLoading: boolean;
 } => {
-  // get data from our selectors
-  const { isLoading: isTransactionsLoading } = useSelector((state: RootState) =>
-    selectTransactions(state),
-  );
-  const { data: categorySpendingData, isLoading: isCatsLoading } = useSelector(
-    (state: RootState) => selectConstructedSpendingMap(state),
-  );
-  const { data: activeMonths, isLoading: isActiveMonthsLoading } = useSelector(
-    (state: RootState) => selectFilteredActiveMonths(state),
-  );
-
   // use the state of the spending analysis
   const selectedCategoryGroupId = useSelector((state: RootState) =>
     selectSelectedCategoryGroupId(state),
   );
   const categoryDimension = useSelector((state: RootState) =>
     selectCategoryDimension(state),
+  );
+  const { data: spendingChartData } = useSelector((state: RootState) =>
+    selectSpendingCharyDataByCategoryDimension(state),
   );
 
   // use names to determine datakeys
@@ -53,15 +41,9 @@ export const useAssembledPlotData = (): {
     selectSubcategoryNamesByParentId(state, selectedCategoryGroupId),
   );
 
-  // exhaustive dependency checking to make compiler happy
-  const isDataLoaded =
-    !isCatsLoading &&
-    categorySpendingData &&
-    !isTransactionsLoading &&
-    activeMonths &&
-    !isActiveMonthsLoading;
-
-  if (!isDataLoaded) return { data: undefined, dataKeys: undefined, isLoading: true };
+  // if we don't have the data, return early
+  if (!spendingChartData)
+    return { data: undefined, dataKeys: undefined, isLoading: true };
 
   // The data keys define the accessors into the spending objects for each month
   const dataKeys =
@@ -69,6 +51,5 @@ export const useAssembledPlotData = (): {
       ? categoryGroupNames
       : subCategoryNames;
 
-  const data = assembleSpendingPlotData(activeMonths, categorySpendingData);
-  return { data, dataKeys, isLoading: false };
+  return { data: spendingChartData, dataKeys, isLoading: false };
 };

@@ -1,4 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
+import { UNDEFINED_AMOUNT_VALUE } from 'components/reports/SpendingByCategoryReport/consts/consts';
 import { InternMap, rollup } from 'd3';
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
@@ -14,6 +16,8 @@ import {
   ALL_CATEGORIES_DIMENSION,
   ALL_CATEGORY_GROUPS_OPTION,
   ALL_SUBCATEGORIES_OPTION,
+  CATEGORY_GROUP_DIMENSION,
+  SINGLE_CATEGORY_DIMENSION,
 } from 'store/consts/consts';
 import { FetchedData } from 'store/interfaces/FetchedData';
 import {
@@ -35,7 +39,6 @@ import {
 import {
   MonthlySpendingMap,
   CategoryGroupSpendingData,
-  MonthlySpendingData,
   TOTAL_MONTHLY_SPENDING_KEY,
   SUBCATEGORY_MAP_KEY,
   SUB_CATEGORY_SPENDING_VALUE_KEY,
@@ -163,6 +166,32 @@ export const selectCategoryOptions = createSelector(
     return { data: returnedOptions, isLoading: false };
   },
 );
+
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+// OTHER MISC SELECTORS RELATED TO THE SPENDING BY CATEGORY ANALYSIS PLOT //
+///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
+/**
+ * Gets the subset of active months that are within range of the applied date filter
+ */
+export const selectFilteredActiveMonths = createSelector(
+  [selectAppliedDateFilter, selectActiveMonths],
+  ({ startDate, endDate }, activeMonthsData): FetchedData<MonthYear[]> => {
+    const { data: activeMonths } = activeMonthsData;
+    if (activeMonths) {
+      return {
+        data: activeMonths.filter((month) => {
+          // if no date boundary date defined, let all through, else apply filter predicates
+          const passStart = startDate ? new Date(month) >= new Date(startDate) : true;
+          const passEnd = endDate ? new Date(month) <= new Date(endDate) : true;
+          return passStart && passEnd;
+        }),
+        isLoading: false,
+      };
+    }
+    return { data: undefined, isLoading: true };
+  },
+);
+
 ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 // SELECTORS FOR SPENDING CALCULATIONS //
 ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
@@ -192,7 +221,7 @@ const selectRolledUpCategorySpending = createSelector(
 );
 
 // selectors for getting spending along the lines of category and category group
-const selectConstructedSpendingMap = createSelector(
+export const selectConstructedSpendingMap = createSelector(
   [selectRolledUpCategorySpending, selectCategoryData],
   (spendingByMonthMapData, categoryDataResponse): FetchedData<MonthlySpendingMap> => {
     const { data: spendingByMonthMap } = spendingByMonthMapData;
@@ -269,13 +298,147 @@ const selectConstructedSpendingMap = createSelector(
   },
 );
 
-export const selectSpendingDataByCategoryDimension = createSelector(
-  [selectConstructedSpendingMap, selectCategoryDimension],
-  (constructedSpendingMapData) => {
+export const selectSpendingCharyDataByCategoryDimension = createSelector(
+  [
+    selectConstructedSpendingMap,
+    selectCategoryDimension,
+    selectFilteredActiveMonths,
+    selectSelectedCategoryGroupId,
+    selectSelectedCategoryId,
+  ],
+  (
+    constructedSpendingMapData,
+    categoryDimension,
+    activeMonthsData,
+    selectedCategoryGroupId,
+    selectedCategoryId,
+  ): FetchedData<SpendingChartData[]> => {
     const { data: constructedSpendingMap } = constructedSpendingMapData;
-    if (constructedSpendingMapData) {
-      switch()
+    const { data: activeMonths } = activeMonthsData;
+
+    if (constructedSpendingMap && activeMonths) {
+      const spendingChartData: SpendingChartData[] = [];
+
+      switch (categoryDimension) {
+        ////////////////////////////////////////////////////////
+        case ALL_CATEGORIES_DIMENSION:
+          activeMonths.forEach((month: MonthYear) => {
+            const monthlySpendingData = constructedSpendingMap.get(month);
+
+            const monthlyCategorySpendingData = monthlySpendingData?.[
+              CATEGORY_GROUPS_MAP_KEY
+            ] as Map<string, CategoryGroupSpendingData>;
+
+            // initialize the data object with the total and the month
+            const monthlySpendingDataObject: SpendingChartData = {
+              month,
+              total:
+                -Number(monthlySpendingData?.[TOTAL_MONTHLY_SPENDING_KEY]) ??
+                UNDEFINED_AMOUNT_VALUE,
+            };
+
+            // loop over each entry in the map for category group spending and apply the
+            // data to the monthlySpendingDataObject
+            monthlyCategorySpendingData?.forEach(
+              (categoryGroupSpendingData: CategoryGroupSpendingData) => {
+                monthlySpendingDataObject[
+                  categoryGroupSpendingData[CATEGORY_GROUP_NAME_KEY]
+                ] = -categoryGroupSpendingData[CATEGORY_GROUP_TOTAL_KEY];
+              },
+            );
+            spendingChartData.push(monthlySpendingDataObject);
+          });
+          break;
+        ////////////////////////////////////////////////////////
+        case CATEGORY_GROUP_DIMENSION:
+          activeMonths.forEach((month: MonthYear) => {
+            const monthlySpendingData = constructedSpendingMap.get(month);
+
+            const monthlyCategorySpendingData = monthlySpendingData?.[
+              CATEGORY_GROUPS_MAP_KEY
+            ] as Map<string, CategoryGroupSpendingData>;
+
+            const monthlySpendingMap = monthlyCategorySpendingData.get(
+              selectedCategoryGroupId,
+            ) as CategoryGroupSpendingData;
+
+            // if no data for the selectedCategoryGroupId, create an empty map
+            const subCategorySpendingMap = monthlySpendingMap
+              ? monthlySpendingMap[SUBCATEGORY_MAP_KEY]
+              : new Map();
+
+            // initialize the data object with the total for the category group and the month
+            const monthlySpendingDataObject: SpendingChartData = {
+              month,
+              total:
+                -Number(
+                  constructedSpendingMap
+                    .get(month)
+                    ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
+                    CATEGORY_GROUP_TOTAL_KEY
+                  ],
+                ) ?? UNDEFINED_AMOUNT_VALUE,
+            };
+
+            // if there's no spending data for this category, we skip adding the subcategories
+            if (subCategorySpendingMap) {
+              subCategorySpendingMap?.forEach(
+                (subCategorySpendingData: SubCategorySpendingData) => {
+                  monthlySpendingDataObject[
+                    subCategorySpendingData[SUB_CATEGORY_NAME_KEY]
+                  ] = -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
+                },
+              );
+            }
+            spendingChartData.push(monthlySpendingDataObject);
+          });
+          break;
+        ////////////////////////////////////////////////////////
+        case SINGLE_CATEGORY_DIMENSION:
+          activeMonths.forEach((month: MonthYear) => {
+            const monthlySpendingData = constructedSpendingMap.get(month);
+
+            const monthlyCategorySpendingData = monthlySpendingData?.[
+              CATEGORY_GROUPS_MAP_KEY
+            ] as Map<string, CategoryGroupSpendingData>;
+
+            const monthlySpendingMap = monthlyCategorySpendingData.get(
+              selectedCategoryGroupId,
+            ) as CategoryGroupSpendingData;
+
+            // if no data for the selectedCategoryGroupId, create an empty map
+            const subCategorySpendingMap = monthlySpendingMap
+              ? monthlySpendingMap[SUBCATEGORY_MAP_KEY]
+              : new Map();
+
+            const subCategorySpendingData: SubCategorySpendingData =
+              subCategorySpendingMap.get(selectedCategoryId);
+
+            // initialize the data object with the total for the category group and the month
+            const monthlySpendingDataObject: SpendingChartData = {
+              month,
+              total:
+                -Number(
+                  constructedSpendingMap
+                    .get(month)
+                    ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
+                    CATEGORY_GROUP_TOTAL_KEY
+                  ],
+                ) ?? UNDEFINED_AMOUNT_VALUE,
+            };
+
+            // if there's no spending data for this category, we skip adding the subcategories
+            if (subCategorySpendingData) {
+              monthlySpendingDataObject[subCategorySpendingData[SUB_CATEGORY_NAME_KEY]] =
+                -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
+            }
+            spendingChartData.push(monthlySpendingDataObject);
+          });
+          break;
+      }
+      return { data: spendingChartData, isLoading: false };
     }
+    return { data: undefined, isLoading: true };
   },
 );
 
@@ -294,28 +457,3 @@ export const selectHighlightedBarData = (
 
 export const selectShowTooltip = (state: RootState): boolean =>
   state.spendingAnalysis.plotState.showTooltip;
-
-///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
-// OTHER MISC SELECTORS RELATED TO THE SPENDING BY CATEGORY ANALYSIS PLOT //
-///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
-/**
- * Gets the subset of active months that are within range of the applied date filter
- */
-export const selectFilteredActiveMonths = createSelector(
-  [selectAppliedDateFilter, selectActiveMonths],
-  ({ startDate, endDate }, activeMonthsData): FetchedData<MonthYear[]> => {
-    const { data: activeMonths } = activeMonthsData;
-    if (activeMonths) {
-      return {
-        data: activeMonths.filter((month) => {
-          // if no date boundary date defined, let all through, else apply filter predicates
-          const passStart = startDate ? new Date(month) >= new Date(startDate) : true;
-          const passEnd = endDate ? new Date(month) <= new Date(endDate) : true;
-          return passStart && passEnd;
-        }),
-        isLoading: false,
-      };
-    }
-    return { data: undefined, isLoading: true };
-  },
-);
