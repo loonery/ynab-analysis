@@ -9,7 +9,7 @@ export interface Account {
   on_budget: boolean; // Required
   closed: boolean; // Required
   note?: string | undefined; // Optional
-  balance: string; // Required, integer with $int64 format
+  balance: number; // Required, integer with $int64 format
   cleared_balance: number; // Required, integer with $int64 format
   uncleared_balance: number; // Required, integer with $int64 format
   transfer_payee_id: string; // Required, string with $uuid format

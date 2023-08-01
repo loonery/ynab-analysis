@@ -5,18 +5,37 @@ import { FetchedData } from 'store/interfaces/FetchedData';
 import { DropdownKey, FilterBarDropdownState } from 'store/interfaces/FilterBarState';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
-import { selectTransactionDates } from '../dataSelectors/transactionSliceSelectors';
+import { selectActiveMonths } from '../dataSelectors/budgetMonthSelectors';
 
 export const selectDropdown = (
   state: RootState,
   dropdownKey: DropdownKey,
 ): FilterBarDropdownState => state.filterBar[dropdownKey];
 
+export const selectAppliedAccountFilters = (state: RootState): string[] =>
+  state.filterBar.appliedFilters.filteredAccounts;
+
+/**
+ *
+ * @param state
+ * @returns string Ids of filtered out categories
+ */
+export const selectAppliedCategoryFilters = (state: RootState): string[] =>
+  state.filterBar.appliedFilters.filteredCategories;
+
+export const selectAppliedDateFilter = (state: RootState): DateRange => {
+  const { startDate, endDate } = state.filterBar.appliedFilters;
+  return { startDate, endDate };
+};
+
 export const selectTempDateRange = (state: RootState): DateRange =>
   state.filterBar.dateDropdown.tempDateRange;
 
+/**
+ * Retrieves all selectable dates that are after the user's selected start date filter
+ */
 export const selectDatesAfterStartDate = createSelector(
-  [selectTempDateRange, selectTransactionDates],
+  [selectTempDateRange, selectActiveMonths],
   (dates, transactionDates): FetchedData<MonthYear[]> => {
     const { startDate } = dates;
     const { data: allDates } = transactionDates;

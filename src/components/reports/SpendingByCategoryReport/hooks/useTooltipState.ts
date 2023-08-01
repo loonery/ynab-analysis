@@ -5,7 +5,7 @@ import {
   CategoryDimensions,
   TooltipData,
   tooltipType,
-} from 'store/interfaces/SpendingAnalysisState';
+} from 'store/interfaces/SpendingAnalysis';
 import {
   selectShowTooltip,
   selectTooltipData,

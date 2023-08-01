@@ -12,10 +12,9 @@ import {
   selectDatesAfterStartDate,
   selectTempDateRange,
 } from 'store/selectors/componentSelectors/filterBarSelectors';
-import {
-  selectTransactionDateRange,
-  selectTransactionDates,
-} from 'store/selectors/dataSelectors/transactionSliceSelectors';
+import { selectFilteredActiveMonths } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
+import { selectActiveMonths } from 'store/selectors/dataSelectors/budgetMonthSelectors';
+import { selectTransactionDateRange } from 'store/selectors/dataSelectors/transactionSliceSelectors';
 import {
   initDateDropdown,
   updateStartDate,
@@ -48,7 +47,7 @@ const DateFilterForm = () => {
 
   // only should be allowed to select dates that occur after any selected start date
   const { data: fromOptions, isLoading: fromOptionsLoading } = useSelector(
-    (state: RootState) => selectTransactionDates(state),
+    (state: RootState) => selectActiveMonths(state),
   );
   const { data: toOptions, isLoading: toOptionsLoading } = useSelector(
     (state: RootState) => selectDatesAfterStartDate(state),

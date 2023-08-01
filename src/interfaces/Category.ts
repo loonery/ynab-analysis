@@ -1,6 +1,7 @@
 export interface CategoryData {
   categories: CategoryGroup[];
   subcategories: SubCategory[];
+  idToNameMap: { [id: string]: string };
   subCategoryReverseMap: { [subCategoryId: string]: CategoryGroup };
 }
 

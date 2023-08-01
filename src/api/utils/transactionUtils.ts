@@ -4,15 +4,14 @@ import {
   YnabTransaction,
 } from 'interfaces/externalDataInterfaces/ynabTransaction';
 import { Transaction } from 'interfaces/Transaction';
-import { MonthYear } from 'store/interfaces/types/MonthYear';
 
-import { convertAmount } from './generalUtils';
+import { convertAmount, convertDateToMonthYear } from './generalUtils';
 
 const convertYnabTransactionToTransaction = (
   transaction: YnabTransaction,
   categoryData: CategoryData,
 ): Transaction => {
-  const { day, month, year, month_year } = getTransactionDate(transaction);
+  const { day, month, year, month_year } = convertDateToMonthYear(transaction.date);
   const subCategoryId: string = transaction.category_id;
   return {
     account_id: transaction.account_id,
@@ -49,7 +48,7 @@ const convertYnabSubtransactionToTransaction = (
   subtransaction: YnabSubtransaction,
   parentTransaction: YnabTransaction,
 ): Transaction => {
-  const { day, month, year, month_year } = getTransactionDate(parentTransaction);
+  const { day, month, year, month_year } = convertDateToMonthYear(parentTransaction.date);
   const subCategoryId = subtransaction.category_id;
   return {
     account_id: parentTransaction.account_id,
@@ -79,34 +78,6 @@ const convertYnabSubtransactionToTransaction = (
     day,
     year,
   };
-};
-
-/**
- *
- * @param transaction
- */
-const getTransactionDate = (
-  transaction: YnabTransaction,
-): { day: string; month: string; year: string; month_year: MonthYear } => {
-  const options: Intl.DateTimeFormatOptions = {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-    timeZone: 'UTC',
-  };
-
-  // parse the date as a string array
-  const transactionDate: Date = new Date(transaction.date);
-  let stringDate: string | string[] = transactionDate.toLocaleString('default', options);
-  stringDate = stringDate.replace(',', '');
-  stringDate = stringDate.split(' ');
-
-  // assign the different portions of the date to keys on the transaction
-  const day = stringDate[1];
-  const month = stringDate[0];
-  const year = stringDate[2];
-  const month_year: MonthYear = (stringDate[0] + ' ' + stringDate[2]) as MonthYear;
-  return { day, month, year, month_year };
 };
 
 /**

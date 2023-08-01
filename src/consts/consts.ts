@@ -59,3 +59,5 @@ export const YNAB_ACCOUNT_TYPES_TO_FORMMATTED_TYPE_MAP: AccountMapType = {
   medicalDebt: 'Medical Debt',
   otherDebt: 'Other Debt',
 };
+
+export const BUDGET_MONTH_GOAL_TYPES = ['TB', 'TBD', 'MF', 'NEED', 'DEBT'] as const;

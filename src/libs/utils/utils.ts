@@ -1,6 +1,7 @@
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import { AllowedValueTypes } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
 import { OptionInterface } from 'libs/reuse/elements/form-controls/interfaces/interfaces';
+import { FetchedData } from 'store/interfaces/FetchedData';
 
 export const getOptionsFromValues = <T>(
   values: T[],
@@ -27,3 +28,7 @@ export const mapCategoryValueToLabel = (value: SubCategory | CategoryGroup): str
 export const getSelectedValue = (
   selectedOption: OptionInterface<AllowedValueTypes>,
 ): AllowedValueTypes => selectedOption.value;
+
+export const areDependenciesLoaded = <T>(deps: FetchedData<T>[]): boolean => {
+  return deps.every((e) => e.isLoading === false && e.data !== undefined);
+};

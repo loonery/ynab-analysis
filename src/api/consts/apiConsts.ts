@@ -10,3 +10,4 @@ export const AUTHORIZATION_STRING = `Bearer ${process.env.REACT_APP_API_KEY}`;
 export const GET_TRANSACTIONS_PATH = `/budgets/${BUDGET_ID}/transactions`;
 export const GET_CATEGORIES_PATH = `/budgets/${BUDGET_ID}/categories`;
 export const GET_ACCOUNTS_PATH = `/budgets/${BUDGET_ID}/accounts`;
+export const GET_BUDGET_MONTHS_PATH = `budgets/${BUDGET_ID}/months`;
