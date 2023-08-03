@@ -2,10 +2,7 @@ import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingCh
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
 import { CategoryDimensions } from 'store/interfaces/SpendingAnalysis';
 
-import {
-  BarTooltipValues,
-  DotTooltipValues,
-} from '../components/SpendingByCategoryPlot/interfaces/interfaces';
+import { DotTooltipValues } from '../components/SpendingByCategoryPlot/interfaces/interfaces';
 
 // export const getCategoryColor = () => {};
 
@@ -14,21 +11,21 @@ export const getBarTooltipValues = (
   dataKey: string,
   categoryDimension: CategoryDimensions,
   selectedCategoryGroupName: string,
-): BarTooltipValues => {
-  // construct the values to be shown in the tooltip
-  const { month } = payload;
-
+): { dollarValue: number; percentString: string } => {
+  // get dollar value
   const dollarValue: number = (payload[dataKey] as number) || 0;
 
+  // get percent string
   const percentOfTotal = payload
     ? ((dollarValue / payload.total) * 100).toFixed(2)
     : undefined;
+  const { month } = payload;
   const percentString =
     categoryDimension === ALL_CATEGORIES_DIMENSION
       ? `${percentOfTotal}% of ${month} spending`
       : `${percentOfTotal}% of ${month} ${selectedCategoryGroupName} spending`;
 
-  return { categoryName: dataKey, dollarValue, percentString };
+  return { dollarValue, percentString };
 };
 
 export const getDotTooltipValues = (

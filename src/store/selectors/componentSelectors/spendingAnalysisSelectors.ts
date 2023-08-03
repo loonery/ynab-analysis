@@ -1,6 +1,10 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
-import { UNDEFINED_AMOUNT_VALUE } from 'components/reports/SpendingByCategoryReport/consts/consts';
+import {
+  MONTH_DATA_KEY_NAME,
+  TOTAL_DATA_KEY_NAME,
+  UNDEFINED_AMOUNT_VALUE,
+} from 'components/reports/SpendingByCategoryReport/consts/consts';
 import { InternMap, rollup } from 'd3';
 import { CategoryGroup, SubCategory } from 'interfaces/Category';
 import { Transaction } from 'interfaces/Transaction';
@@ -329,21 +333,21 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
               CATEGORY_GROUPS_MAP_KEY
             ] as Map<string, CategoryGroupSpendingData>;
 
+            const total =
+              monthlySpendingData?.[TOTAL_MONTHLY_SPENDING_KEY] ?? UNDEFINED_AMOUNT_VALUE;
+
             // initialize the data object with the total and the month
             const monthlySpendingDataObject: SpendingChartData = {
-              month,
-              total:
-                -Number(monthlySpendingData?.[TOTAL_MONTHLY_SPENDING_KEY]) ??
-                UNDEFINED_AMOUNT_VALUE,
+              [MONTH_DATA_KEY_NAME]: month,
+              [TOTAL_DATA_KEY_NAME]: -total,
             };
 
             // loop over each entry in the map for category group spending and apply the
             // data to the monthlySpendingDataObject
             monthlyCategorySpendingData?.forEach(
-              (categoryGroupSpendingData: CategoryGroupSpendingData) => {
-                monthlySpendingDataObject[
-                  categoryGroupSpendingData[CATEGORY_GROUP_NAME_KEY]
-                ] = -categoryGroupSpendingData[CATEGORY_GROUP_TOTAL_KEY];
+              (categoryGroupSpendingData: CategoryGroupSpendingData, categoryGroupId) => {
+                monthlySpendingDataObject[categoryGroupId] =
+                  -categoryGroupSpendingData[CATEGORY_GROUP_TOTAL_KEY];
               },
             );
             spendingChartData.push(monthlySpendingDataObject);
@@ -367,26 +371,25 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
               ? monthlySpendingMap[SUBCATEGORY_MAP_KEY]
               : new Map();
 
+            const total =
+              constructedSpendingMap
+                .get(month)
+                ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
+                CATEGORY_GROUP_TOTAL_KEY
+              ] ?? UNDEFINED_AMOUNT_VALUE;
+
             // initialize the data object with the total for the category group and the month
             const monthlySpendingDataObject: SpendingChartData = {
-              month,
-              total:
-                -Number(
-                  constructedSpendingMap
-                    .get(month)
-                    ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
-                    CATEGORY_GROUP_TOTAL_KEY
-                  ],
-                ) ?? UNDEFINED_AMOUNT_VALUE,
+              [MONTH_DATA_KEY_NAME]: month,
+              [TOTAL_DATA_KEY_NAME]: -total,
             };
 
             // if there's no spending data for this category, we skip adding the subcategories
             if (subCategorySpendingMap) {
               subCategorySpendingMap?.forEach(
-                (subCategorySpendingData: SubCategorySpendingData) => {
-                  monthlySpendingDataObject[
-                    subCategorySpendingData[SUB_CATEGORY_NAME_KEY]
-                  ] = -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
+                (subCategorySpendingData: SubCategorySpendingData, subCategoryId) => {
+                  monthlySpendingDataObject[subCategoryId] =
+                    -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
                 },
               );
             }
@@ -415,33 +418,31 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
               subCategorySpendingMap.get(selectedCategoryId);
 
             // initialize the data object with the total for the category group and the month
+            const total =
+              constructedSpendingMap
+                .get(month)
+                ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
+                CATEGORY_GROUP_TOTAL_KEY
+              ] ?? UNDEFINED_AMOUNT_VALUE;
+
             const monthlySpendingDataObject: SpendingChartData = {
-              month,
-              total:
-                -Number(
-                  constructedSpendingMap
-                    .get(month)
-                    ?.[CATEGORY_GROUPS_MAP_KEY]?.get(selectedCategoryGroupId)?.[
-                    CATEGORY_GROUP_TOTAL_KEY
-                  ],
-                ) ?? UNDEFINED_AMOUNT_VALUE,
+              [MONTH_DATA_KEY_NAME]: month,
+              [TOTAL_DATA_KEY_NAME]: -total,
             };
 
             // if there's no spending data for this category, we skip adding the subcategories
             if (subCategorySpendingData) {
-              monthlySpendingDataObject[subCategorySpendingData[SUB_CATEGORY_NAME_KEY]] =
+              monthlySpendingDataObject[selectedCategoryId] =
                 -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
             }
             spendingChartData.push(monthlySpendingDataObject);
           });
-          break;
       }
       return { data: spendingChartData, isLoading: false };
     }
     return { data: undefined, isLoading: true };
   },
 );
-
 ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////
 // Selectors for Plot Component's data //
 ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// ///// /////

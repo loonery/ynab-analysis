@@ -6,10 +6,10 @@ import { ComposedSpendingChart } from './ComposedSpendingChart';
 
 // eslint-disable-next-line
 export const SpendingByCategoryPlotContainer = () => {
-  const { data, dataKeys, isLoading } = useAssembledPlotData();
-  if (!data || !dataKeys || isLoading) {
+  const { data, dataKeys, colorMap, isLoading } = useAssembledPlotData();
+  if (!data || !dataKeys || !colorMap || isLoading) {
     return <div>Loading Plot...</div>;
   }
-  return <ComposedSpendingChart data={data} dataKeys={dataKeys} />;
+  return <ComposedSpendingChart data={data} dataKeys={dataKeys} colorMap={colorMap} />;
 };
 export default SpendingByCategoryPlotContainer;

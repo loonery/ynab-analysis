@@ -1,5 +1,6 @@
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { DotProps } from 'recharts';
+import { ColorMap } from 'store/interfaces/SpendingAnalysis';
 import { MonthYear } from 'store/interfaces/types/MonthYear';
 
 import { DataKeys } from './types/types';
@@ -11,6 +12,7 @@ import { DataKeys } from './types/types';
 export interface ComposedSpendingChartProps {
   data: SpendingChartData[];
   dataKeys: DataKeys;
+  colorMap: ColorMap;
 }
 
 // DOT INTERFACES

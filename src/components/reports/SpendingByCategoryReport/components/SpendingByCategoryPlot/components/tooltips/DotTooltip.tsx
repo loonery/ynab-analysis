@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 
-import { useTooltipState } from '../../../hooks/useTooltipState';
-import { getDotTooltipValues } from '../../../utils/plotUtils';
-import { DotTooltipProps } from '../interfaces/interfaces';
-import { StyledMonth, StyledDollarValue } from '../styles/styles';
+import { useTooltipState } from '../../../../hooks/useTooltipState';
+import { getDotTooltipValues } from '../../../../utils/plotUtils';
+import { DotTooltipProps } from '../../interfaces/interfaces';
+import { StyledMonth, StyledDollarValue } from '../../styles/styles';
 
 // eslint-disable-next-line
 export const DotTooltip = ({ month, total }: DotTooltipProps) => {

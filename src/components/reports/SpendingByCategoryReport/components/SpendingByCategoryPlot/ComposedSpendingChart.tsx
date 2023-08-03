@@ -17,6 +17,10 @@ import { BAR_TOOLTIP_TYPE } from 'store/consts/consts';
 import { HighlightedBarData } from 'store/interfaces/SpendingAnalysis';
 import { selectHighlightedBarData } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
+  selectCategoryColors,
+  selectCategoryFillById,
+} from 'store/selectors/dataSelectors/categorySelectors';
+import {
   setTooltipData,
   setHighlightedBarData,
   setShowTooltip,
@@ -35,13 +39,17 @@ import {
   COMPOSED_SPENDING_CHART_CONSTANT_PROPS,
 } from '../consts/consts';
 
+import { CustomTooltip } from './components/tooltips/CustomTooltip';
 import { CustomDot } from './CustomDot';
 import { HighlightedBarSection } from './HighlightedBarSection';
 import { BarMouseOverData, ComposedSpendingChartProps } from './interfaces/interfaces';
-import { CustomTooltip } from './Tooltip/CustomTooltip';
 
 // eslint-disable-next-line
-export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartProps) => {
+export const ComposedSpendingChart = ({
+  data,
+  dataKeys,
+  colorMap,
+}: ComposedSpendingChartProps) => {
   const dispatch = useDispatch();
 
   const highlightedBarData: HighlightedBarData | undefined = useSelector(
@@ -74,14 +82,14 @@ export const ComposedSpendingChart = ({ data, dataKeys }: ComposedSpendingChartP
         <XAxis dataKey={MONTH_DATA_KEY_NAME} />
         <YAxis tickFormatter={(value: number): string => `$${value}`} />
         <Tooltip cursor={false} content={<CustomTooltip />} />
-        {dataKeys.map((key: string, index: number) => {
+        {dataKeys.map((dataKey: string, index: number) => {
           return (
             <Bar
               key={index}
               stackId={STACK_ID}
               isAnimationActive={true}
-              dataKey={key}
-              fill={SPENDING_CATEGORIES_COLORS[key]}
+              dataKey={dataKey}
+              fill={colorMap[dataKey]}
               onMouseEnter={handleMouseEnterBar}
               onMouseLeave={handleMouseLeaveBar}
             />
