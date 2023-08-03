@@ -18,6 +18,7 @@ const initialPlotState: PlotState = {
   tooltipData: undefined,
   showTooltip: false,
   highlightedBarData: undefined,
+  colorMap: {},
 };
 
 const initialState: SpendingAnalysisState = {
@@ -34,6 +35,9 @@ const spendingAnalysisSlice = createSlice({
   name: sliceName,
   initialState,
   reducers: {
+    initializeCategoryColors(state, { payload }) {
+      state.plotState.colorMap = payload;
+    },
     setCategoryDimension(state, { payload }) {
       const categoryDimension: CategoryDimensions = payload;
       state.categoryDimension = categoryDimension;

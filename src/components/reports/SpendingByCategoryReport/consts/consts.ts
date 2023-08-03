@@ -88,6 +88,7 @@ export const UNDEFINED_AMOUNT_VALUE = 0;
 
 // PLOT PROPS CONSTS
 export const MONTH_DATA_KEY_NAME = 'month';
+export const TOTAL_DATA_KEY_NAME = 'total';
 export const STACK_ID = 'a';
 
 // HIGHLIGHTED BAR SECTION CONSTS

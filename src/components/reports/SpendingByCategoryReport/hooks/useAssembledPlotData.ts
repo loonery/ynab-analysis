@@ -3,23 +3,26 @@ import { useSelector } from 'react-redux';
 import { SpendingChartData } from 'components/interfaces/chartObjects/SpendingChartData';
 import { RootState } from 'store';
 import { ALL_CATEGORIES_DIMENSION } from 'store/consts/consts';
+import { ColorMap } from 'store/interfaces/SpendingAnalysis';
 import {
   selectCategoryDimension,
   selectSelectedCategoryGroupId,
   selectSpendingCharyDataByCategoryDimension,
 } from 'store/selectors/componentSelectors/spendingAnalysisSelectors';
 import {
-  selectAllCategoryGroupNames,
-  selectSubcategoryNamesByParentId,
+  selectAllCategoryGroupIds,
+  selectCategoryColors,
+  selectSubcategoryIdsByParentId,
 } from 'store/selectors/dataSelectors/categorySelectors';
 
 /**
  *
- * @returns packaged data for the SpendingByCategory analysis chart
+ * @returns array of objects for the recharts SpendingByCategory analysis chart
  */
 export const useAssembledPlotData = (): {
   data: SpendingChartData[] | undefined;
   dataKeys: string[] | undefined;
+  colorMap: ColorMap | undefined;
   isLoading: boolean;
 } => {
   // use the state of the spending analysis
@@ -34,22 +37,25 @@ export const useAssembledPlotData = (): {
   );
 
   // use names to determine datakeys
-  const { data: categoryGroupNames } = useSelector((state: RootState) =>
-    selectAllCategoryGroupNames(state),
+  const { data: categoryGroupIds } = useSelector((state: RootState) =>
+    selectAllCategoryGroupIds(state),
   );
-  const { data: subCategoryNames } = useSelector((state: RootState) =>
-    selectSubcategoryNamesByParentId(state, selectedCategoryGroupId),
+  const { data: subCategoryIds } = useSelector((state: RootState) =>
+    selectSubcategoryIdsByParentId(state, selectedCategoryGroupId),
+  );
+
+  // get colors for categories
+  const { data: colorMap } = useSelector((state: RootState) =>
+    selectCategoryColors(state, 'random'),
   );
 
   // if we don't have the data, return early
   if (!spendingChartData)
-    return { data: undefined, dataKeys: undefined, isLoading: true };
+    return { data: undefined, dataKeys: undefined, colorMap: undefined, isLoading: true };
 
   // The data keys define the accessors into the spending objects for each month
   const dataKeys =
-    categoryDimension === ALL_CATEGORIES_DIMENSION
-      ? categoryGroupNames
-      : subCategoryNames;
+    categoryDimension === ALL_CATEGORIES_DIMENSION ? categoryGroupIds : subCategoryIds;
 
-  return { data: spendingChartData, dataKeys, isLoading: false };
+  return { data: spendingChartData, dataKeys, colorMap, isLoading: false };
 };

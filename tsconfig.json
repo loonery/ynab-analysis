@@ -15,5 +15,8 @@
     "noImplicitAny": false,
     "noErrorTruncation": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "paths": {
+    "crypto": ["node_modules/crypto-js"]
+  }
 }

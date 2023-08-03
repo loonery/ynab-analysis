@@ -29,11 +29,16 @@ export interface SpendingAnalysisState {
   plotState: PlotState;
 }
 
+export interface ColorMap {
+  [id: string]: string;
+}
+
 export interface PlotState {
   tooltipType: tooltipType | undefined;
   tooltipData: TooltipData;
   showTooltip: boolean;
   highlightedBarData: HighlightedBarData | undefined;
+  colorMap: ColorMap;
 }
 
 export interface HighlightedBarData {

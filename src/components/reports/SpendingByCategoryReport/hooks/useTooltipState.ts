@@ -33,6 +33,7 @@ export const useTooltipState = (): {
   const selectedCategoryDimension = useSelector((state: RootState) =>
     selectCategoryDimension(state),
   );
+  // get and parse the name
   const selectedCategoryGroupName = useSelector((state: RootState) =>
     selectSelectedCategoryGroupName(state),
   );
