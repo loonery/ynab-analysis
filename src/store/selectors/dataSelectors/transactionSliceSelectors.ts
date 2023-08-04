@@ -116,6 +116,7 @@ export const selectTransactionDateRange = createSelector(
 /**
  * Gets the category groups that exist on the set of transactions that meet the active filter criteria
  */
+// todo - derive these from the categoryData, not the list of transactions
 export const selectFilteredTransactionSubCategories = createSelector(
   [selectFilteredTransactions],
   (transactionsData): FetchedData<SubCategory[]> => {

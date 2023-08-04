@@ -23,6 +23,15 @@ import {
   CATEGORY_GROUP_DIMENSION,
   SINGLE_CATEGORY_DIMENSION,
 } from 'store/consts/consts';
+import {
+  TOTAL_MONTHLY_SPENDING_KEY,
+  SUBCATEGORY_MAP_KEY,
+  SUB_CATEGORY_SPENDING_VALUE_KEY,
+  SUB_CATEGORY_NAME_KEY,
+  CATEGORY_GROUP_NAME_KEY,
+  CATEGORY_GROUP_TOTAL_KEY,
+  CATEGORY_GROUPS_MAP_KEY,
+} from 'store/consts/consts';
 import { FetchedData } from 'store/interfaces/FetchedData';
 import {
   HighlightedBarData,
@@ -43,13 +52,6 @@ import {
 import {
   MonthlySpendingMap,
   CategoryGroupSpendingData,
-  TOTAL_MONTHLY_SPENDING_KEY,
-  SUBCATEGORY_MAP_KEY,
-  SUB_CATEGORY_SPENDING_VALUE_KEY,
-  SUB_CATEGORY_NAME_KEY,
-  CATEGORY_GROUP_NAME_KEY,
-  CATEGORY_GROUP_TOTAL_KEY,
-  CATEGORY_GROUPS_MAP_KEY,
   SubCategorySpendingData,
 } from '../interfaces/interfaces';
 
@@ -283,7 +285,7 @@ export const selectConstructedSpendingMap = createSelector(
             // the month that we are iterating over in the outer loop
             currentCategoryGroupsMap.set(categoryGroupId, {
               ...currentCategoryGroupsMap.get(categoryGroupId),
-              [CATEGORY_GROUP_TOTAL_KEY]: totalCategorySpendingValue,
+              [CATEGORY_GROUP_TOTAL_KEY]: Number(totalCategorySpendingValue.toFixed(2)),
             });
             monthlySum += totalCategorySpendingValue;
           });
@@ -291,7 +293,7 @@ export const selectConstructedSpendingMap = createSelector(
           const currentMonthData = returnedMap.get(month) ?? {}; // never undefined
           returnedMap.set(month, {
             [CATEGORY_GROUPS_MAP_KEY]: currentMonthData[CATEGORY_GROUPS_MAP_KEY],
-            [TOTAL_MONTHLY_SPENDING_KEY]: monthlySum,
+            [TOTAL_MONTHLY_SPENDING_KEY]: Number(monthlySum.toFixed(2)),
           });
         },
       );
@@ -346,8 +348,9 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
             // data to the monthlySpendingDataObject
             monthlyCategorySpendingData?.forEach(
               (categoryGroupSpendingData: CategoryGroupSpendingData, categoryGroupId) => {
-                monthlySpendingDataObject[categoryGroupId] =
-                  -categoryGroupSpendingData[CATEGORY_GROUP_TOTAL_KEY];
+                monthlySpendingDataObject[categoryGroupId] = (-categoryGroupSpendingData[
+                  CATEGORY_GROUP_TOTAL_KEY
+                ]).toFixed(2);
               },
             );
             spendingChartData.push(monthlySpendingDataObject);
@@ -388,8 +391,9 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
             if (subCategorySpendingMap) {
               subCategorySpendingMap?.forEach(
                 (subCategorySpendingData: SubCategorySpendingData, subCategoryId) => {
-                  monthlySpendingDataObject[subCategoryId] =
-                    -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
+                  monthlySpendingDataObject[subCategoryId] = (-subCategorySpendingData[
+                    SUB_CATEGORY_SPENDING_VALUE_KEY
+                  ]).toFixed(2);
                 },
               );
             }
@@ -432,8 +436,9 @@ export const selectSpendingCharyDataByCategoryDimension = createSelector(
 
             // if there's no spending data for this category, we skip adding the subcategories
             if (subCategorySpendingData) {
-              monthlySpendingDataObject[selectedCategoryId] =
-                -subCategorySpendingData[SUB_CATEGORY_SPENDING_VALUE_KEY];
+              monthlySpendingDataObject[selectedCategoryId] = (-subCategorySpendingData[
+                SUB_CATEGORY_SPENDING_VALUE_KEY
+              ]).toFixed(2);
             }
             spendingChartData.push(monthlySpendingDataObject);
           });
