@@ -39,6 +39,16 @@ export const NO_PARENT = 'no parent';
 export const DOT_TOOLTIP_TYPE = 'dot-tooltip';
 export const BAR_TOOLTIP_TYPE = 'bar-tooltip';
 
+// spendingAnalysisSelector data
+export const TOTAL_MONTHLY_SPENDING_KEY = 'totalMonthlySpending';
+export const CATEGORY_GROUP_NAME_KEY = 'categoryGroupName';
+export const CATEGORY_GROUP_TOTAL_KEY = 'categoryGroupTotal';
+export const CATEGORY_GROUPS_MAP_KEY = 'categoryGroupSpendingMap';
+
+export const SUB_CATEGORY_SPENDING_VALUE_KEY = 'subCategorySpendingValue';
+export const SUB_CATEGORY_NAME_KEY = 'subCategoryName';
+export const SUBCATEGORY_MAP_KEY = 'subCategorySpendingMap';
+
 /*
  * FILTER BAR SLICE CONSTS
  */
