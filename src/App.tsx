@@ -24,10 +24,6 @@ const App = () => {
   useGetTransactionsQuery();
   useGetAccountsQuery();
 
-  const x = useSelector((state: RootState) =>
-    selectSpendingCharyDataByCategoryDimension(state),
-  );
-
   return (
     <AppContainer>
       <FilterBar />
