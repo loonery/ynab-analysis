@@ -54,18 +54,6 @@ export const ynabApi = createApi({
         return processAccounts(response.data.accounts);
       },
     }),
-    getTruncatedBudgetMonths: build.query<YnabTruncatedBudgetMonth[], void>({
-      query: () => GET_BUDGET_MONTHS_PATH,
-      transformResponse: (response: YnabBudgetMonthsResponse) => {
-        return response.data.months;
-      },
-    }),
-    getFullBudgetMonth: build.query<YnabFullBudgetMonth, string>({
-      query: (month) => `${GET_BUDGET_MONTHS_PATH}/${month}`,
-      transformResponse: (response: YnabFullBudgetMonthResponse) => {
-        return response.data.month;
-      },
-    }),
     // multiple fetch calls made from this endpoint
     getAllBudgetMonths: build.query<BudgetMonth[], void>({
       async queryFn(_arg, _queryApi, _extraOptions, fetchWithBQ) {
